@@ -1,92 +1,8 @@
-from tkinter import *
-import tkinter as tk
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import math
 
-
-
-class Model():
-    def __init__(self, option):
-        self.k = 5
-        self.b = 10
-        self.beta = 15
-        self.alpha = 20
-        self.y = []
-        self.option = option
-
-        self.x = []
-        for i in range(1000):
-            self.x.append(i)
-
-    def calculation(self):
-        if(self.option == 1):
-            x_max = 1000
-
-            for i in range(x_max):
-                yn = self.k * i + self.b
-                self.y.append(yn)
-
-        if (self.option == 2):
-            x_max = 1000
-
-            for i in range(x_max):
-                yn = -self.k * i + self.b
-                self.y.append(yn)
-
-        if (self.option == 3):   ### Проблемы с экспонентой
-            x_max = 1000
-
-            for i in range(x_max):
-                try:
-                    #yn = self.beta * math.exp((self.alpha * i))
-                    yn = math.exp(i)
-                    self.y.append(yn)
-                except:
-                    self.y.append(0)
-
-        if (self.option == 4):
-            x_max = 1000
-
-            for i in range(x_max):
-                yn = self.beta * math.exp(self.alpha * -i)
-                self.y.append(yn)
-
-
-    def calculation1(self):
-        if(self.option == 1):
-            x_max = 1000
-
-            for i in range(x_max):
-                yn = self.k * i + self.b
-                self.y.append(yn)
-
-        if (self.option == 2):
-            x_max = 1000
-
-            for i in range(x_max):
-                yn = -self.k * i + self.b
-                self.y.append(yn)
-
-        if (self.option == 3):   ### Проблемы с экспонентой
-            x_max = 1000
-
-            for i in range(x_max):
-                try:
-                    #yn = self.beta * math.exp((self.alpha * i))
-                    yn = math.exp(i)
-                    self.y.append(yn)
-                except:
-                    self.y.append(0)
-
-        if (self.option == 4):
-            x_max = 1000
-
-            for i in range(x_max):
-                yn = self.beta * math.exp(self.alpha * -i)
-                self.y.append(yn)
-
+from main import *
+from model import *
 
 class Display(Frame):
     def __init__(self, parent):
@@ -98,16 +14,7 @@ class Display(Frame):
     def update_UI(self, array_models, k, b, alpha, beta):
         print("альфа")
         print(k)
-        """
-        for i in (array_models): ### Не правильно сделал массив объектов
-           
-            i.k = k.get()
-            i.b = b.get()
-            i.alpha = alpha.get()
-            i.beta = beta.get()
-            
-            i.calculation()
-        """
+
 
     def initUI(self):
         self.pack(fill=BOTH, expand=1)
@@ -171,7 +78,6 @@ class Display(Frame):
         input_b = Entry(width=10)
         input_b.place(x=1065, y=115)
 
-
         ### Ввод alpha
         label4 = Label(text="alpha", height=1, width=5, font='Arial 14')
         label4.place(x=1018, y=150)
@@ -197,16 +103,5 @@ class Display(Frame):
         label9 = Label(text="x(t) = beta * E^(-alpha * x)", height=1, width=25, font='Arial 18')
         label9.place(x=580, y=410)
 
-        b1 = Button(text="Обновить графики", command=self.update_UI(array_models, input_k, input_b, input_alpha.get(), input_beta), width="26", height="2")
+        b1 = Button(self, text="Обновить графики", command=self.update_UI(array_models, input_k, input_b, input_alpha.get(), input_beta), width="26", height="2")
         b1.place(x=1020, y=220)
-
-
-def main():
-    root = Tk()
-    root.title("Лабораторная №1 / Методы обработки эксперементальных данных")
-    root.geometry('1320x820')
-    ex = Display(root)
-    root.mainloop()
-
-if __name__ == '__main__':
-    main()
