@@ -1,94 +1,130 @@
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-
-from main import *
+from tkinter import *
 from model import *
 
-class Display(Frame):
-    def __init__(self, parent):
-        Frame.__init__(self, parent)
+class Display():
+    def __init__(self, root):
 
-        self.parent = parent
+        self.root = root
+        self.root.title("Лабораторная №1 / Методы обработки эксперементальных данных")
+        self.root.geometry('1400x820')
         self.initUI()
 
-    def update_UI(self, array_models, k, b, alpha, beta):
+
+    def draw_graph(self, model):
+
+        if model.option == 1:
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.set_xlim([0, 100])
+            ax.set_ylim([0, 100])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=10, y=10)
+
+        if model.option == 2:
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.set_xlim([0, 100])
+            ax.set_ylim([0, 100])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=550, y=10)
+
+        if model.option == 3:
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            #ax.set_xlim([0, 10])
+            #ax.set_ylim([0, 100])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=10, y=400)
+
+        if model.option == 4:
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.set_xlim([-10, 10])
+            ax.set_ylim([0, 100])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=550, y=400)
+
+
+    def update_UI(self, models):
         print("альфа")
-        print(k)
+
+        for obj in models:
+            obj.k = float(self.k.get())
+            obj.b = float(self.b.get())
+            obj.calculation()
+            self.draw_graph(obj)
+
 
 
     def initUI(self):
-        self.pack(fill=BOTH, expand=1)
-
-        canvas = Canvas(self)
+        canvas = Canvas(self.root)
         array_models = []
 
         model1 = Model(1)
         array_models.append(model1)
         model1.calculation()
-
-
-        fig = Figure(figsize=(5, 4), dpi=100)
-        fig.add_subplot(111).plot(model1.x, model1.y, color='red', label='Линия 1')
-        canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=10, y=10)
+        self.draw_graph(model1)
 
         model2 = Model(2)
         array_models.append(model2)
         model2.calculation()
+        self.draw_graph(model2)
 
-        fig = Figure(figsize=(5, 4), dpi=100)
-        fig.add_subplot(111).plot(model2.x, model2.y, color='red', label='Линия 1')
-        canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=550, y=10)
 
-        model3 = Model(1)
+        model3 = Model(3)
         array_models.append(model3)
         model3.calculation()
+        self.draw_graph(model3)
 
-        fig = Figure(figsize=(5, 4), dpi=100)
-        fig.add_subplot(111).plot(model3.x, model3.y, color='red', label='Линия 1')
-        canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=10, y=400)
 
-        model4 = Model(2)
+        model4 = Model(4)
         array_models.append(model4)
         model4.calculation()
+        self.draw_graph(model4)
 
-        fig = Figure(figsize=(5, 4), dpi=100)
-        fig.add_subplot(111).plot(model4.x, model4.y, color='red', label='Линия 1')
-        canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=550, y=400)
 
         label1 = Label(text="Коэффициенты для графиков", height=1, width=29, font='Arial 14')
-        label1.place(x=1000, y=50)
+        label1.place(x=1100, y=50)
 
         ###Ввод к
         label2 = Label(text="k", height=1, width=1, font='Arial 14')
-        label2.place(x=1018, y=90)
+        label2.place(x=1118, y=90)
         input_k = Entry(width=10)
-        input_k.place(x=1065, y=85)
+        input_k.place(x=1165, y=85)
+        self.k = input_k
 
         ### Ввод b
         label3 = Label(text="b", height=1, width=1, font='Arial 14')
-        label3.place(x=1018, y=120)
+        label3.place(x=1118, y=120)
         input_b = Entry(width=10)
-        input_b.place(x=1065, y=115)
+        input_b.place(x=1165, y=115)
+        self.b = input_b
 
         ### Ввод alpha
         label4 = Label(text="alpha", height=1, width=5, font='Arial 14')
-        label4.place(x=1018, y=150)
+        label4.place(x=1118, y=150)
         input_alpha = Entry(width=10)
-        input_alpha.place(x=1065, y=145)
+        input_alpha.place(x=1165, y=145)
+        self.alpha = input_alpha
 
         ### Ввод beta
         label5 = Label(text="beta", height=1, width=4, font='Arial 14')
-        label5.place(x=1018, y=180)
+        label5.place(x=1118, y=180)
         input_beta = Entry(width=10)
-        input_beta.place(x=1065, y=175)
+        input_beta.place(x=1165, y=175)
+        self.beta = input_beta
 
         ### Ввод label's с названием функция
         label6 = Label(text="x(t) = k(x)+ b", height=1, width=15, font='Arial 18')
@@ -103,5 +139,6 @@ class Display(Frame):
         label9 = Label(text="x(t) = beta * E^(-alpha * x)", height=1, width=25, font='Arial 18')
         label9.place(x=580, y=410)
 
-        b1 = Button(self, text="Обновить графики", command=self.update_UI(array_models, input_k, input_b, input_alpha.get(), input_beta), width="26", height="2")
-        b1.place(x=1020, y=220)
+        b1 = Button(text="Обновить графики", command=lambda: self.update_UI(array_models), width="26", height="2")
+        b1.place(x=1120, y=220)
+
