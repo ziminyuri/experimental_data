@@ -26,6 +26,17 @@ class Display():
             canvas.get_tk_widget().place(x=10, y=10)
 
         if model.option == 2:
+
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.set_xlim([0, model.n])
+            ax.set_ylim([model.axis_y_min, model.axis_y_max])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=550, y=10)
+
+            """
             fig = Figure(figsize=(5, 4), dpi=100)
             ax = fig.add_subplot(111)
             ax.set_xlim([0, 100])
@@ -35,8 +46,24 @@ class Display():
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
             canvas.get_tk_widget().place(x=550, y=10)
+            """
+
 
         if model.option == 3:
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.set_xlim([0, model.n])
+            ax.set_ylim([model.axis_y_min, model.axis_y_max])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=10, y=400)
+
+            """
+            
+            Здесь рабочая гипербола
+            
+            
             fig = Figure(figsize=(5, 4), dpi=100)
             ax = fig.add_subplot(111)
             #ax.set_xlim([0, 10])
@@ -45,8 +72,21 @@ class Display():
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
             canvas.get_tk_widget().place(x=10, y=400)
+            """
+
 
         if model.option == 4:
+
+            fig = Figure(figsize=(5, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            ax.set_xlim([0, model.n])
+            ax.set_ylim([model.axis_y_min, model.axis_y_max])
+            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+            canvas.draw()
+            canvas.get_tk_widget().place(x=550, y=400)
+
+            """
             fig = Figure(figsize=(5, 4), dpi=100)
             ax = fig.add_subplot(111)
             ax.set_xlim([-10, 10])
@@ -55,6 +95,7 @@ class Display():
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
             canvas.get_tk_widget().place(x=550, y=400)
+            """
 
 
     def update_UI(self, models):
@@ -63,6 +104,8 @@ class Display():
         for obj in models:
             obj.k = float(self.k.get())
             obj.b = float(self.b.get())
+            obj.beta = float(self.beta.get())
+            obj.alpha = float(self.alpha.get())
             obj.calculation()
             self.draw_graph(obj)
 
@@ -118,6 +161,27 @@ class Display():
         input_alpha = Entry(width=10)
         input_alpha.place(x=1165, y=145)
         self.alpha = input_alpha
+
+        ### Ввод beta
+        label5 = Label(text="beta", height=1, width=4, font='Arial 14')
+        label5.place(x=1118, y=180)
+        input_beta = Entry(width=10)
+        input_beta.place(x=1165, y=175)
+        self.beta = input_beta
+
+        ### Ввод N - количество записей
+        label5 = Label(text="beta", height=1, width=4, font='Arial 14')
+        label5.place(x=1118, y=180)
+        input_beta = Entry(width=10)
+        input_beta.place(x=1165, y=175)
+        self.beta = input_beta
+
+        ### Ввод 
+        label5 = Label(text="beta", height=1, width=4, font='Arial 14')
+        label5.place(x=1118, y=180)
+        input_beta = Entry(width=10)
+        input_beta.place(x=1165, y=175)
+        self.beta = input_beta
 
         ### Ввод beta
         label5 = Label(text="beta", height=1, width=4, font='Arial 14')
