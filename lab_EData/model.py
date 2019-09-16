@@ -14,28 +14,49 @@ class Model():
 
         self.x = []
 
-        self.axis_y_min = -10
-        self.axis_y_max = 10
+        self.axis_y_graph_min = -1    #Минимальное значение функции
+        self.axis_y_graf_max = 1      #Максимальное значение функции
+        self.axis_y_delta = 9         #Небходимо для самого графика, например: у_min = -(delta + self.axis_y_graf_max)
 
-        self.n = 100
 
-        for i in range(self.n):
+        self.N = 100    #Количество точек по оси Х
+        self.n = 10     #Начало аномального отрезка
+        self.m = 40     #Окончание аномального отрезка
+        self.argument = 10  #Константа на сколько поднять/опустить точки на аномальном участке
+
+        for i in range(self.N):
             self.x.append(i)
 
     def calculation(self):
 
         self.y[:] = []
 
-
         if(self.option == 1):
+            for i in range(self.N):
+                if (i >= self.n) and (i <= self.m):
+                    try:
+                        yn = random.uniform(self.axis_y_graph_min + self.argument, self.axis_y_graf_max + self.argument)
+                        self.y.append(yn)
+                    except:
+                        self.y.append(0)
+                else:
+                    try:
+                        yn = random.uniform(self.axis_y_graph_min, self.axis_y_graf_max)
+                        self.y.append(yn)
+                    except:
+                        self.y.append(0)
 
-            for i in range(self.n):
+            """
+            for i in range(self.N):
                 yn = self.k * i + self.b
                 self.y.append(yn)
+            """
+                
+
 
         if (self.option == 2):
 
-            for i in range(self.n):
+            for i in range(self.N):
                 try:
                     temp_string_time = str(time.time())
                     reverse_temp_string_time = temp_string_time[::-1]
@@ -75,7 +96,7 @@ class Model():
 
         if (self.option == 3):
 
-            for i in range(self.n):
+            for i in range(self.N):
                 try:
                     temp_string_time = str(time.time())
                     reverse_temp_string_time = temp_string_time[::-1]
@@ -127,9 +148,9 @@ class Model():
 
         if (self.option == 4):
 
-            for i in range(self.n):
+            for i in range(self.N):
                 try:
-                    yn = random.uniform(self.axis_y_min, self.axis_y_max)
+                    yn = random.uniform(self.axis_y_graph_min, self.axis_y_graf_max)
                     self.y.append(yn)
                 except:
                     self.y.append(0)
