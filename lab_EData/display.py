@@ -2,6 +2,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from tkinter import *
 from model import *
+from tkinter import messagebox
 
 class Display():
     def __init__(self, root):
@@ -126,6 +127,7 @@ class Display():
         print("альфа")
 
         for obj in models:
+
             obj.k = float(self.k.get())
             obj.b = float(self.b.get())
             obj.beta = float(self.beta.get())
@@ -133,6 +135,25 @@ class Display():
             obj.calculation()
             self.draw_graph(obj)
 
+    #Нажатие на клавишу проверка на стационарность
+    def click_button_stationarity(self, models):
+
+        for obj in models:
+            flag_stationarity_UI = obj.check_stationarity()
+
+            message = ""
+
+            j = 1
+            for i in obj.all_average_value:
+                message = message + "Среднее значение №:" + str(j)+ " = " + str(i) + "\n"
+                j = j+ 1
+
+
+            if flag_stationarity_UI == True:
+                messagebox.showinfo("Проверка на стационарность", message + "\nГрафик №:"+ str(obj.option) +" стационарен")
+
+            else:
+                messagebox.showinfo("Проверка на стационарность", "График №:"+ str(obj.option) +" не стационарен")
 
 
     def initUI(self):
@@ -261,17 +282,24 @@ class Display():
 
         ### Ввод label's с названием функция
         #label6 = Label(text="x(t) = k(x)+ b", height=1, width=15, font='Arial 18')
-        #label6.place(x=55, y=15)
+        label6 = Label(text="График №1", height=1, width=15, font='Arial 18')
+        label6.place(x=55, y=15)
 
         #label7 = Label(text="x(t) = -k(x)+ b", height=1, width=15, font='Arial 18')
-        #label7.place(x=600, y=15)
+        label7 = Label(text="График №2", height=1, width=15, font='Arial 18')
+        label7.place(x=600, y=15)
 
         #label8 = Label(text="x(t) = beta * E^(alpha * x)", height=1, width=25, font='Arial 18')
-        #label8.place(x=40, y=410)
+        label8 = Label(text="График №3", height=1, width=25, font='Arial 18')
+        label8.place(x=40, y=410)
 
         #label9 = Label(text="x(t) = beta * E^(-alpha * x)", height=1, width=25, font='Arial 18')
-        #label9.place(x=580, y=410)
+        label9 = Label(text="График №4", height=1, width=25, font='Arial 18')
+        label9.place(x=580, y=410)
 
         b1 = Button(text="Обновить графики", command=lambda: self.update_UI(array_models), width="26", height="2")
         b1.place(x=1120, y=370)
+
+        b2 = Button(text="Проверить на стационарность", command=lambda: self.click_button_stationarity(array_models), width="26", height="2")
+        b2.place(x=1120, y=410)
 

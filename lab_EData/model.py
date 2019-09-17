@@ -14,18 +14,47 @@ class Model():
 
         self.x = []
 
-        self.axis_y_graph_min = -1    #Минимальное значение функции
-        self.axis_y_graf_max = 1      #Максимальное значение функции
-        self.axis_y_delta = 9         #Небходимо для самого графика, например: у_min = -(delta + self.axis_y_graf_max)
-
+        self.axis_y_graph_min = -100    #Минимальное значение функции
+        self.axis_y_graf_max = 100      #Максимальное значение функции
+        self.axis_y_delta = 10         #Небходимо для самого графика, например: у_min = -(delta + self.axis_y_graf_max)
 
         self.N = 100    #Количество точек по оси Х
         self.n = 10     #Начало аномального отрезка
         self.m = 40     #Окончание аномального отрезка
         self.argument = 10  #Константа на сколько поднять/опустить точки на аномальном участке
 
+        self.all_average_value = []   #Средние значения
+
         for i in range(self.N):
             self.x.append(i)
+
+
+    def check_stationarity(self):
+
+        number_of_gaps = 10 #Количество промежутков
+
+        gap_length = int(self.N / number_of_gaps)      #Длина промежутка
+
+        average_value = 0
+
+        delta_min_max = (- self.axis_y_graph_min + self.axis_y_graf_max) * 0.05
+
+        for i in range(self.N):
+            average_value = average_value + self.y[i]
+            if i % gap_length == 0:
+                average_value = average_value / gap_length
+                self.all_average_value.append(average_value)
+                average_value = 0
+
+        flag_stationarity = True
+        for i in range(self.all_average_value.__len__() - 1):
+            if self.all_average_value[i] - self.all_average_value[i+1] > delta_min_max:
+                flag_stationarity = False
+
+        print(self.all_average_value)
+
+        return flag_stationarity
+
 
     def calculation(self):
 
