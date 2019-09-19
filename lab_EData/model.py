@@ -60,7 +60,39 @@ class Model():
 
         self.y[:] = []
 
-        if(self.option == 1):
+        # y(x)=kx+b
+        if (self.option == 1):
+            for i in range(self.N):
+                yn = self.k * i + self.b
+                self.y.append(yn)
+
+        # y(x)=-kx+b
+        if (self.option == 2):
+            for i in range(self.n):
+                yn = -self.k * i + self.b
+                self.y.append(yn)
+
+        # y(x) = beta * exp^(alpha * i)
+            if (self.option == 3):
+                for i in range(self.n):
+                    try:
+                        yn = self.beta * math.exp((self.alpha * i))
+                        # yn = 2 * math.exp(i)
+                        self.y.append(yn)
+                    except:
+                        self.y.append(0)
+        # y(x) = beta * exp^(alpha * -i)
+            if (self.option == 4):
+                for i in range(self.n):
+                    try:
+                        yn = self.beta * math.exp((self.alpha * i))
+                        # yn = 2 * math.exp(i)
+                        self.y.append(yn)
+                    except:
+                        self.y.append(0)
+
+        #Встроенный рандом
+        if(self.option == 5):
             for i in range(self.N):
                 if (i >= self.n) and (i <= self.m):
                     try:
@@ -75,14 +107,8 @@ class Model():
                     except:
                         self.y.append(0)
 
-            """
-            for i in range(self.N):
-                yn = self.k * i + self.b
-                self.y.append(yn)
-            """
-                
 
-
+        """
         if (self.option == 2):
 
             for i in range(self.N):
@@ -114,14 +140,14 @@ class Model():
                 except:
                     self.y.append(0)
 
-            """
+  
             Здесь был график kx+b
             
             for i in range(self.n):
                 yn = -self.k * i + self.b
                 self.y.append(yn)
                 
-            """
+         
 
         if (self.option == 3):
 
@@ -147,7 +173,7 @@ class Model():
                 except:
                     self.y.append(0)
 
-            """
+            
             
             Здесь рабочий встроенный рандом
             
@@ -160,9 +186,9 @@ class Model():
                     self.y.append(0)
                     
                     
-            """
+            
 
-            '''
+            
             
             Здесь рабочая экспонента
             
@@ -173,7 +199,7 @@ class Model():
                     self.y.append(yn)
                 except:
                     self.y.append(0)
-            '''
+            
 
         if (self.option == 4):
 
@@ -184,7 +210,7 @@ class Model():
                 except:
                     self.y.append(0)
 
-            """
+            
         
             for i in range(self.n):
                 yn = self.beta * math.exp(self.alpha * -i)

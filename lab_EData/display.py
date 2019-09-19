@@ -3,9 +3,12 @@ from matplotlib.figure import Figure
 from tkinter import *
 from model import *
 from tkinter import messagebox
+from ChildWindow import *
 
-class Display():
+class Display(Frame):
     def __init__(self, root):
+        super().__init__(root)
+        self.init_main_window()
 
         self.root = root
         self.root.title("Лабораторная №1 / Методы обработки эксперементальных данных")
@@ -23,6 +26,8 @@ class Display():
 
         self.initUI()
 
+    def init_main_window(self):
+        ChildWindow()
 
     def draw_graph(self, model):
 
@@ -155,16 +160,25 @@ class Display():
             else:
                 messagebox.showinfo("Проверка на стационарность", "График №:"+ str(obj.option) +" не стационарен")
 
+    def click_button_add(self):
+        a = Toplevel()
+        a.geometry('200x150')
+        a['bg'] = 'grey'
+        a.overrideredirect(True)
+        Label(a, text="About this").pack(expand=1)
+        a.after(5000, lambda: a.destroy())
 
     def initUI(self):
         canvas = Canvas(self.root)
         array_models = []
 
+
+
         model1 = Model(1)
         array_models.append(model1)
         model1.calculation()
         self.draw_graph(model1)
-
+        """
         model2 = Model(2)
         array_models.append(model2)
         model2.calculation()
@@ -181,6 +195,8 @@ class Display():
         array_models.append(model4)
         model4.calculation()
         self.draw_graph(model4)
+
+        """
 
 
         label1 = Label(text="Коэффициенты для графиков", height=1, width=29, font='Arial 14')
@@ -302,4 +318,7 @@ class Display():
 
         b2 = Button(text="Проверить на стационарность", command=lambda: self.click_button_stationarity(array_models), width="26", height="2")
         b2.place(x=1120, y=410)
+
+        b2 = Button(text="Добавить", command=lambda: self.click_button_add,width="26", height="2")
+        b2.place(x=1120, y=450)
 
