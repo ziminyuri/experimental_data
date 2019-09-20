@@ -66,95 +66,48 @@ class MainWindow(Frame):
         b3 = Button(text="Проверить на стационарность", command=self.click_button_add, width="26", height="2")
         b3.place(x=1120, y=120)
 
-    def draw_graph(self, model):
+    def draw_graph(self, model, chart_number):
 
-        if model.option == 1:
-            fig = Figure(figsize=(5, 4), dpi=100)
+        if chart_number == "1":
+            fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.N])
-            ax.set_ylim([model.axis_y_graph_min - model.argument, model.axis_y_graf_max + model.argument])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            ax.set_xlim([0, model.get_N()])
+            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+
+            print(model.get_x())
+            print(model.get_y())
+
+            ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
-            canvas.get_tk_widget().place(x=10, y=10)
+            canvas.get_tk_widget().place(x=5, y=35)
 
-            """
-            fig = Figure(figsize=(5, 4), dpi=100)
+        if chart_number == "2":
+            fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, 100])
-            ax.set_ylim([0, 100])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
-
+            ax.set_xlim([0, model.get_N()])
+            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
-            canvas.get_tk_widget().place(x=10, y=10)
+            canvas.get_tk_widget().place(x=550, y=35)
 
-            """
-
-        if model.option == 2:
-            fig = Figure(figsize=(5, 4), dpi=100)
+        if chart_number == "3":
+            fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.N])
-            ax.set_ylim([model.axis_y_graph_min - model.argument, model.axis_y_graf_max + model.argument])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            ax.set_xlim([0, model.get_N()])
+            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
-            canvas.get_tk_widget().place(x=550, y=10)
+            canvas.get_tk_widget().place(x=5, y=400)
 
-            """
-            fig = Figure(figsize=(5, 4), dpi=100)
+        if chart_number == "4":
+            fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, 100])
-            ax.set_ylim([0, 100])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
-
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
-            canvas.get_tk_widget().place(x=550, y=10)
-            """
-
-        if model.option == 3:
-            fig = Figure(figsize=(5, 4), dpi=100)
-            ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.N])
-            ax.set_ylim([model.axis_y_graph_min - model.argument, model.axis_y_graf_max + model.argument])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
-            canvas.get_tk_widget().place(x=10, y=400)
-
-            """
-
-            Здесь рабочая гипербола
-
-
-            fig = Figure(figsize=(5, 4), dpi=100)
-            ax = fig.add_subplot(111)
-            #ax.set_xlim([0, 10])
-            #ax.set_ylim([0, 100])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
-            canvas.get_tk_widget().place(x=10, y=400)
-            """
-
-        if model.option == 4:
-            fig = Figure(figsize=(5, 4), dpi=100)
-            ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.N])
-            ax.set_ylim([model.axis_y_graph_min - model.argument, model.axis_y_graf_max + model.argument])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
+            ax.set_xlim([0, model.get_N()])
+            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
             canvas.get_tk_widget().place(x=550, y=400)
-
-            """
-            fig = Figure(figsize=(5, 4), dpi=100)
-            ax = fig.add_subplot(111)
-            ax.set_xlim([-10, 10])
-            ax.set_ylim([0, 100])
-            ax.plot(model.x, model.y, color='red', label='Линия 1')
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
-            canvas.get_tk_widget().place(x=550, y=400)
-            """

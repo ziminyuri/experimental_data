@@ -4,114 +4,198 @@ import time
 
 class Model():
     def __init__(self, option):
-        self.k = 5
-        self.b = 10
-        self.beta = 2
-        self.alpha = 0.5
-        self.y = []
+        self._k = 5
+        self._b = 10
+        self._beta = 2
+        self._alpha = 0.5
+        self._y = []
 
-        self.option = option #Тип функции
+        self._option = option #Тип функции
 
-        self.x = []
+        self._x = []
 
-        self.axis_y_graph_min = -100    #Минимальное значение функции
-        self.axis_y_graf_max = 100      #Максимальное значение функции
-        self.axis_y_delta = 10         #Небходимо для самого графика, например: у_min = -(delta + self.axis_y_graf_max)
+        self._axis_y_graph_min = -100    #Минимальное значение функции
+        self._axis_y_graf_max = 100      #Максимальное значение функции
+        self._axis_y_delta = 10         #Небходимо для самого графика, например: у_min = -(delta + self.axis_y_graf_max)
 
-        self.N = 100    #Количество точек по оси Х
-        self.n = 10     #Начало аномального отрезка
-        self.m = 40     #Окончание аномального отрезка
-        self.argument = 10  #Константа на сколько поднять/опустить точки на аномальном участке
+        self._N = 100    #Количество точек по оси Х
+        self._n = 10     #Начало аномального отрезка
+        self._m = 40     #Окончание аномального отрезка
+        self._argument = 100  #Константа на сколько поднять/опустить точки на аномальном участке
 
-        self.all_average_value = []   #Средние значения
+        self._all_average_value = []   #Средние значения
 
-        for i in range(self.N):
-            self.x.append(i)
+        for i in range(self._N):
+            self._x.append(i)
 
+    def set_k(self,k):
+        self._k = k
+
+    def set_b(self,b):
+        self._b = b
+
+    def set_beta(self,beta):
+        self._beta = beta
+
+    def set_alpha(self,alpha):
+        self._alpha = alpha
+
+    def set_axis_y_graph_min(self,axis_y_graph_min):
+        self._axis_y_graph_min = axis_y_graph_min
+
+    def get_axis_y_graph_min(self):
+        return self._axis_y_graph_min
+
+    def set_axis_y_graf_max(self,axis_y_graf_max):
+        self._axis_y_graf_max = axis_y_graf_max
+
+    def get_axis_y_graf_max(self):
+        return self._axis_y_graf_max
+
+    def set_n(self,n):
+        self._n = n
+
+    def set_m(self,m):
+        self._m = m
+
+    def set_N(self,N):
+        self._N = N
+
+    def get_N(self):
+        return self._N
+
+    def get_argument(self):
+        return self._argument
+
+    def get_x(self):
+        return self._x
+
+    def get_y(self):
+        return self._y
 
     def check_stationarity(self):
 
         number_of_gaps = 10 #Количество промежутков
 
-        gap_length = int(self.N / number_of_gaps)      #Длина промежутка
+        gap_length = int(self._N / number_of_gaps)      #Длина промежутка
 
         average_value = 0
 
-        delta_min_max = (- self.axis_y_graph_min + self.axis_y_graf_max) * 0.05
+        delta_min_max = (- self._axis_y_graph_min + self._axis_y_graf_max) * 0.05
 
-        for i in range(self.N):
-            average_value = average_value + self.y[i]
+        for i in range(self._N):
+            average_value = average_value + self._y[i]
             if i % gap_length == 0:
                 average_value = average_value / gap_length
-                self.all_average_value.append(average_value)
+                self._all_average_value.append(average_value)
                 average_value = 0
 
         flag_stationarity = True
-        for i in range(self.all_average_value.__len__() - 1):
-            if self.all_average_value[i] - self.all_average_value[i+1] > delta_min_max:
+        for i in range(self._all_average_value.__len__() - 1):
+            if self._all_average_value[i] - self._all_average_value[i+1] > delta_min_max:
                 flag_stationarity = False
 
-        print(self.all_average_value)
+        print(self._all_average_value)
 
         return flag_stationarity
 
 
     def calculation(self):
 
-        self.y[:] = []
+        self._y[:] = []
 
         # y(x)=kx+b
-        if (self.option == 1):
-            for i in range(self.N):
-                yn = self.k * i + self.b
-                self.y.append(yn)
+        if (self._option == 1):
+            for i in range(self._N):
+                yn = self._k * i + self._b
+                self._y.append(yn)
 
         # y(x)=-kx+b
-        if (self.option == 2):
-            for i in range(self.n):
-                yn = -self.k * i + self.b
-                self.y.append(yn)
+        if (self._option == 2):
+            for i in range(self._N):
+                yn = -self._k * i + self._b
+                self._y.append(yn)
 
         # y(x) = beta * exp^(alpha * i)
-            if (self.option == 3):
-                for i in range(self.n):
-                    try:
-                        yn = self.beta * math.exp((self.alpha * i))
-                        # yn = 2 * math.exp(i)
-                        self.y.append(yn)
-                    except:
-                        self.y.append(0)
+        if (self._option == 3):
+            for i in range(self._N):
+                try:
+                    yn = self._beta * math.exp((self._alpha * i))
+                    # yn = 2 * math.exp(i)
+                    self._y.append(yn)
+                except:
+                    self._y.append(0)
+
         # y(x) = beta * exp^(alpha * -i)
-            if (self.option == 4):
-                for i in range(self.n):
-                    try:
-                        yn = self.beta * math.exp((self.alpha * i))
-                        # yn = 2 * math.exp(i)
-                        self.y.append(yn)
-                    except:
-                        self.y.append(0)
+        if (self._option == 4):
+            for i in range(self._N):
+                try:
+                    yn = self._beta * math.exp((self._alpha * -i))
+                    # yn = 2 * math.exp(i)
+                    self._y.append(yn)
+                except:
+                    self._y.append(0)
 
         #Встроенный рандом
-        if(self.option == 5):
-            for i in range(self.N):
-                if (i >= self.n) and (i <= self.m):
+        if(self._option == 5):
+            for i in range(self._N):
+                if (i >= self._n) and (i <= self._m):
                     try:
-                        yn = random.uniform(self.axis_y_graph_min + self.argument, self.axis_y_graf_max + self.argument)
-                        self.y.append(yn)
+                        yn = random.uniform(self._axis_y_graph_min + self._argument, self._axis_y_graf_max + self._argument)
+                        self._y.append(yn)
                     except:
-                        self.y.append(0)
+                        self._y.append(0)
                 else:
                     try:
-                        yn = random.uniform(self.axis_y_graph_min, self.axis_y_graf_max)
-                        self.y.append(yn)
+                        yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
+                        self._y.append(yn)
                     except:
-                        self.y.append(0)
+                        self._y.append(0)
 
+        #Кастомный рандом
+        if (self._option == 6):
+            for i in range(self._N):
+                try:
+                    temp_string_time = str(time.time())
+                    reverse_temp_string_time = temp_string_time[::-1]
+                    new_value = float(reverse_temp_string_time[0])
+                    new_value = new_value / 10
 
-        """
-        if (self.option == 2):
+                    temp_string_time_for_even = str(time.time())
+                    reverse_temp_string_time_for_even = temp_string_time_for_even[::-1]
+                    new_value_for_even = int(reverse_temp_string_time_for_even[0])
+                    new_value_for_even = new_value_for_even % 2
 
-            for i in range(self.N):
+                    if new_value_for_even == 1:
+                        new_value = - new_value
+
+                    print(new_value)
+                    self._y.append(new_value)
+
+                except:
+                    self._y.append(0)
+
+        # Аномальные участки
+        if (self._option == 7):
+            for i in range(self._N):
+                if (i >= self._n) and (i <= self._m):
+                    try:
+                        yn = random.uniform(self._axis_y_graph_min + self._argument,
+                                            self._axis_y_graf_max + self._argument)
+                        self._y.append(yn)
+                    except:
+                        self._y.append(0)
+                else:
+                    try:
+                        yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
+                        self._y.append(yn)
+                    except:
+                        self._y.append(0)
+
+        # Значения за областью
+        if (self._option == 8):
+
+            for i in range(self._N):
                 try:
                     temp_string_time = str(time.time())
                     reverse_temp_string_time = temp_string_time[::-1]
@@ -135,84 +219,18 @@ class Model():
                         new_value = - new_value
 
                     print(new_value)
-                    self.y.append(new_value)
+                    self._y.append(new_value)
 
                 except:
-                    self.y.append(0)
+                    self._y.append(0)
 
-  
-            Здесь был график kx+b
-            
-            for i in range(self.n):
-                yn = -self.k * i + self.b
-                self.y.append(yn)
-                
-         
 
-        if (self.option == 3):
 
-            for i in range(self.N):
-                try:
-                    temp_string_time = str(time.time())
-                    reverse_temp_string_time = temp_string_time[::-1]
-                    new_value = float(reverse_temp_string_time[0])
-                    new_value = new_value / 10
-                    #print(new_value)
 
-                    temp_string_time_for_even = str(time.time())
-                    reverse_temp_string_time_for_even = temp_string_time_for_even[::-1]
-                    new_value_for_even = int(reverse_temp_string_time_for_even[0])
-                    new_value_for_even = new_value_for_even % 2
 
-                    if new_value_for_even == 1:
-                        new_value = - new_value
 
-                    print(new_value)
-                    self.y.append(new_value)
-
-                except:
-                    self.y.append(0)
-
-            
-            
-            Здесь рабочий встроенный рандом
-            
-            
-            for i in range(self.n):
-                try:
-                    yn = random.uniform(self.axis_y_min,self.axis_y_max)
-                    self.y.append(yn)
-                except:
-                    self.y.append(0)
-                    
-                    
             
 
             
-            
-            Здесь рабочая экспонента
-            
-            for i in range(self.n):
-                try:
-                    yn = self.beta * math.exp((self.alpha * i))
-                    #yn = 2 * math.exp(i)
-                    self.y.append(yn)
-                except:
-                    self.y.append(0)
-            
 
-        if (self.option == 4):
 
-            for i in range(self.N):
-                try:
-                    yn = random.uniform(self.axis_y_graph_min, self.axis_y_graf_max)
-                    self.y.append(yn)
-                except:
-                    self.y.append(0)
-
-            
-        
-            for i in range(self.n):
-                yn = self.beta * math.exp(self.alpha * -i)
-                self.y.append(yn)
-            """

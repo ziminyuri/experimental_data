@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter.ttk as ttk
 from model import *
+from tkinter import messagebox
 
 class ChildWindow(Toplevel):
     def __init__(self, main_window, root):
@@ -10,47 +11,116 @@ class ChildWindow(Toplevel):
         self.init_child_window()
 
 
+    def set_defual_values_for_model(self, model):
+
+        if self.input_k.get() != "":
+            try:
+                k = float(self.input_k.get())
+                model.set_k(k)
+            except:
+                messagebox.showerror("Ошибка", "k должно быть вещественнным")
+                return
+
+        if self.input_b.get() != "":
+            try:
+                b = float(self.input_b.get())
+                model.set_b(b)
+            except:
+                messagebox.showerror("Ошибка", "b должно быть вещественнным")
+                return
+
+        if self.input_alpha.get() != "":
+            try:
+                alpha = float(self.input_alpha.get())
+                model.set_alpha(alpha)
+            except:
+                messagebox.showerror("Ошибка", "alpha должно быть вещественнным")
+                return
+
+        if self.input_beta.get() != "":
+            try:
+                beta = float(self.input_beta.get())
+                model.set_beta(beta)
+            except:
+                messagebox.showerror("Ошибка", "beta должно быть вещественнным")
+                return
+
+        if self.input_N.get() != "":
+            try:
+                N = int(self.input_N.get())
+                model.set_N(N)
+            except:
+                messagebox.showerror("Ошибка", "Количество записей должно быть целочисленным")
+                return
+
+        if self.input_n.get() != "":
+            try:
+                n = int(self.input_n.get())
+                model.set_n(n)
+            except:
+                messagebox.showerror("Ошибка", "Начало промежутка должно быть целочисленным")
+                return
+
+        if self.input_m.get() != "":
+            try:
+                m = int(self.input_m.get())
+                model.set_m(m)
+            except:
+                messagebox.showerror("Ошибка", "Окончание промежутка должно быть целочисленным")
+                return
+
+        if self.input_S_min.get() != "":
+            try:
+                min = int(self.input_S_min.get())
+                model.set_axis_y_graph_min(min)
+            except:
+                messagebox.showerror("Ошибка", "Минимальное значение ф-ии должно быть целочисленным")
+                return
+
+        if self.input_S_max.get() != "":
+            try:
+                max = int(self.input_S_max.get())
+                model.set_axis_y_graf_max(max)
+            except:
+                messagebox.showerror("Ошибка", "Максимальное значение ф-ии должно быть целочисленным")
+                return
+
     def click_button_add_and_close(self):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        model1 = Model(1)
 
         if self.c2.get() == "y(x)=kx+b":
             model1 = Model(1)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "y(x)=-kx+b":
             model1 = Model(2)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "y(x) = beta * exp^(alpha * i)":
             model1 = Model(3)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "y(x) = beta * exp^(alpha * -i)":
             model1 = Model(4)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "Встроенный рандом":
             model1 = Model(5)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "Кастомный рандом":
             model1 = Model(6)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "Аномальные участки":
             model1 = Model(7)
-            model1.calculation()
-            self.main.draw_graph(model1)
 
         if self.c2.get() == "Значения за областью":
             model1 = Model(8)
-            model1.calculation()
-            self.main.draw_graph(model1)
+
+
+        self.set_defual_values_for_model(model1)
+        model1.calculation()
+        self.main.draw_graph(model1, self.c1.get())
 
         self.destroy()
 
@@ -78,56 +148,56 @@ class ChildWindow(Toplevel):
         ### Ввод k
         label2 = Label(self, text="k", height=1, width=1, font='Arial 14')
         label2.place(x=300, y=10)
-        input_k = Entry(self, width=15)
-        input_k.place(x=300, y=30)
+        self.input_k = Entry(self, width=15)
+        self.input_k.place(x=300, y=30)
 
         ### Ввод b
         label3 = Label(self, text="b", height=1, width=1, font='Arial 14')
         label3.place(x=300, y=60)
-        input_b = Entry(self,width=15)
-        input_b.place(x=300, y=80)
+        self.input_b = Entry(self,width=15)
+        self.input_b.place(x=300, y=80)
 
         ### Ввод alpha
         label4 = Label(self,text="alpha", height=1, width=5, font='Arial 14')
         label4.place(x=300, y=110)
-        input_alpha = Entry(self,width=15)
-        input_alpha.place(x=300, y=130)
+        self.input_alpha = Entry(self,width=15)
+        self.input_alpha.place(x=300, y=130)
 
         ### Ввод beta
         label5 = Label(self,text="beta", height=1, width=4, font='Arial 14')
         label5.place(x=300, y=160)
-        input_beta = Entry(self,width=22)
-        input_beta.place(x=300, y=180)
+        self.input_beta = Entry(self,width=22)
+        self.input_beta.place(x=300, y=180)
 
         ### Ввод N - Количество записей
         label6 = Label(self,text="Количество записей", height=1, width=17, font='Arial 14')
         label6.place(x=10, y=210)
-        input_N = Entry(self,width=22)
-        input_N.place(x=10, y=230)
+        self.input_N = Entry(self,width=22)
+        self.input_N.place(x=10, y=230)
 
         ### Ввод n - Начало промежутка
         label7 = Label(self,text="Начало промежутка", height=1, width=17, font='Arial 14')
         label7.place(x=10, y=260)
-        input_n = Entry(self,width=22)
-        input_n.place(x=10, y=280)
+        self.input_n = Entry(self,width=22)
+        self.input_n.place(x=10, y=280)
 
         ### Ввод m - Конец промежутка
         label8 = Label(self,text="Окончание промежутка", height=1, width=20, font='Arial 14')
         label8.place(x=10, y=310)
-        input_m = Entry(self,width=22)
-        input_m.place(x=10, y=330)
+        self.input_m = Entry(self,width=22)
+        self.input_m.place(x=10, y=330)
 
         ### Ввод -S - Минимальное значение функции
         label9 = Label(self,text="Минимальное значение ф-ии", height=1, width=24, font='Arial 14')
         label9.place(x=10, y=110)
-        input_S_min = Entry(self,width=22)
-        input_S_min.place(x=10, y=130)
+        self.input_S_min = Entry(self,width=22)
+        self.input_S_min.place(x=10, y=130)
 
         ### Ввод S - Максимальное значение функции
         label10 = Label(self,text="Максимальное значение ф-ии", height=1, width=25, font='Arial 14')
         label10.place(x=10, y=160)
-        input_S_max = Entry(self,width=22)
-        input_S_max.place(x=10, y=180)
+        self.input_S_max = Entry(self,width=22)
+        self.input_S_max.place(x=10, y=180)
 
 
         b1 = Button(self, text="Добавить", command=self.click_button_add_and_close, width="15", height="2")
