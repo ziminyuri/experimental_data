@@ -1,11 +1,12 @@
 import math
 import random
 import time
+import copy
 
 class Model():
     def __init__(self, option):
         self._k = 0.1
-        self._b = 10
+        self._b = 5
         self._beta = 2
         self._alpha = 0.5
         self._y = []
@@ -73,36 +74,26 @@ class Model():
     def get_y(self):
         return self._y
 
-
     def normalization(self):
-
-        """
-        max_y = self._y[0]
-        min_y = self._y[0]
+        x_max = self._y[0]
+        x_min = self._y[0]
         for i in range(self._N):
-            if self._y[i]>max_y:
-                max_y = self._y[i]
+            if self._y[i]>x_max:
+                x_max = self._y[i]
 
-            if self._y[i]<min_y:
-                min_y = self._y[i]
+            if self._y[i] <x_min:
+                x_min = self._y[i]
 
-        temp_y = self._y
-        self._y.clear()
-
-        """
-
-        temp_y = self._y
+        temp_y = copy.deepcopy(self._y)
         self._y.clear()
         for i in range(self._N):
-            a = temp_y[i+1]
-            b = a - self._axis_y_graph_min
-            c = self._axis_y_graf_max - self._axis_y_graph_min
+            a = temp_y[i]
+            b = a - x_min
+            c = x_max - x_min
             d = b / c
-            self._y.append(d)
-            #yn = ( temp_y[i] - self._axis_y_graph_min ) / (self._axis_y_graf_max - self._axis_y_graph_min)
-            #self._y.append(yn)
-
-
+            e = d - 0.5
+            f = e * 2 * self._axis_y_graf_max
+            self._y.append(f)
 
     def check_stationarity(self):
 
