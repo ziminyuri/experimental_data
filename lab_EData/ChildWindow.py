@@ -117,9 +117,22 @@ class ChildWindow(Toplevel):
         if self.c2.get() == "Значения за областью":
             model1 = Model(8)
 
+        if self.c2.get() == "Адитивная модель №1":
+            model1 = Model(9)
+
+        if self.c2.get() == "Адитивная модель №2":
+            model1 = Model(10)
+
+        if self.c2.get() == "Мультипликативная модель №1":
+            model1 = Model(11)
+
+        if self.c2.get() == "Мультипликативная модель №2":
+            model1 = Model(12)
+
 
         self.set_defual_values_for_model(model1)
         model1.calculation()
+        model1.normalization()
         self.main.draw_graph(model1, self.c1.get())
 
         self.destroy()
@@ -142,7 +155,10 @@ class ChildWindow(Toplevel):
         label2.place(x=10, y=60)
         self.c2 = ttk.Combobox(self, values = [u"y(x)=kx+b",u"y(x)=-kx+b",u"y(x) = beta * exp^(alpha * i)",
                                          u"y(x) = beta * exp^(alpha * -i)", u"Встроенный рандом",u"Кастомный рандом",
-                                         u"Аномальные участки", u"Значения за областью"],height=8)
+                                         u"Аномальные участки", u"Значения за областью", u"Адитивная модель №1",
+                                        u"Адитивная модель №2", u"Мультипликативная модель №1", u"Мультипликативная модель №2"],
+                               height=12)
+
         self.c2.place(x=10, y=80)
 
         ### Ввод k
