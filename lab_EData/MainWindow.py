@@ -12,8 +12,21 @@ class MainWindow(Frame):
 
         self.init_main_window()
 
+    def append_graph(self,model):
+        self.graph.append(model)
+
     def click_button_add(self):
         ChildWindow(self, self.root)
+
+
+
+    def check_stationarity_click_button(self):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+
 
     def init_main_window(self):
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
@@ -63,8 +76,16 @@ class MainWindow(Frame):
         b2 = Button(text="Добавить", command=self.click_button_add, width="26", height="2")
         b2.place(x=1120, y=70)
 
-        b3 = Button(text="Проверить на стационарность", command=self.click_button_add, width="26", height="2")
-        b3.place(x=1120, y=120)
+        label1 = Label(text="Номер графика", height=1, width=14, font='Arial 14')
+        label1.place(x=1120, y=150)
+        self.c1 = ttk.Combobox(values=[u"1", u"2", u"3", u"4"], height=4, width = "24")
+        self.c1.place(x=1120, y=180)
+
+        b3 = Button(text="Среднее значение", command=self.click_button_add, width="26", height="2")
+        b3.place(x=1120, y=220)
+
+        b4 = Button(text="Дисперсия", command=self.click_button_add, width="26", height="2")
+        b4.place(x=1120, y=270)
 
     def draw_graph(self, model, chart_number):
 

@@ -134,6 +134,7 @@ class ChildWindow(Toplevel):
         model1.calculation()
         model1.normalization()
         self.main.draw_graph(model1, self.c1.get())
+        
 
         self.destroy()
 

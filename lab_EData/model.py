@@ -12,6 +12,7 @@ class Model():
         self._y = []
 
         self._option = option #Тип функции
+        self._graph = 0 #Номер графика
 
         self._x = []
 
@@ -103,7 +104,7 @@ class Model():
 
         average_value = 0
 
-        delta_min_max = (- self._axis_y_graph_min + self._axis_y_graf_max) * 0.05
+        delta_min_max = (2 * self._axis_y_graf_max) * 0.05
 
         for i in range(self._N):
             average_value = average_value + self._y[i]
