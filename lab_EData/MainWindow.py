@@ -12,11 +12,8 @@ class MainWindow(Frame):
 
         self.init_main_window()
 
-    def append_graph(self,model):
-        self.graph.append(model)
-
     def click_button_add(self):
-        ChildWindow(self, self.root)
+        ChildWindow(self, self.root, self.graph)
 
 
 
@@ -25,7 +22,6 @@ class MainWindow(Frame):
         if self.c1.get() == "":
             messagebox.showinfo("Не указан номер графика")
             pass
-
 
 
     def init_main_window(self):
@@ -81,7 +77,7 @@ class MainWindow(Frame):
         self.c1 = ttk.Combobox(values=[u"1", u"2", u"3", u"4"], height=4, width = "24")
         self.c1.place(x=1120, y=180)
 
-        b3 = Button(text="Среднее значение", command=self.click_button_add, width="26", height="2")
+        b3 = Button(text="Среднее значение", command=self.check_stationarity_click_button, width="26", height="2")
         b3.place(x=1120, y=220)
 
         b4 = Button(text="Дисперсия", command=self.click_button_add, width="26", height="2")
@@ -94,9 +90,6 @@ class MainWindow(Frame):
             ax = fig.add_subplot(111)
             ax.set_xlim([0, model.get_N()])
             ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
-
-            print(model.get_x())
-            print(model.get_y())
 
             ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.

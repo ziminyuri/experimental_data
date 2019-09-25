@@ -75,6 +75,12 @@ class Model():
     def get_y(self):
         return self._y
 
+    def set_graph(self, number):
+        self._graph = number
+
+    def get_graph(self):
+        return self._graph
+
     def normalization(self):
         x_max = self._y[0]
         x_min = self._y[0]
@@ -117,8 +123,6 @@ class Model():
         for i in range(self._all_average_value.__len__() - 1):
             if self._all_average_value[i] - self._all_average_value[i+1] > delta_min_max:
                 flag_stationarity = False
-
-        print(self._all_average_value)
 
         return flag_stationarity
 
@@ -185,7 +189,6 @@ class Model():
                     if new_value_for_even == 1:
                         new_value = - new_value
 
-                    print(new_value)
                     self._y.append(new_value)
 
                 except:
@@ -234,7 +237,6 @@ class Model():
                     if new_value_for_even == 1:
                         new_value = - new_value
 
-                    print(new_value)
                     self._y.append(new_value)
 
                 except:

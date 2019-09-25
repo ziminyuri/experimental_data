@@ -1,4 +1,3 @@
-from display import *
 from tkinter import *
 from MainWindow import *
 

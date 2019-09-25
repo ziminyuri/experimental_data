@@ -4,11 +4,14 @@ from model import *
 from tkinter import messagebox
 
 class ChildWindow(Toplevel):
-    def __init__(self, main_window, root):
+    def __init__(self, main_window, root, graph_array):
         super().__init__(root)
         self.root = root
+        self.graph_array = graph_array
+
         self.main = main_window
         self.init_child_window()
+
 
 
     def set_defual_values_for_model(self, model):
@@ -85,6 +88,19 @@ class ChildWindow(Toplevel):
                 messagebox.showerror("Ошибка", "Максимальное значение ф-ии должно быть целочисленным")
                 return
 
+        #Указали какому графику принадлежит график
+        model.set_graph(int(self.c1.get()))
+
+    def add_model(self, model):
+
+        j = 0
+        for i in (self.graph_array):
+            if i.get_graph() == int(self.c1.get()):
+                del self.graph_array[j]
+            j= j + 1
+
+        self.graph_array.append(model)
+
     def click_button_add_and_close(self):
 
         if self.c1.get() == "":
@@ -129,12 +145,12 @@ class ChildWindow(Toplevel):
         if self.c2.get() == "Мультипликативная модель №2":
             model1 = Model(12)
 
-
         self.set_defual_values_for_model(model1)
         model1.calculation()
         model1.normalization()
+
+        self.add_model(model1)
         self.main.draw_graph(model1, self.c1.get())
-        
 
         self.destroy()
 
