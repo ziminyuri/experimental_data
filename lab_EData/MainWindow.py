@@ -15,13 +15,52 @@ class MainWindow(Frame):
     def click_button_add(self):
         ChildWindow(self, self.root, self.graph)
 
-
-
     def check_stationarity_click_button(self):
 
         if self.c1.get() == "":
             messagebox.showinfo("Не указан номер графика")
             pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                check_result = i.check_stationarity_average_value()
+
+        if check_result == True:
+            messagebox.showinfo("Проверка на стационарность: Среднее значение","График стационарен")
+        else:
+            messagebox.showinfo("Проверка на стационарность: Среднее значение","График не стационарен")
+
+    def check_stationarity_dispersion_click_button(self):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                check_result = i.check_stationarity_dispersion(1)
+
+        """
+        if check_result == True:
+            messagebox.showinfo("Проверка на стационарность: Дисперсия","График стационарен")
+        else:
+            messagebox.showinfo("Проверка на стационарность: Дисперсия","График не стационарен")
+        """
+
+        print(check_result)
+        messagebox.showinfo("Проверка на стационарность: Дисперсия", "Корень из дисперсии: " + str(check_result))
+
+    def check_stationarity_dispersion_x_10_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                check_result = i.check_stationarity_dispersion(10)
+
+        print(check_result)
+        messagebox.showinfo("Проверка на стационарность: Дисперсия", "Корень из дисперсии x10: " + str(check_result))
 
 
     def init_main_window(self):
@@ -80,8 +119,11 @@ class MainWindow(Frame):
         b3 = Button(text="Среднее значение", command=self.check_stationarity_click_button, width="26", height="2")
         b3.place(x=1120, y=220)
 
-        b4 = Button(text="Дисперсия", command=self.click_button_add, width="26", height="2")
+        b4 = Button(text="Дисперсия", command=self.check_stationarity_dispersion_click_button, width="26", height="2")
         b4.place(x=1120, y=270)
+
+        b4 = Button(text="Дисперсия x10", command=self.check_stationarity_dispersion_x_10_click_button, width="26", height="2")
+        b4.place(x=1120, y=320)
 
     def draw_graph(self, model, chart_number):
 

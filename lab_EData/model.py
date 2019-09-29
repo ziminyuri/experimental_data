@@ -6,7 +6,7 @@ import copy
 class Model():
     def __init__(self, option):
         self._k = 0.1
-        self._b = 5
+        self._b = 4
         self._beta = 2
         self._alpha = 0.5
         self._y = []
@@ -20,12 +20,15 @@ class Model():
         self._axis_y_graf_max = 100      #Максимальное значение функции
         self._axis_y_delta = 10         #Небходимо для самого графика, например: у_min = -(delta + self.axis_y_graf_max)
 
-        self._N = 1000    #Количество точек по оси Х
+        self._N = 1000   #Количество точек по оси Х
         self._n = 10     #Начало аномального отрезка
         self._m = 40     #Окончание аномального отрезка
-        self._argument = 100  #Константа на сколько поднять/опустить точки на аномальном участке
+        self._argument = self._axis_y_graf_max * 0.1  #Константа на сколько поднять/опустить точки на аномальном участке
 
         self._all_average_value = []   #Средние значения
+        self._dispersion = []   #Дисперсия
+
+        self._piecewise_function = int(self._N/3)
 
         for i in range(self._N):
             self._x.append(i)
@@ -33,8 +36,11 @@ class Model():
     def set_k(self,k):
         self._k = k
 
-    def set_b(self,b):
+    def set_b(self, b):
         self._b = b
+
+    def set_argument(self, a):
+        self._argument = a
 
     def set_beta(self,beta):
         self._beta = beta
@@ -102,7 +108,7 @@ class Model():
             f = e * 2 * self._axis_y_graf_max
             self._y.append(f)
 
-    def check_stationarity(self):
+    def check_stationarity_average_value(self):
 
         number_of_gaps = 10 #Количество промежутков
 
@@ -113,19 +119,85 @@ class Model():
         delta_min_max = (2 * self._axis_y_graf_max) * 0.05
 
         for i in range(self._N):
-            average_value = average_value + self._y[i]
-            if i % gap_length == 0:
+            average_value = average_value + math.fabs(self._y[i])
+            if i % gap_length == 0 and i > 0 or i == self._N -1 :
                 average_value = average_value / gap_length
                 self._all_average_value.append(average_value)
                 average_value = 0
 
         flag_stationarity = True
         for i in range(self._all_average_value.__len__() - 1):
-            if self._all_average_value[i] - self._all_average_value[i+1] > delta_min_max:
+
+            if math.fabs(self._all_average_value[i] - self._all_average_value[i+1]) > delta_min_max:
                 flag_stationarity = False
 
         return flag_stationarity
 
+    def check_stationarity_dispersion(self, iteration_number):
+
+        """
+        number_of_gaps = 10  # Количество промежутков
+
+        gap_length = int(self._N / number_of_gaps)  # Длина промежутка
+
+        dispersion = 0
+
+        delta_min_max = (2 * self._axis_y_graf_max) * 0.05
+
+        j = 0
+        for i in range(self._N):
+
+            dispersion = dispersion + ( self._y[i] - self._all_average_value[j] ) * ( self._y[i] - self._all_average_value[j] )
+
+            if i % gap_length  == 0 and i > 0 or i == self._N-1:
+                dispersion = dispersion / gap_length
+                self._dispersion.append(dispersion)
+                dispersion = 0
+                j= j+1
+
+        flag_stationarity = True
+        for i in range(self._dispersion.__len__() - 1):
+
+            print("Дисперсия № " + str(i))
+            print(self._dispersion[i])
+            print("Дисперсия № " + str(i+1))
+            print(self._dispersion[i+1])
+
+            if math.fabs(self._dispersion[i] - self._dispersion[i + 1]) > delta_min_max:
+                flag_stationarity = False
+
+        return flag_stationarity
+        """
+
+        for i in range(iteration_number):
+            self.calculation()
+            self.check_stationarity_average_value()
+
+            number_of_gaps = 10  # Количество промежутков
+
+            average_value = 0
+
+            for i  in range(number_of_gaps):
+                average_value = average_value + self._all_average_value[i]
+
+            dispersion = 0
+            for i in range(self._N):
+                dispersion = (self._y[i] - average_value) * (self._y[i] - average_value) + dispersion
+
+            dispersion = dispersion / self._N
+            self._dispersion.append(dispersion)
+
+
+        dispersion = 0
+        for i in range(iteration_number):
+            dispersion = dispersion + self._dispersion[i]
+
+
+        dispersion = dispersion / iteration_number
+
+        dispersion = math.sqrt(dispersion)
+
+        return dispersion
 
     def calculation(self):
 
@@ -133,18 +205,21 @@ class Model():
 
         # y(x)=kx+b
         if (self._option == 1):
+
             for i in range(self._N):
                 yn = self._k * i + self._b
                 self._y.append(yn)
 
         # y(x)=-kx+b
         if (self._option == 2):
+
             for i in range(self._N):
                 yn = -self._k * i + self._b
                 self._y.append(yn)
 
         # y(x) = beta * exp^(alpha * i)
         if (self._option == 3):
+
             for i in range(self._N):
                 try:
                     yn = self._beta * math.exp((self._alpha * i))
@@ -155,6 +230,7 @@ class Model():
 
         # y(x) = beta * exp^(alpha * -i)
         if (self._option == 4):
+
             for i in range(self._N):
                 try:
                     yn = self._beta * math.exp((self._alpha * -i))
@@ -165,6 +241,7 @@ class Model():
 
         #Встроенный рандом
         if(self._option == 5):
+
             for i in range(self._N):
                 try:
                     yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
@@ -174,6 +251,7 @@ class Model():
 
         #Кастомный рандом
         if (self._option == 6):
+
             for i in range(self._N):
                 try:
                     temp_string_time = str(time.time())
@@ -244,6 +322,7 @@ class Model():
 
         # Адитивная модель №1
         if(self._option == 9):
+
             for i in range(self._N):
                 try:
                     yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
@@ -258,6 +337,7 @@ class Model():
 
         # Адитивная модель №2
         if (self._option == 10):
+
             for i in range(self._N):
                 try:
                     yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
@@ -272,6 +352,7 @@ class Model():
 
         # Мультипликативная модель №1
         if (self._option == 11):
+
             for i in range(self._N):
                 try:
                     yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
@@ -284,8 +365,11 @@ class Model():
                 except:
                     self._y.append(0)
 
+            self._y.reverse()
+
         # Мультипликативная модель №2
         if (self._option == 12):
+
             for i in range(self._N):
                 try:
                     yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
@@ -295,6 +379,26 @@ class Model():
                     yn = yn * yn_1
 
                     self._y.append(yn)
+                except:
+                    self._y.append(0)
+
+        # График кусочной функции
+        if (self._option == 13):
+
+            for i in range(self._N):
+                try:
+                    if i < self._piecewise_function:
+                        yn = -self._k * i + self._b
+
+
+                    if i < self._piecewise_function * 2 and i >= self._piecewise_function:
+                        yn = random.uniform(self._axis_y_graph_min, self._axis_y_graf_max)
+
+                    if i >= self._piecewise_function * 2:
+                        yn = self._k * i + self._b
+
+                    self._y.append(yn)
+
                 except:
                     self._y.append(0)
 
