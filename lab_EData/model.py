@@ -105,6 +105,18 @@ class Model():
 
         return result
 
+    # Проверяем, что рассчитаны эксцесс и стандартное отклонение
+    def check_excess_and_standard_deviation(self):
+        result = False
+
+        if self._standard_deviation != 0:
+            if self._excess != 0:
+                result = True
+        else:
+            result = False
+
+        return result
+
     def normalization(self):
         x_max = self._y[0]
         x_min = self._y[0]
@@ -208,7 +220,6 @@ class Model():
 
         return self._standard_deviation
 
-
     #Рассчет асимметрии
     def asymmetry(self):
         sum_of_values = 0
@@ -229,6 +240,27 @@ class Model():
         self._asymmetry_coefficient = self._asymmetry / sigma3
 
         return self._asymmetry_coefficient
+
+    # Рассчет эксцесса
+    def excess(self):
+        sum_of_values = 0
+
+        for i in range(self._N):
+            temp_value = (self._y[i] - self._average_value)
+            temp_value = temp_value ** 4                        # Возведение в степень 4
+            sum_of_values = sum_of_values + temp_value
+
+        self._excess = sum_of_values / self._N
+
+        return self._excess
+
+    # Рассчет куртозис
+    def kurtosis(self):
+
+        kurtosis = self._excess / (self._standard_deviation ** 4)
+        kurtosis = kurtosis - 3
+
+        return kurtosis
 
     def calculation(self):
 

@@ -12,8 +12,6 @@ class ChildWindow(Toplevel):
         self.main = main_window
         self.init_child_window()
 
-
-
     def set_defual_values_for_model(self, model):
 
         if self.input_k.get() != "":
@@ -235,7 +233,6 @@ class ChildWindow(Toplevel):
         label10.place(x=10, y=160)
         self.input_S_max = Entry(self,width=22)
         self.input_S_max.place(x=10, y=180)
-
 
         b1 = Button(self, text="Добавить", command=self.click_button_add_and_close, width="15", height="2")
         b1.place(x=300, y=350)

@@ -12,15 +12,9 @@ class MainWindow(Frame):
 
         self.init_main_window()
 
-    def click_button_add(self):
+    def click_button_add_model(self):
 
         ChildWindow(self, self.root, self.graph)
-
-        self._b3['state'] = 'normal'    # Активирование кнопки "Стационарность: СЗ"
-        self._b4['state'] = 'normal'    # Активирование кнопки "Среднее значение"
-        self._b5['state'] = 'normal'    # Активирование кнопки "Дисперсия"
-        self._b6['state'] = 'normal'    # Активирование кнопки "Дисперсия х10"
-
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     def check_stationarity_click_button(self):
@@ -80,6 +74,7 @@ class MainWindow(Frame):
         messagebox.showinfo("Среднее значение", "Среднее значение: " + str(check_result))
 
         self._button_asymmetry['state'] = 'normal'  # Активирование кнопки "Асимметрия"
+        self._button_excess['state'] = 'normal'     # Активирование кнопки "Эксцесс"
 
     # Обработка нажатия на кнопку "Асимметрия"
     def asymmetry_click_button(self):
@@ -94,7 +89,11 @@ class MainWindow(Frame):
                 check_button_asymmetry_coefficient = i.check_asymmetry_and_standard_deviation()
                 if check_button_asymmetry_coefficient == True:
                     self._button_asymmetry_coefficient[
-                        'state'] = 'normal'  # Активирование кнопки "Коэффициент асимметрии"
+                        'state'] = 'normal'                    # Активирование кнопки "Коэффициент асимметрии"
+
+                check_button_kurtosis = i.check_excess_and_standard_deviation()
+                if check_button_kurtosis == True:
+                    self._button_kurtosis['state'] = 'normal'  # Активирование кнопки "Куртозиса"
 
         messagebox.showinfo("Ассиметрия", "Ассиметрия: " + str(result))
 
@@ -113,6 +112,10 @@ class MainWindow(Frame):
                     self._button_asymmetry_coefficient[
                         'state'] = 'normal'  # Активирование кнопки "Коэффициент асимметрии"
 
+                check_button_kurtosis = i.check_excess_and_standard_deviation()
+                if check_button_kurtosis == True:
+                    self._button_kurtosis['state'] = 'normal'  # Активирование кнопки "Куртозиса"
+
         messagebox.showinfo("Стандартное отклонение", "Стандартное отклонение: " + str(result))
 
     # Обработка нажатия на кнопку "Коэффициент асимметрии"
@@ -126,6 +129,238 @@ class MainWindow(Frame):
                 result = i.asymmetry_coefficient()
 
         messagebox.showinfo("Коэффициент асимметрии", "Коэффициент асимметрии: " + str(result))
+
+    # Обработка нажатия на кнопку "Эксцесс"
+    def excess_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.excess()
+
+        messagebox.showinfo("Эксцесс", "Эксцесс: " + str(result))
+
+    # Обработка нажатия на кнопку "Куртозис"
+    def kurtosis_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.kurtosis()
+
+        messagebox.showinfo("Куртозис", "Куртозис: " + str(result))
+
+    # Обработка нажатия на кнопку "Стандартный коэфифциент"
+    def standard_ratio_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.kurtosis()
+
+        messagebox.showinfo("Стандартный коэфифциент", "Стандартный коэфифциент: " + str(result))
+
+    # Обработка нажатия на кнопку "Среднеквадратичная ошибка"
+    def standard_error_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.kurtosis()
+
+        messagebox.showinfo("Среднеквадратичная ошибка", "Среднеквадратичная ошибка: " + str(result))
+
+    # Обработка нажатия на кнопку "Среднее абсолютное отклонение"
+    def mean_absolute_deviation_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.kurtosis()
+
+        messagebox.showinfo("Среднее абсолютное отклонение", "Среднее абсолютное отклонение: " + str(result))
+
+    # Обработка нажатия на кнопку "Минимальный Х"
+    def x_min_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.kurtosis()
+
+        messagebox.showinfo("Минимальный Х", "Минимальный Х: " + str(result))
+
+    # Обработка нажатия на кнопку "Максимальный Х"
+    def x_max_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика", "Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.kurtosis()
+
+        messagebox.showinfo("Максимальный Х", "Максимальный Х: " + str(result))
+
+    def click_button_add_and_close(self, window, choice_of_calculation):
+
+
+        if choice_of_calculation == 1:
+            self.check_stationarity_click_button()
+
+        if choice_of_calculation == 2:
+            self.average_value_click_button()
+
+        if choice_of_calculation == 3:
+            self.dispersion_click_button()
+
+        if choice_of_calculation == 4:
+            self.dispersion_x_10_click_button()
+
+        if choice_of_calculation == 5:
+            self.standard_deviation()
+
+        if choice_of_calculation == 6:
+            self.asymmetry_click_button()
+
+        if choice_of_calculation == 7:
+            self.asymmetry_coefficient_click_button()
+
+        if choice_of_calculation == 8:
+            self.excess_click_button()
+
+        if choice_of_calculation == 9:
+            self.kurtosis_click_button()
+
+        if choice_of_calculation == 10:
+            self.asymmetry_click_button()
+
+        if choice_of_calculation == 11:
+            self.asymmetry_click_button()
+
+        window.destroy()
+
+    def click_button_close(self, window):
+        window.destroy()
+
+    def click_button_calculation1(self):
+        a = Toplevel()
+        a.title('Вычисления')
+        a.geometry('600x400')
+        label1 = Label(a, text="Номер графика", height=1, width=14, font='Arial 14')
+        label1.place(x=10, y=10)
+        self.c1 = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="24")
+        self.c1.place(x=10, y=30)
+
+        choice_of_calculation = BooleanVar()
+        choice_of_calculation.set(0)
+        stationarity = Radiobutton(a, text='Стационарность: СЗ', variable=choice_of_calculation, value=1)
+        average_value = Radiobutton(a, text='Среднее значение', variable=choice_of_calculation, value=2)
+        dispersion = Radiobutton(a, text='Дисперсия', variable=choice_of_calculation, value=3)
+        dispersion_x_10 = Radiobutton(a, text='Дисперсия x10', variable=choice_of_calculation, value=4)
+        standard_deviation = Radiobutton(a, text='Стандартное отклоение', variable=choice_of_calculation, value=5)
+        asymmetry = Radiobutton(a, text='Асимметрия', variable=choice_of_calculation, value=6)
+        asymmetry_coefficient = Radiobutton(a, text='Коэффициент асимметрии', variable=choice_of_calculation, value=7)
+        excess = Radiobutton(a, text='Эксцесс', variable=choice_of_calculation, value=8)
+        kurtosis = Radiobutton(a, text='Куртозис', variable=choice_of_calculation, value=9)
+        standard_ratio = Radiobutton(a, text='Стандартный коэфифциент', variable=choice_of_calculation, value=10)
+        mean_absolute_deviation = Radiobutton(a, text='Среднее абсолютное отклонение', variable=choice_of_calculation,
+                                              value=11)
+        x_min = Radiobutton(a, text='Минимальный Х', variable=choice_of_calculation, value=12)
+        x_max = Radiobutton(a, text='Максимальный Х', variable=choice_of_calculation, value=13)
+
+        stationarity.place(x=10, y=60)
+        average_value.place(x=10, y=80)
+        dispersion.place(x=10, y=100)
+        dispersion_x_10.place(x=10, y=120)
+        standard_deviation.place(x=10, y=140)
+        asymmetry.place(x=10, y=160)
+        asymmetry_coefficient.place(x=10, y=180)
+        excess.place(x=10, y=200)
+        kurtosis.place(x=10, y=220)
+        standard_ratio.place(x=10, y=240)
+        mean_absolute_deviation.place(x=10, y=260)
+        x_min.place(x=10, y=280)
+        x_max.place(x=10, y=300)
+
+        b1 = Button(a, text="Вычислить",
+                    command=lambda: self.click_button_add_and_close(a, choice_of_calculation.get()),
+                    width="15", height="2")
+        b1.place(x=300, y=350)
+        b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
+        b2.place(x=450, y=350)
+
+        """
+        button_stationarity = Button(a, text="Стационарность: СЗ", command=self.check_stationarity_click_button, width="26",
+                          height="2",state=DISABLED)
+        button_stationarity.place(x=10, y=60)
+
+        b4 = Button(a, text="Среднее значение", command=self.average_value_click_button, width="26", height="2",
+                          state=DISABLED)
+        b4.place(x=10, y=270)
+
+        b5 = Button(a, text="Дисперсия", command=self.dispersion_click_button, width="26", height="2",
+                          state=DISABLED)
+        b5.place(x=10, y=320)
+
+        b6 = Button(a, text="Дисперсия x10", command=self.dispersion_x_10_click_button, width="26",
+                          height="2", state=DISABLED)
+        b6.place(x=10, y=370)
+
+        b7 = Button(a, text="Стандартное отклоение", command=self.standard_deviation, width="26",
+                          height="2", state=DISABLED)
+        b7.place(x=10, y=420)
+
+        button_asymmetry = Button(a, text="Асимметрия", command=self.asymmetry_click_button, width="26", height="2",
+                                        state=DISABLED)
+        button_asymmetry.place(x=10, y=470)
+
+        button_asymmetry_coefficient = Button(a, text="Коэффициент асимметрии",
+                                                    command=self.asymmetry_coefficient_click_button,
+                                                    width="26", height="2", state=DISABLED)
+        button_asymmetry_coefficient.place(x=10, y=520)
+
+        button_excess = Button(a, text="Эксцесс", command=self.excess_click_button, width="26", height="2",
+                                     state=DISABLED)
+        button_excess.place(x=10, y=570)
+
+        button_kurtosis = Button(a, text="Куртозис", command=self.kurtosis_click_button, width="26", height="2",
+                                       state=DISABLED)
+        button_kurtosis.place(x=10, y=620)
+
+        standard_ratio = Button(a, text="Стандартный коэфифциент", command=self.kurtosis_click_button,
+                                      width="26", height="2", state=DISABLED)
+        standard_ratio.place(x=10, y=670)
+
+        standard_error = Button(a, text="Среднеквадратичная ошибка", command=self.kurtosis_click_button, width="26",
+                                      height="2", state=DISABLED)
+        standard_error.place(x=10, y=720)
+
+        mean_absolute_deviation = Button(text="Среднее абсолютное отклонение",
+                                               command=self.kurtosis_click_button, width="26", height="2",
+                                               state=DISABLED)
+        mean_absolute_deviation.place(x=10, y=770)
+
+        x_min = Button(text="Минимальный Х", command=self.kurtosis_click_button, width="26",
+                             height="2", state=DISABLED)
+        x_min.place(x=10, y=820)
+
+        """
+
+        a.grab_set()  # Перехватывает все события происходящие в приложении
+        a.focus_set()  # Захватывает и удерживает фокус
 
     def init_main_window(self):
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
@@ -172,41 +407,11 @@ class MainWindow(Frame):
         canvas.draw()
         canvas.get_tk_widget().place(x=550, y=400)
 
-        b2 = Button(text="Добавить", command=self.click_button_add, width="26", height="2")
+        b2 = Button(text="Добавить", command=self.click_button_add_model, width="26", height="2")
         b2.place(x=1120, y=70)
 
-        label1 = Label(text="Номер графика", height=1, width=14, font='Arial 14')
-        label1.place(x=1120, y=150)
-        self.c1 = ttk.Combobox(values=[u"1", u"2", u"3", u"4"], height=4, width = "24")
-        self.c1.place(x=1120, y=180)
-
-        self._b3 = Button(text="Стационарность: СЗ", command=self.check_stationarity_click_button, width="26", height="2",
-                    state=DISABLED)
-        self._b3.place(x=1120, y=220)
-
-        self._b4 = Button(text="Среднее значение", command=self.average_value_click_button, width="26", height="2",
-                    state=DISABLED)
-        self._b4.place(x=1120, y=270)
-
-        self._b5 = Button(text="Дисперсия", command=self.dispersion_click_button, width="26", height="2",
-                    state=DISABLED)
-        self._b5.place(x=1120, y=320)
-
-        self._b6 = Button(text="Дисперсия x10", command=self.dispersion_x_10_click_button, width="26",
-                    height="2", state=DISABLED)
-        self._b6.place(x=1120, y=370)
-
-        self._b7 = Button(text="Стандартное отклоение", command=self.standard_deviation, width="26",
-                          height="2", state=DISABLED)
-        self._b7.place(x=1120, y=420)
-
-        self._button_asymmetry = Button(text="Асимметрия", command=self.asymmetry_click_button, width="26", height="2",state=DISABLED)
-        self._button_asymmetry.place(x=1120, y=470)
-
-        self._button_asymmetry_coefficient = Button(text="Коэффициент асимметрии",
-                                                    command=self.asymmetry_coefficient_click_button,
-                                                    width="26", height="2", state=DISABLED)
-        self._button_asymmetry_coefficient.place(x=1120, y=520)
+        b3 = Button(text="Вычисления", command=self.click_button_calculation1, width="26", height="2")
+        b3.place(x=1120, y=120)
 
     def draw_graph(self, model, chart_number):
 
