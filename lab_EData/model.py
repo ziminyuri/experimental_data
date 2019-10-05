@@ -27,12 +27,14 @@ class Model():
         self._argument = self._axis_y_graf_max * 0.10  # Константа на сколько поднять/опустить точки на аномальном 
         # участке 
 
-        self._all_average_value = []    # Средние значения
-        self._average_value = 0         # Среднее значения тренда
-        self._dispersion = []           # Дисперсия
+        self._all_average_value = []        # Все средние значения
+        self._average_value = 0             # Среднее значения тренда
+        self._dispersion = 0                # Дисперсия
+        self._standard_deviation = 0        # Стандартное отклонение
+        self._asymmetry = 0                 # Асимметрия
+        self._asymmetry_coefficient = 0     # Коэффициент асимметрии
 
         self._piecewise_function = int(self._N / 3)
-
 
         for i in range(self._N):
             self._x.append(i)
@@ -90,6 +92,18 @@ class Model():
 
     def get_graph(self):
         return self._graph
+
+    # Проверяем, что рассчитаны коэффициенты ассиметрии и стандартного отклонения
+    def check_asymmetry_and_standard_deviation(self):
+        result = False
+
+        if self._standard_deviation != 0:
+            if self._asymmetry != 0:
+                result = True
+        else:
+            result = False
+
+        return result
 
     def normalization(self):
         x_max = self._y[0]
@@ -153,7 +167,8 @@ class Model():
 
         return flag_stationarity
 
-    def check_stationarity_dispersion(self, iteration_number):
+    # Рассчет дисперсии
+    def dispersion(self, iteration_number):
         trend_list = []
 
         for i in range(iteration_number):
@@ -182,12 +197,19 @@ class Model():
         for i in range(self._N):
             dispersion = (average_trend_list[i] - average_value) * (average_trend_list[i] - average_value) + dispersion
 
-        dispersion = dispersion / self._N
-        dispersion = math.sqrt(dispersion)
+        self._dispersion = dispersion / self._N
 
-        return dispersion
+        return self._dispersion
 
-    #Рассчет ассиметрии
+    # Рассчет стандартного отклонения
+    def standard_deviation(self):
+
+        self._standard_deviation = math.sqrt(self._dispersion)
+
+        return self._standard_deviation
+
+
+    #Рассчет асимметрии
     def asymmetry(self):
         sum_of_values = 0
 
@@ -196,9 +218,17 @@ class Model():
             temp_value = temp_value * temp_value * temp_value
             sum_of_values = sum_of_values + temp_value
 
-        asymmetry = sum_of_values / self._N
+        self._asymmetry = sum_of_values / self._N
 
-        return asymmetry
+        return self._asymmetry
+
+    # Рассчет коэффициента асимметрии
+    def asymmetry_coefficient(self):
+
+        sigma3 = self._standard_deviation * self._standard_deviation * self._standard_deviation
+        self._asymmetry_coefficient = self._asymmetry / sigma3
+
+        return self._asymmetry_coefficient
 
     def calculation(self):
 
