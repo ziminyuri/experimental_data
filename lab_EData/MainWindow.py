@@ -15,10 +15,11 @@ class MainWindow(Frame):
     def click_button_add(self):
         ChildWindow(self, self.root, self.graph)
 
+    # Обработка нажатия на кнопку "Стационарность: СЗ"
     def check_stationarity_click_button(self):
 
         if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
+            messagebox.showinfo("Не указан номер графика","Не указан номер графика")
             pass
 
         for i in (self.graph):
@@ -30,46 +31,57 @@ class MainWindow(Frame):
         else:
             messagebox.showinfo("Проверка на стационарность: Среднее значение","График не стационарен")
 
+    # Обработка нажатия на кнопку "Диспресия"
     def check_stationarity_dispersion_click_button(self):
 
         if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
+            messagebox.showinfo("Не указан номер графика","Не указан номер графика")
             pass
 
         for i in (self.graph):
             if i.get_graph() == int(self.c1.get()):
-                check_result = i.check_stationarity_dispersion1(1)
+                check_result = i.check_stationarity_dispersion(1)
 
-        print(check_result)
         messagebox.showinfo("Проверка на стационарность: Дисперсия", "Корень из дисперсии: " + str(check_result))
 
-    #Проверка на стационарность
+    # Обработка нажатия на кнопку "Дисперсия х10"
     def check_stationarity_dispersion_x_10_click_button(self):
         if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
+            messagebox.showinfo("Не указан номер графика","Не указан номер графика")
             pass
 
         for i in (self.graph):
             if i.get_graph() == int(self.c1.get()):
-                check_result = i.check_stationarity_dispersion1(10)
+                check_result = i.check_stationarity_dispersion(10)
 
-        print(check_result)
         messagebox.showinfo("Проверка на стационарность: Дисперсия", "Корень из дисперсии x10: " + str(check_result))
 
-    #Среднее значение
+    # Обработка нажатия на кнопку "Среднее значение"
     def average_value_click_button(self):
         if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
+            messagebox.showinfo("Не указан номер графика","Не указан номер графика")
             pass
 
         for i in (self.graph):
             if i.get_graph() == int(self.c1.get()):
                 check_result = i.average_value()
 
-        print(check_result)
-        messagebox.showinfo("Среднее значение: " + str(check_result))
+        messagebox.showinfo("Среднее значение", "Среднее значение: " + str(check_result))
+
+    # Обработка нажатия на кнопку "Ассиметрия"
+    def asymmetry_click_button(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика","Не указан номер графика")
+            pass
+
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                result = i.asymmetry()
+
+        messagebox.showinfo("Ассиметрия", "Ассиметрия: " + str(result))
 
 
+    
     def init_main_window(self):
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
         label1.place(x=165, y=5)
@@ -134,6 +146,9 @@ class MainWindow(Frame):
 
         b6 = Button(text="Среднее значение", command=self.average_value_click_button, width="26", height="2")
         b6.place(x=1120, y=370)
+
+        b7 = Button(text="Ассиметрия", command=self.asymmetry_click_button, width="26", height="2")
+        b7.place(x=1120, y=420)
 
     def draw_graph(self, model, chart_number):
 
