@@ -33,6 +33,7 @@ class Model():
         self._standard_deviation = 0        # Стандартное отклонение
         self._asymmetry = 0                 # Асимметрия
         self._asymmetry_coefficient = 0     # Коэффициент асимметрии
+        self._standard_ratio = 0            # Стандартный коэффициент
 
         self._piecewise_function = int(self._N / 3)
 
@@ -92,30 +93,6 @@ class Model():
 
     def get_graph(self):
         return self._graph
-
-    # Проверяем, что рассчитаны коэффициенты ассиметрии и стандартного отклонения
-    def check_asymmetry_and_standard_deviation(self):
-        result = False
-
-        if self._standard_deviation != 0:
-            if self._asymmetry != 0:
-                result = True
-        else:
-            result = False
-
-        return result
-
-    # Проверяем, что рассчитаны эксцесс и стандартное отклонение
-    def check_excess_and_standard_deviation(self):
-        result = False
-
-        if self._standard_deviation != 0:
-            if self._excess != 0:
-                result = True
-        else:
-            result = False
-
-        return result
 
     def normalization(self):
         x_max = self._y[0]
@@ -216,12 +193,19 @@ class Model():
     # Рассчет стандартного отклонения
     def standard_deviation(self):
 
+        if self._dispersion == 0:  # Если не была расчитана диспресия
+            self.dispersion(1)
+
         self._standard_deviation = math.sqrt(self._dispersion)
 
         return self._standard_deviation
 
     #Рассчет асимметрии
     def asymmetry(self):
+
+        if self._average_value ==0:
+            self.average_value()
+
         sum_of_values = 0
 
         for i in range(self._N):
@@ -236,6 +220,12 @@ class Model():
     # Рассчет коэффициента асимметрии
     def asymmetry_coefficient(self):
 
+        if self._standard_deviation == 0:
+            self.standard_deviation()
+
+        if self._asymmetry == 0:
+            self.asymmetry()
+
         sigma3 = self._standard_deviation * self._standard_deviation * self._standard_deviation
         self._asymmetry_coefficient = self._asymmetry / sigma3
 
@@ -243,6 +233,10 @@ class Model():
 
     # Рассчет эксцесса
     def excess(self):
+
+        if self._average_value == 0:
+            self.average_value()
+
         sum_of_values = 0
 
         for i in range(self._N):
@@ -257,10 +251,77 @@ class Model():
     # Рассчет куртозис
     def kurtosis(self):
 
+        if self._standard_deviation ==0:
+            self.standard_deviation()
+
+        if self._excess == 0:
+            self.excess()
+
         kurtosis = self._excess / (self._standard_deviation ** 4)
         kurtosis = kurtosis - 3
 
         return kurtosis
+
+    # Рассчет стандартного коэфициента
+    def standard_ratio(self):
+
+        sum_of_values = 0
+
+        for i in range(self._N):
+            temp_value = self._y[i] ** 2
+            sum_of_values = sum_of_values + temp_value
+
+        self._standard_ratio = sum_of_values / self._N
+
+        return self._standard_ratio
+
+    # Рассчет среднеквадратичной ошибки
+    def standard_error(self):
+        if self._standard_ratio == 0:
+            self.standard_ratio()
+
+        standard_error = math.sqrt(self._standard_ratio)
+
+        return standard_error
+
+    # Рассчет среднего абсолютного отклонения
+    def mean_absolute_deviation(self):
+
+        if self._average_value == 0:
+            self.average_value()
+
+        sum_of_values = 0
+
+        for i in range(self._N):
+            sum_of_values = sum_of_values + math.fabs(self._y[i] - self._average_value)
+
+        mean_absolute_deviation = sum_of_values / self._N
+
+        return mean_absolute_deviation
+
+    # Поиск минимального Х
+    def min_X(self):
+
+        min = self._y[0]
+
+        for i in range(self._N):
+            if min > self._y[i]:
+                min = self._y[i]
+
+        return min
+
+    # Поиск максимального Х
+    def max_X(self):
+
+        max = self._y[0]
+
+        for i in range(self._N):
+            if max < self._y[i]:
+                max = self._y[i]
+
+        return max
+
+
 
     def calculation(self):
 
