@@ -189,6 +189,7 @@ class MainWindow(Frame):
 
                 messagebox.showinfo("Максимальный Х", "Максимальный Х: " + str(result))
 
+
     def click_button_add_and_close(self, window, choice_of_calculation):
 
         if choice_of_calculation == 1:
@@ -235,14 +236,32 @@ class MainWindow(Frame):
     def click_button_close(self, window):
         window.destroy()
 
+    # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
         a = Toplevel()
         a.title('Вычисления')
         a.geometry('600x400')
-        label1 = Label(a, text="Номер графика", height=1, width=14, font='Arial 14')
+
+        label1 = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
         label1.place(x=10, y=10)
         self.c1 = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="24")
         self.c1.place(x=10, y=30)
+
+        label2 = Label(a, text="Место для вывода анализа", height=1, width=24, font='Arial 14')
+        label2.place(x=300, y=10)
+        self.c2 = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="24")
+        self.c2.place(x=300, y=30)
+
+        button_bar_graph = Button(a, text="Гистограмма", command=self.click_button_bar_graph, width="26", height="2")
+        button_bar_graph.place(x=300, y=70)
+
+        button_autocorrelation = Button(a, text="Автокорелляция", command=self.click_button_bar_graph, width="26",
+                                        height="2")
+        button_autocorrelation.place(x=300, y=110)
+
+        button_nested_correlation = Button(a, text="Вложенаая корелляция", command=self.click_button_bar_graph,
+                                           width="26", height="2")
+        button_nested_correlation.place(x=300, y=150)
 
         choice_of_calculation = IntVar()
         choice_of_calculation.set(0)
@@ -282,65 +301,27 @@ class MainWindow(Frame):
         b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
         b2.place(x=450, y=350)
 
-        """
-        button_stationarity = Button(a, text="Стационарность: СЗ", command=self.check_stationarity_click_button, width="26",
-                          height="2",state=DISABLED)
-        button_stationarity.place(x=10, y=60)
-
-        b4 = Button(a, text="Среднее значение", command=self.average_value_click_button, width="26", height="2",
-                          state=DISABLED)
-        b4.place(x=10, y=270)
-
-        b5 = Button(a, text="Дисперсия", command=self.dispersion_click_button, width="26", height="2",
-                          state=DISABLED)
-        b5.place(x=10, y=320)
-
-        b6 = Button(a, text="Дисперсия x10", command=self.dispersion_x_10_click_button, width="26",
-                          height="2", state=DISABLED)
-        b6.place(x=10, y=370)
-
-        b7 = Button(a, text="Стандартное отклоение", command=self.standard_deviation, width="26",
-                          height="2", state=DISABLED)
-        b7.place(x=10, y=420)
-
-        button_asymmetry = Button(a, text="Асимметрия", command=self.asymmetry_click_button, width="26", height="2",
-                                        state=DISABLED)
-        button_asymmetry.place(x=10, y=470)
-
-        button_asymmetry_coefficient = Button(a, text="Коэффициент асимметрии",
-                                                    command=self.asymmetry_coefficient_click_button,
-                                                    width="26", height="2", state=DISABLED)
-        button_asymmetry_coefficient.place(x=10, y=520)
-
-        button_excess = Button(a, text="Эксцесс", command=self.excess_click_button, width="26", height="2",
-                                     state=DISABLED)
-        button_excess.place(x=10, y=570)
-
-        button_kurtosis = Button(a, text="Куртозис", command=self.kurtosis_click_button, width="26", height="2",
-                                       state=DISABLED)
-        button_kurtosis.place(x=10, y=620)
-
-        standard_ratio = Button(a, text="Стандартный коэфифциент", command=self.kurtosis_click_button,
-                                      width="26", height="2", state=DISABLED)
-        standard_ratio.place(x=10, y=670)
-
-        standard_error = Button(a, text="Среднеквадратичная ошибка", command=self.kurtosis_click_button, width="26",
-                                      height="2", state=DISABLED)
-        standard_error.place(x=10, y=720)
-
-        mean_absolute_deviation = Button(text="Среднее абсолютное отклонение",
-                                               command=self.kurtosis_click_button, width="26", height="2",
-                                               state=DISABLED)
-        mean_absolute_deviation.place(x=10, y=770)
-
-        x_min = Button(text="Минимальный Х", command=self.kurtosis_click_button, width="26",
-                             height="2", state=DISABLED)
-        x_min.place(x=10, y=820)
-
-        """
-
         a.grab_set()  # Перехватывает все события происходящие в приложении
         a.focus_set()  # Захватывает и удерживает фокус
+
+    def click_button_bar_graph(self):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        model = Model(14)
+        model.bar_graph()
+
+        j = 0
+        for i in (self.graph):
+            if i.get_graph() == int(self.c1.get()):
+                del self.graph[j]
+            j = j + 1
+
+        self.graph_array.append(model)
+
+        self.draw_graph(model, self.c1.get(), model.get_number_of_intervals(), 0, model.get_max_bar_graph_value())
 
     def init_main_window(self):
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
@@ -393,13 +374,13 @@ class MainWindow(Frame):
         b3 = Button(text="Вычисления", command=self.click_button_calculation1, width="26", height="2")
         b3.place(x=1120, y=120)
 
-    def draw_graph(self, model, chart_number):
+    def draw_graph(self, model, chart_number, x, y_min, y_max):
 
         if chart_number == "1":
             fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.get_N()])
-            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.set_xlim([0, x])
+            ax.set_ylim([y_min - model.get_argument(), y_max + model.get_argument()])
 
             ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
@@ -409,8 +390,8 @@ class MainWindow(Frame):
         if chart_number == "2":
             fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.get_N()])
-            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.set_xlim([0, x])
+            ax.set_ylim([y_min - model.get_argument(),  + model.get_argument()])
             ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
@@ -419,8 +400,8 @@ class MainWindow(Frame):
         if chart_number == "3":
             fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.get_N()])
-            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.set_xlim([0, x])
+            ax.set_ylim([y_min - model.get_argument(), y_max + model.get_argument()])
             ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()
@@ -429,8 +410,8 @@ class MainWindow(Frame):
         if chart_number == "4":
             fig = Figure(figsize=(5, 3), dpi=100)
             ax = fig.add_subplot(111)
-            ax.set_xlim([0, model.get_N()])
-            ax.set_ylim([model.get_axis_y_graph_min() - model.get_argument(), model.get_axis_y_graf_max() + model.get_argument()])
+            ax.set_xlim([0, x])
+            ax.set_ylim([y_min - model.get_argument(), y_max + model.get_argument()])
             ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
             canvas.draw()

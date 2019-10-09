@@ -35,10 +35,21 @@ class Model():
         self._asymmetry_coefficient = 0     # Коэффициент асимметрии
         self._standard_ratio = 0            # Стандартный коэффициент
 
+        # Параметры для гистограммы
+        self._bar_graph = []                # Значения для графика гистограммы
+        self._number_of_intervals = 40      # Количество интервалов для гистограмм
+        self._max_bar_graph_value = 0
+
         self._piecewise_function = int(self._N / 3)
 
         for i in range(self._N):
             self._x.append(i)
+
+    def get_number_of_intervals(self):
+        return self._number_of_intervals
+
+    def get_max_bar_graph_value(self):
+        return self._max_bar_graph_value
 
     def set_k(self, k):
         self._k = k
@@ -64,7 +75,7 @@ class Model():
     def set_axis_y_graf_max(self, axis_y_graf_max):
         self._axis_y_graf_max = axis_y_graf_max
 
-    def get_axis_y_graf_max(self):
+    def get_axis_y_graph_max(self):
         return self._axis_y_graf_max
 
     def set_n(self, n):
@@ -321,7 +332,27 @@ class Model():
 
         return max
 
+    # Гистограмма
+    def bar_graph(self):
 
+        interval_size = int((math.fabs(self._axis_y_graph_min) + self._axis_y_graf_max) / self._number_of_intervals)
+        temp_value_hit_count = 0
+
+
+
+        for i in range(self._number_of_intervals):
+            for j in range(self._N):
+                if self._y[j] >= (self._axis_y_graph_min + interval_size * i) and self._y[j] < (self._axis_y_graph_min +
+                    interval_size * (i+1)):
+
+                    temp_value_hit_count = temp_value_hit_count + 1
+
+            self._bar_graph.append(temp_value_hit_count)
+
+            if (self._max_bar_graph_value <= temp_value_hit_count):
+                self._max_bar_graph_value = temp_value_hit_count
+
+            temp_value_hit_count = 0
 
     def calculation(self):
 
