@@ -81,7 +81,7 @@ class ChildWindow(Toplevel):
         if self.input_S_max.get() != "":
             try:
                 max = int(self.input_S_max.get())
-                model.set_axis_y_graf_max(max)
+                model.set_axis_y_graph_max(max)
             except:
                 messagebox.showerror("Ошибка", "Максимальное значение ф-ии должно быть целочисленным")
                 return
@@ -151,9 +151,9 @@ class ChildWindow(Toplevel):
         model1.normalization()
 
         self.add_model(model1)
-        self.main.draw_graph(model1, self.c1.get(), model1.get_N(), model1.get_axis_y_graph_min(),
-                             model1.get_axis_y_graph_max())
+        self.main.draw_graph(model1)
 
+        self.main.set_combobox_value(self.c1.get())
         self.destroy()
 
     def click_button_close(self):
