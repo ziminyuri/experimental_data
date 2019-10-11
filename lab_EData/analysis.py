@@ -17,9 +17,12 @@ class Analysis:
         self._standard_ratio = 0            # Стандартный коэффициент
 
         # Параметры для гистограммы
-        self._bar_graph = []            # Значения для графика гистограммы
-        self._number_of_intervals = 40   # Количество интервалов для гистограмм
+        self._bar_graph = []                # Значения для графика гистограммы
+        self._number_of_intervals = 40      # Количество интервалов для гистограмм
         self._max_bar_graph_value = 0
+
+        # Параметры для автокорреляции
+        self._l = model.get_N() - 1         # Сдвиг
 
     def get_number_of_intervals(self):
         return self._number_of_intervals
@@ -267,5 +270,56 @@ class Analysis:
         model.set_x_all(x)
         model.set_axis_y_graph_min(0)
         model.set_axis_y_graph_max(max_bar_graph_value)
+
+        return model
+
+    # Автокорреляция
+    def autocorrelation(self):
+
+        model = Model(15)  # Модель графика автокорреляции
+        analysis_model_N = self._model.get_N()
+
+        if self._average_value == 0:
+            self.average_value()
+
+        x = []
+        y = []
+
+        result_y_min = 0
+        result_y_max = 0
+
+        for i in range(self._l):
+
+            numerator = 0
+            denominator = 0
+
+            for j in range(analysis_model_N - i - 1):
+                y_i = self._model.get_y_i(j)
+                y_l = self._model.get_y_i(j+i)
+                temp_value = (y_i - self._average_value) * (y_l - self._average_value)
+                numerator = numerator + temp_value
+
+            for j in range(analysis_model_N - 1):
+                y_i = self._model.get_y_i(j)
+                temp_value = (y_i - self._average_value)
+                temp_value = temp_value ** 2
+                denominator = denominator + temp_value
+
+            result_y = numerator / denominator
+
+            if result_y_min > result_y:
+                result_y_min = result_y
+
+            if result_y_max < result_y:
+                result_y_max = result_y
+
+            x.append(i)
+            y.append(result_y)
+
+        model.set_N(self._l)
+        model.set_y_all(y)
+        model.set_x_all(x)
+        model.set_axis_y_graph_min(result_y_min)
+        model.set_axis_y_graph_max(result_y_max)
 
         return model

@@ -187,6 +187,29 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    def click_button_autocorrelation(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.autocorrelation()
+        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.get_graph() == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
         a = Toplevel()
@@ -207,7 +230,7 @@ class MainWindow(Frame):
                                   width="26", height="2")
         button_bar_graph.place(x=300, y=70)
 
-        button_autocorrelation = Button(a, text="Автокорелляция", command=lambda: self.click_button_bar_graph(a),
+        button_autocorrelation = Button(a, text="Автокорелляция", command=lambda: self.click_button_autocorrelation(a),
                                         width="26", height="2")
         button_autocorrelation.place(x=300, y=110)
 
