@@ -273,6 +273,70 @@ class Analysis:
 
         return model
 
+    # Вложенная корреляция
+    def nested_correlation(self):
+
+        model = Model(16)                       # Модель графика вложенная корреляция
+        analysis_model_N = self._model.get_N()
+
+        y_list_1 = copy.deepcopy(self._model.get_y())
+        self.average_value()
+        average_value1 = self._average_value
+
+        self._model.calculation()
+        y_list_2 = copy.deepcopy(self._model.get_y())
+        self.average_value()
+        average_value2 = self._average_value
+
+        x = []
+        y = []
+
+        result_y_min = 0
+        result_y_max = 0
+
+        # Знаменатель
+        sum_1 = 0
+        sum_2 = 0
+
+        for j in range(analysis_model_N - 1):
+            temp_value_1 = (y_list_1[j] - average_value1)
+            temp_value_1 = temp_value_1 ** 2
+            sum_1 = sum_1 + temp_value_1
+
+            temp_value_2 = (y_list_2[j] - average_value2)
+            temp_value_2 = temp_value_2 ** 2
+            sum_2 = sum_2 + temp_value_2
+
+        denominator = sum_1 * sum_2
+        denominator = math.sqrt(denominator)
+
+        for i in range(self._l):
+
+            numerator = 0
+
+            for j in range(analysis_model_N - i - 1):
+                temp_value = (y_list_1[j] - average_value1) * (y_list_2[j+i] - average_value2)
+                numerator = numerator + temp_value
+
+            result_y = numerator / denominator
+
+            if result_y_min > result_y:
+                result_y_min = result_y
+
+            if result_y_max < result_y:
+                result_y_max = result_y
+
+            x.append(i)
+            y.append(result_y)
+
+        model.set_N(self._l)
+        model.set_y_all(y)
+        model.set_x_all(x)
+        model.set_axis_y_graph_min(result_y_min)
+        model.set_axis_y_graph_max(result_y_max)
+
+        return model
+
     # Автокорреляция
     def autocorrelation(self):
 
@@ -288,22 +352,25 @@ class Analysis:
         result_y_min = 0
         result_y_max = 0
 
+        # Считаем знаменатель
+
+        denominator = 0
+        for j in range(analysis_model_N - 1):
+            y_i = self._model.get_y_i(j)
+            temp_value = (y_i - self._average_value)
+            temp_value = temp_value ** 2
+            denominator = denominator + temp_value
+
+        # Считаем числитель
         for i in range(self._l):
 
             numerator = 0
-            denominator = 0
 
             for j in range(analysis_model_N - i - 1):
                 y_i = self._model.get_y_i(j)
                 y_l = self._model.get_y_i(j+i)
                 temp_value = (y_i - self._average_value) * (y_l - self._average_value)
                 numerator = numerator + temp_value
-
-            for j in range(analysis_model_N - 1):
-                y_i = self._model.get_y_i(j)
-                temp_value = (y_i - self._average_value)
-                temp_value = temp_value ** 2
-                denominator = denominator + temp_value
 
             result_y = numerator / denominator
 

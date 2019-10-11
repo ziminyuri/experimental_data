@@ -210,6 +210,29 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    def click_button_nested_correlation(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.nested_correlation()
+        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.get_graph() == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
         a = Toplevel()
@@ -235,7 +258,7 @@ class MainWindow(Frame):
         button_autocorrelation.place(x=300, y=110)
 
         button_nested_correlation = Button(a, text="Вложенаая корелляция",
-                                           command=lambda: self.click_button_bar_graph(a),
+                                           command=lambda: self.click_button_nested_correlation(a),
                                            width="26", height="2")
         button_nested_correlation.place(x=300, y=150)
 
