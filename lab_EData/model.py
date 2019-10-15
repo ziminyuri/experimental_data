@@ -22,10 +22,15 @@ class Model:
         self._axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axis_y_graph_max)
 
         self._N = 1000  # Количество точек по оси Х
-        self._n = 10   # Начало аномального отрезка
+        self._n = 10  # Начало аномального отрезка
         self._m = 40  # Окончание аномального отрезка
         self._argument = self._axis_y_graph_max * 0.10  # Константа на сколько поднять/опустить точки на аномальном
         # участке
+
+        # Гармоничекое процесс
+        self._a_0 = 100  # А0
+        self._f_0 = 11  # 11; 110; 250; 510
+        self._delta_t = 0.001
 
         self._piecewise_function = int(self._N / 3)
 
@@ -37,6 +42,10 @@ class Model:
 
     def set_b(self, b):
         self._b = b
+
+    # Меняем частоту
+    def set_f_0(self, f):
+        self._f_0 = f
 
     def set_argument(self, a):
         self._argument = a
@@ -318,3 +327,9 @@ class Model:
 
                 except:
                     self._y.append(0)
+
+        # График гармонический процесс
+        if self._option == 17:
+            for i in range(self._N):
+                yn = self._a_0 * math.sin(2 * math.pi * self._f_0 * i * self._delta_t)
+                self._y.append(yn)

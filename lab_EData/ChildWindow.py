@@ -146,6 +146,10 @@ class ChildWindow(Toplevel):
         if self.c2.get() == "Кусочная функция":
             model1 = Model(13)
 
+        if self.c2.get() == "Гармоническое процесс":
+            model1 = Model(17)
+            model1.set_f_0(int(self.input_f_0.get()))
+
         self.set_defual_values_for_model(model1)
         model1.calculation()
         model1.normalization()
@@ -174,8 +178,10 @@ class ChildWindow(Toplevel):
         self.c2 = ttk.Combobox(self, values = [u"y(x)=kx+b",u"y(x)=-kx+b",u"y(x) = beta * exp^(alpha * i)",
                                          u"y(x) = beta * exp^(alpha * -i)", u"Встроенный рандом",u"Кастомный рандом",
                                          u"Аномальные участки", u"Значения за областью", u"Адитивная модель №1",
-                                        u"Адитивная модель №2", u"Мультипликативная модель №1", u"Мультипликативная модель №2",
-                                        u"Кусочная функция", u"Автокорелляционная функция", u"Взаимная корелляция"],
+                                        u"Адитивная модель №2", u"Мультипликативная модель №1",
+                                               u"Мультипликативная модель №2", u"Кусочная функция",
+                                               u"Автокорелляционная функция", u"Взаимная корелляция",
+                                               u"Гармоническое процесс"],
                                height=13)
 
         self.c2.place(x=10, y=80)
@@ -203,6 +209,12 @@ class ChildWindow(Toplevel):
         label5.place(x=300, y=160)
         self.input_beta = Entry(self,width=22)
         self.input_beta.place(x=300, y=180)
+
+        # Ввод f0 - частота
+        label6 = Label(self, text="fo", height=1, width=4, font='Arial 14')
+        label6.place(x=300, y=210)
+        self.input_f_0 = Entry(self, width=22)
+        self.input_f_0.place(x=300, y=230)
 
         # Ввод N - Количество записей
         label6 = Label(self,text="Количество записей", height=1, width=17, font='Arial 14')
