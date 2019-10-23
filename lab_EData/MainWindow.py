@@ -24,7 +24,8 @@ class MainWindow(Frame):
         ChildWindow(self, self.root, self.graph)
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
-    def check_stationarity_click_button(self, analysis):
+    @staticmethod
+    def check_stationarity_click_button(analysis):
 
         check_result = analysis.check_stationarity_average_value()
 
@@ -34,79 +35,92 @@ class MainWindow(Frame):
             messagebox.showinfo("Проверка на стационарность: Среднее значение", "График не стационарен")
 
     # Обработка нажатия на кнопку "Диспресия"
-    def dispersion_click_button(self, analysis):
+    @staticmethod
+    def dispersion_click_button(analysis):
 
         check_result = analysis.dispersion(1)
         messagebox.showinfo("Дисперсия", "Дисперсия: " + str(check_result))
 
     # Обработка нажатия на кнопку "Дисперсия х10"
-    def dispersion_x_10_click_button(self, analysis):
+    @staticmethod
+    def dispersion_x_10_click_button(analysis):
 
         check_result = analysis.dispersion(10)
         messagebox.showinfo("Дисперсия", "Дисперсия x10: " + str(check_result))
 
     # Обработка нажатия на кнопку "Среднее значение"
-    def average_value_click_button(self, analysis):
+    @staticmethod
+    def average_value_click_button(analysis):
 
         check_result = analysis.average_value()
         messagebox.showinfo("Среднее значение", "Среднее значение: " + str(check_result))
 
     # Обработка нажатия на кнопку "Асимметрия"
-    def asymmetry_click_button(self, analysis):
+    @staticmethod
+    def asymmetry_click_button(analysis):
 
         result = analysis.asymmetry()
         messagebox.showinfo("Ассиметрия", "Ассиметрия: " + str(result))
 
     # Обработка нажатия на кнопку "Стандартное отклонение"
-    def standard_deviation(self, analysis):
+    @staticmethod
+    def standard_deviation(analysis):
 
         result = analysis.standard_deviation()
         messagebox.showinfo("Стандартное отклонение", "Стандартное отклонение: " + str(result))
 
     # Обработка нажатия на кнопку "Коэффициент асимметрии"
-    def asymmetry_coefficient_click_button(self, analysis):
+    @staticmethod
+    def asymmetry_coefficient_click_button(analysis):
 
         result = analysis.asymmetry_coefficient()
         messagebox.showinfo("Коэффициент асимметрии", "Коэффициент асимметрии: " + str(result))
 
     # Обработка нажатия на кнопку "Эксцесс"
-    def excess_click_button(self, analysis):
+    @staticmethod
+    def excess_click_button(analysis):
 
         result = analysis.excess()
         messagebox.showinfo("Эксцесс", "Эксцесс: " + str(result))
 
     # Обработка нажатия на кнопку "Куртозис"
-    def kurtosis_click_button(self, analysis):
+    @staticmethod
+    def kurtosis_click_button(analysis):
 
         result = analysis.kurtosis()
         messagebox.showinfo("Куртозис", "Куртозис: " + str(result))
 
     # Обработка нажатия на кнопку "Стандартный коэфифциент"
-    def standard_ratio_click_button(self, analysis):
+    @staticmethod
+    def standard_ratio_click_button(analysis):
 
         result = analysis.standard_ratio()
         messagebox.showinfo("Стандартный коэфифциент", "Стандартный коэфифциент: " + str(result))
 
     # Обработка нажатия на кнопку "Среднеквадратичная ошибка"
-    def standard_error_click_button(self, analysis):
+    @staticmethod
+    def standard_error_click_button(analysis):
 
         result = analysis.standard_error()
         messagebox.showinfo("Среднеквадратичная ошибка", "Среднеквадратичная ошибка: " + str(result))
 
     # Обработка нажатия на кнопку "Среднее абсолютное отклонение"
-    def mean_absolute_deviation_click_button(self, analysis):
+    @staticmethod
+    def mean_absolute_deviation_click_button(analysis):
 
         result = analysis.mean_absolute_deviation()
         messagebox.showinfo("Среднее абсолютное отклонение", "Среднее абсолютное отклонение: " + str(result))
 
     # Обработка нажатия на кнопку "Минимальный Х"
-    def x_min_click_button(self, analysis):
+    @staticmethod
+    def x_min_click_button(analysis):
 
         result = analysis.min_X()
         messagebox.showinfo("Минимальный Х", "Минимальный Х: " + str(result))
 
     # Обработка нажатия на кнопку "Максимальный Х"
-    def x_max_click_button(self, analysis):
+    @staticmethod
+    def x_max_click_button(analysis):
 
         result = analysis.max_X()
         messagebox.showinfo("Максимальный Х", "Максимальный Х: " + str(result))
@@ -161,7 +175,8 @@ class MainWindow(Frame):
 
         window.destroy()
 
-    def click_button_close(self, window):
+    @staticmethod
+    def click_button_close(window):
         window.destroy()
 
     def click_button_bar_graph(self, window):
@@ -233,11 +248,62 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    def click_button_fourier_transform(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.fourier_transform()
+        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.get_graph() == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        model.normalization()
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
+
+    def click_button_shift(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.fourier_transform()
+        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.get_graph() == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        model.normalization()
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
         a = Toplevel()
         a.title('Вычисления')
-        a.geometry('600x400')
+        a.geometry('900x500')
 
         label1 = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
         label1.place(x=10, y=10)
@@ -257,10 +323,30 @@ class MainWindow(Frame):
                                         width="26", height="2")
         button_autocorrelation.place(x=300, y=110)
 
-        button_nested_correlation = Button(a, text="Вложенаая корелляция",
+        button_nested_correlation = Button(a, text="Взаимная корелляция",
                                            command=lambda: self.click_button_nested_correlation(a),
                                            width="26", height="2")
         button_nested_correlation.place(x=300, y=150)
+
+        button_fourier_transform = Button(a, text="Преобразование фурье",
+                                           command=lambda: self.click_button_fourier_transform(a),
+                                           width="26", height="2")
+        button_fourier_transform.place(x=300, y=190)
+
+        button_anti_shift = Button(a, text="Антисдвиг",
+                                          command=lambda: self.click_button_fourier_transform(a),
+                                          width="26", height="2")
+        button_anti_shift.place(x=600, y=70)
+
+        button_anti_spike = Button(a, text="Антиспайк",
+                                          command=lambda: self.click_button_fourier_transform(a),
+                                          width="26", height="2")
+        button_anti_spike.place(x=600, y=110)
+
+        button_anti_trend = Button(a, text="Антитренд",
+                                   command=lambda: self.click_button_fourier_transform(a),
+                                   width="26", height="2")
+        button_anti_trend.place(x=600, y=150)
 
         choice_of_calculation = IntVar()
         choice_of_calculation.set(0)
@@ -296,9 +382,9 @@ class MainWindow(Frame):
         b1 = Button(a, text="Вычислить",
                     command=lambda: self.click_button_add_and_close(a, choice_of_calculation.get()),
                     width="15", height="2")
-        b1.place(x=300, y=350)
+        b1.place(x=600, y=450)
         b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
-        b2.place(x=450, y=350)
+        b2.place(x=750, y=450)
 
         a.grab_set()  # Перехватывает все события происходящие в приложении
         a.focus_set()  # Захватывает и удерживает фокус

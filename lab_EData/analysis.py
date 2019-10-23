@@ -273,10 +273,10 @@ class Analysis:
 
         return model
 
-    # Вложенная корреляция
+    # Взаимной корреляция
     def nested_correlation(self):
 
-        model = Model(16)                       # Модель графика вложенная корреляция
+        model = Model(16)                       # Модель графика взаимной корреляция
         analysis_model_N = self._model.get_N()
 
         y_list_1 = copy.deepcopy(self._model.get_y())
@@ -336,6 +336,42 @@ class Analysis:
         model.set_axis_y_graph_max(result_y_max)
 
         return model
+
+        # Преобразование фурье
+    def fourier_transform(self):
+
+        new_model = Model(18)  # Модель графика фурье
+        analyses = self._model
+        x = []
+        y = []
+
+        Rem = 0
+        Imm = 0
+
+        N = analyses.get_N()
+        for i in range(N-1):
+            for j in range(N-1):
+                xk = analyses.get_y_i(j)
+                yn = xk * math.cos((2 * math.pi * i * j) / N)
+                Rem + Rem +yn
+
+                yn_1 = xk * math.sin((2 * math.pi * i * j) / N)
+                Imm = Imm + yn_1
+
+            Rem = Rem / N
+            Imm = Imm / N
+
+            yn = math.sqrt(Rem ** 2 + Imm ** 2)
+            y.append(yn)
+            x.append(i)
+            Rem = 0
+            Imm = 0
+
+        new_model.set_x_all(x)
+        new_model.set_y_all(y)
+        new_model.set_N(N-1)
+
+        return new_model
 
     # Автокорреляция
     def autocorrelation(self):
