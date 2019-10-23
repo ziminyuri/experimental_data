@@ -2,7 +2,7 @@ import math
 import random
 import time
 import copy
-
+import numpy as np
 
 class Model:
     def __init__(self, option):
@@ -11,19 +11,17 @@ class Model:
         self._beta = 20
         self._alpha = 0.05
 
-        self._x = []
-        self._y = []
+        self._n = 10  # Количество точек по оси Х
 
-        self._option = option           # Тип функции
-        self._graph = 0                 # Номер графика
-        self._flag_normalisation = 1    # Флаг, что необходима нормализация
+        self._x = np.arange(0, self._n)
+        self._y = np.zeros(self._n)
+
+        self._option = option  # Тип функции
+        self._graph = 0  # Номер графика
+        self._flag_normalisation = 1  # Флаг, что необходима нормализация
 
         self._s = 100  # Максимальное значение функции
         self._axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axis_y_graph_max)
-
-        self._N = 1000  # Количество точек по оси Х
-        self._n = 10  # Начало аномального отрезка
-        self._m = 40  # Окончание аномального отрезка
         self._argument = self._s * 0.10  # Константа на сколько поднять/опустить точки на аномальном участке
 
         # Гармоничекое процесс
@@ -31,10 +29,7 @@ class Model:
         self._f_0 = 11  # 11; 110; 250; 510
         self._delta_t = 0.001
 
-        self._piecewise_function = int(self._N / 3)
-
-        for i in range(self._N):
-            self._x.append(i)
+        self._piecewise_function = int(self._n / 3)
 
     def set_k(self, k):
         self._k = k
@@ -67,14 +62,8 @@ class Model:
     def set_n(self, n):
         self._n = n
 
-    def set_m(self, m):
-        self._m = m
-
-    def set_N(self, N):
-        self._N = N
-
-    def get_N(self):
-        return self._N
+    def get_n(self):
+        return self._n
 
     def get_argument(self):
         return self._argument
@@ -111,92 +100,76 @@ class Model:
         else:
             return 0
 
-
     # Генерируем значение встроенным рандомом
     def generating_trend_random(self):
-        try:
-            yn = random.uniform(- self._s, self._s)
-            return yn
-        except:
-            return 0
-
+        y = np.random.uniform(-self._s, self._s, self._n)
+        return y
 
     def normalization(self):
 
-        if self._flag_normalisation is 0:
+        if self._flag_normalisation == 0:
             return
 
-        x_max = self._y[0]
-        x_min = self._y[0]
-        for i in range(self._N):
-            if self._y[i] > x_max:
-                x_max = self._y[i]
+        self._y = np.array(self._y)
 
-            if self._y[i] < x_min:
-                x_min = self._y[i]
+        x_max = np.amax(self._y)
+        x_min = np.amin(self._y)
+        c = x_max - x_min
 
-        temp_y = copy.deepcopy(self._y)
-        self._y.clear()
-        for i in range(self._N):
-            a = temp_y[i]
-            b = a - x_min
-            c = x_max - x_min
-            d = b / c
-            e = d - 0.5
-            f = e * 2 * self._s
-            self._y.append(f)
+        self._y = ((((self._y - x_min) / c) - 0.5) * 2 * self._s)
 
     def calculation(self):
 
-        self._y[:] = []
+        self._y = []
 
         # y(x)=kx+b
         if self._option == 1:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 yn = self._k * i + self._b
                 self._y.append(yn)
 
         # y(x)=-kx+b
         if self._option == 2:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 yn = -self._k * i + self._b
                 self._y.append(yn)
 
         # y(x) = beta * exp^(alpha * i)
         if self._option == 3:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     yn = self._beta * math.exp((self._alpha * i))
                     # yn = 2 * math.exp(i)
                     self._y.append(yn)
+
                 except:
                     self._y.append(0)
 
         # y(x) = beta * exp^(alpha * -i)
         if self._option == 4:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     yn = self._beta * math.exp((self._alpha * -i))
-                    # yn = 2 * math.exp(i)
                     self._y.append(yn)
+
                 except:
                     self._y.append(0)
 
         # Встроенный рандом
         if self._option == 5:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 value = self.generating_trend_random()
                 self._y.append(value)
 
         # Кастомный рандом
         if self._option == 6:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     temp_string_time = str(time.time())
                     reverse_temp_string_time = temp_string_time[::-1]
@@ -216,6 +189,7 @@ class Model:
                 except:
                     self._y.append(0)
 
+
         # Рандом + сдвиг
         if self._option == 7:
 
@@ -224,8 +198,7 @@ class Model:
 
             self._argument = self._s * 1000
 
-
-            for i in range(self._N):
+            for i in range(self._n):
                 value = self.generating_trend_random()
                 value += self._argument
                 self._y.append(value)
@@ -243,7 +216,7 @@ class Model:
 
             self._argument = self._s * 2
 
-            for i in range(self._N):
+            for i in range(self._n):
                 value = self.generating_spikes()
                 if value < 0:
                     value -= self._argument
@@ -258,7 +231,7 @@ class Model:
         # Адитивная модель №1
         if self._option == 9:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     yn = random.uniform(- self._s, self._s)
 
@@ -273,7 +246,7 @@ class Model:
         # Адитивная модель №2
         if self._option == 10:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     yn = random.uniform(- self._s, self._s)
 
@@ -288,7 +261,7 @@ class Model:
         # Мультипликативная модель №1
         if self._option == 11:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     yn = random.uniform(- self._s, self._s)
 
@@ -300,12 +273,12 @@ class Model:
                 except:
                     self._y.append(0)
 
-            self._y.reverse()
+            np.flip(self._y)
 
         # Мультипликативная модель №2
         if self._option == 12:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     yn = random.uniform(- self._s, self._s)
 
@@ -320,7 +293,7 @@ class Model:
         # График кусочной функции
         if self._option == 13:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 try:
                     if i < self._piecewise_function:
                         yn = -self._k * i + self._b
@@ -339,7 +312,7 @@ class Model:
 
         # График гармонический процесс
         if self._option == 17:
-            for i in range(self._N):
+            for i in range(self._n):
                 yn = self._a_0 * math.sin(2 * math.pi * self._f_0 * i * self._delta_t)
                 self._y.append(yn)
 
@@ -358,7 +331,7 @@ class Model:
             f2 = 41
             f3 = 141
 
-            for i in range(self._N):
+            for i in range(self._n):
                 yn1 = a1 * math.sin(2 * math.pi * f1 * i)
                 yn2 = a2 * math.sin(2 * math.pi * f2 * i)
                 yn3 = a3 * math.sin(2 * math.pi * f3 * i)
@@ -368,16 +341,15 @@ class Model:
         # График Рандом + спайки
         if self._option == 20:
 
-            for i in range(self._N):
+            for i in range(self._n):
                 random_value = self.generating_trend_random()
                 spike = self.generating_spikes()
 
                 value = random_value + spike
                 self._y.append(value)
 
-
         # График Рандом + спайки + trend
         if self._option == 21:
-            for i in range(self._N):
+            for i in range(self._n):
                 yn = self._a_0 * math.sin(2 * math.pi * self._f_0 * i * self._delta_t)
                 self._y.append(yn)

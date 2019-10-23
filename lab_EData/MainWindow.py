@@ -244,7 +244,7 @@ class MainWindow(Frame):
             j = j + 1
 
         self.graph.append(model)
-        self.draw_graph(model)
+        # self.draw_graph(model)
 
         window.destroy()
 
@@ -434,7 +434,7 @@ class MainWindow(Frame):
     def draw_graph(self, model):
 
         chart_number = str(model.get_graph())
-        x = model.get_N()
+        x = model.get_n()
         y_min = model.get_axis_y_graph_min()
         y_max = model.get_axis_y_graph_max()
 

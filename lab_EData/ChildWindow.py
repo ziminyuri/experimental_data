@@ -166,6 +166,8 @@ class ChildWindow(Toplevel):
             model1 = Model(21)
 
         self.set_defual_values_for_model(model1)
+
+
         model1.calculation()
         model1.normalization()
 
