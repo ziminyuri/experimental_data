@@ -14,10 +14,7 @@ class MainWindow(Frame):
 
         self.init_main_window()
 
-        self._combobox_value = []  # ComboBox графиков для анализа
-
-    def set_combobox_value(self, value):
-        self._combobox_value.append(value)
+        self.combobox_value = []  # ComboBox графиков для анализа
 
     def click_button_add_model(self):
 
@@ -433,17 +430,17 @@ class MainWindow(Frame):
 
     def draw_graph(self, model):
 
-        chart_number = str(model.get_graph())
-        x = model.get_n()
-        y_min = model.get_axis_y_graph_min()
-        y_max = model.get_axis_y_graph_max()
+        chart_number = str(model.graph)
+        x = model.n
+        y_min = - model.s
+        y_max = model.s
 
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
         ax.set_xlim([0, x])
-        ax.set_ylim([y_min - model.get_argument(), y_max + model.get_argument()])
+        ax.set_ylim([y_min - model.argument, y_max + model.argument])
 
-        ax.plot(model.get_x(), model.get_y(), color='red', label='Линия 1')
+        ax.plot(model.x, model.y, color='red', label='Линия 1')
 
         if chart_number == "1":
             canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
