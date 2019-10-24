@@ -230,7 +230,7 @@ class ChildWindow(Toplevel):
                 pass
             else:
                 model1 = Model(17)
-                model1.f_0(int(self.input_f_0.get()))
+                model1.f_0 = int(self.input_f_0.get())
 
         if self.c2.get() == "Полигармоническое процесс":
             model1 = Model(19)
