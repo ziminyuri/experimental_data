@@ -11,14 +11,14 @@ class Model:
         self.beta = 20
         self.alpha = 0.05
 
-        self.n = 1000                         # Количество точек по оси Х
+        self.n = 1000                           # Количество точек по оси Х
 
         self.x = np.arange(0, self.n)
-        self.y = np.zeros(self.n)           # Сгенерировали матрицу из нулей
+        self.y = np.zeros(self.n)               # Сгенерировали матрицу из нулей
 
-        self.option = option                # Тип функции
-        self.graph = 0                      # Номер графика
-        self.flag_normalisation = 1         # Флаг, что необходима нормализация
+        self.option = option                    # Тип функции
+        self.graph = 0                          # Номер графика
+        self.flag_normalisation = 1             # Флаг, что необходима нормализация
 
         self.s_max = 100                        # Максимальное значение функции
         self.s_min = - self.s_max               # Минимальное значение ф-ии
@@ -27,7 +27,7 @@ class Model:
         self.axis_min = self.s_min * 1.2
 
         self.axis_y_delta = 10          # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
-        self.argument = 0   # Константа на сколько поднять/опустить точки на аномальном участке
+        self.argument = 0               # Константа на сколько поднять/опустить точки на аномальном участке
 
         # Гармоничекое процесс
         self.a_0 = 100  # А0
@@ -158,11 +158,17 @@ class Model:
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
 
-            self.argument = self.s_max * 1000
+            self.argument = self.s_max * 100
 
             self.y = self.generating_trend_random()
             self.y = self.y + self.argument
+
+            for i in range(10):
+                self.y[i] = 0
+
             self.s_max = self.argument
+            self.axis_max = self.s_max * 1.1
+            self.axis_min = 0
 
         # Значения за областью
         if self.option == 8:
@@ -236,7 +242,6 @@ class Model:
 
             self.y = np.array(temp)
 
-
         # График полигармонического процесса
         # x(t) = x1(t) + x2(t) = x3(t)
         # xi(t) = Ai * sin(2piFit)
@@ -280,3 +285,7 @@ class Model:
             trend_3 = self.generating_spikes()
 
             self.y = trend_1 + trend_2 + trend_3
+
+            self.flag_normalisation = 0
+            self.axis_max = np.amax(self.y) * 1.2
+            self.axis_min = np.amin(self.y) * 1.2

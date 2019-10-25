@@ -320,7 +320,7 @@ class MainWindow(Frame):
                 del self.graph[j]
             j = j + 1
 
-        #model.normalization()
+        # model.normalization()
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -439,8 +439,8 @@ class MainWindow(Frame):
         b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
         b2.place(x=750, y=450)
 
-        a.grab_set()  # Перехватывает все события происходящие в приложении
-        a.focus_set()  # Захватывает и удерживает фокус
+        a.grab_set()    # Перехватывает все события происходящие в приложении
+        a.focus_set()   # Захватывает и удерживает фокус
 
     def get_model(self, number_of_trend):
         for i in self.graph:
@@ -458,7 +458,7 @@ class MainWindow(Frame):
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
         ax.set_xlim([0, x])
-        ax.set_ylim([y_min - model.argument, y_max + model.argument])
+        ax.set_ylim([y_min, y_max])
 
         ax.plot(model.x, model.y, color='red', label='Линия 1')
 

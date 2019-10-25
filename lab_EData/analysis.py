@@ -372,7 +372,6 @@ class Analysis:
         result_y_max = 0
 
         # Считаем знаменатель
-
         denominator = 0
         for j in range(analysis_model_n - 1):
             y_i = self.model.y[j]
