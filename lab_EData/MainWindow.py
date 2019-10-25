@@ -12,7 +12,40 @@ class MainWindow(Frame):
         self.root = root
         self.graph = []
 
-        self.init_main_window()
+        label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
+        label1.place(x=165, y=5)
+
+        fig = Figure(figsize=(5, 3), dpi=100)
+        ax = fig.add_subplot(111)
+        ax.set_xlim([0, 1000])
+        ax.set_ylim([-100, 100])
+        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().place(x=5, y=35)
+
+        label2 = Label(text="График №2", height=1, width=15, font='Arial 18')
+        label2.place(x=700, y=5)
+        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().place(x=550, y=35)
+
+        label3 = Label(text="График №3", height=1, width=15, font='Arial 18')
+        label3.place(x=165, y=360)
+        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().place(x=5, y=400)
+
+        label4 = Label(text="График №4", height=1, width=15, font='Arial 18')
+        label4.place(x=700, y=360)
+        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().place(x=550, y=400)
+
+        b2 = Button(text="Добавить", command=self.click_button_add_model, width="26", height="2")
+        b2.place(x=1120, y=70)
+
+        b3 = Button(text="Вычисления", command=self.click_button_calculation1, width="26", height="2")
+        b3.place(x=1120, y=120)
 
         self.combobox_value = []  # ComboBox графиков для анализа
 
@@ -268,6 +301,31 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    # Нажатие на кнопку антиспайк
+    def click_button_anti_spike(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.calculation_anti_spike()
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.graph == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        #model.normalization()
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
 
     def click_button_shift(self, window):
 
@@ -334,7 +392,7 @@ class MainWindow(Frame):
         button_anti_shift.place(x=600, y=70)
 
         button_anti_spike = Button(a, text="Антиспайк",
-                                          command=lambda: self.click_button_fourier_transform(a),
+                                          command=lambda: self.click_button_anti_spike(a),
                                           width="26", height="2")
         button_anti_spike.place(x=600, y=110)
 
@@ -386,52 +444,16 @@ class MainWindow(Frame):
 
     def get_model(self, number_of_trend):
         for i in self.graph:
-            g = i.get_graph()
+            g = i.graph
             if g == int(number_of_trend):
                 return i
-
-    def init_main_window(self):
-        label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
-        label1.place(x=165, y=5)
-
-        fig = Figure(figsize=(5, 3), dpi=100)
-        ax = fig.add_subplot(111)
-        ax.set_xlim([0, 1000])
-        ax.set_ylim([-100, 100])
-        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=5, y=35)
-
-        label2 = Label(text="График №2", height=1, width=15, font='Arial 18')
-        label2.place(x=700, y=5)
-        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=550, y=35)
-
-        label3 = Label(text="График №3", height=1, width=15, font='Arial 18')
-        label3.place(x=165, y=360)
-        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=5, y=400)
-
-        label4 = Label(text="График №4", height=1, width=15, font='Arial 18')
-        label4.place(x=700, y=360)
-        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().place(x=550, y=400)
-
-        b2 = Button(text="Добавить", command=self.click_button_add_model, width="26", height="2")
-        b2.place(x=1120, y=70)
-
-        b3 = Button(text="Вычисления", command=self.click_button_calculation1, width="26", height="2")
-        b3.place(x=1120, y=120)
 
     def draw_graph(self, model):
 
         chart_number = str(model.graph)
         x = model.n
-        y_min = - model.s
-        y_max = model.s
+        y_min = model.axis_min
+        y_max = model.axis_max
 
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)

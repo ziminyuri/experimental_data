@@ -20,8 +20,11 @@ class Model:
         self.graph = 0                      # Номер графика
         self.flag_normalisation = 1         # Флаг, что необходима нормализация
 
-        self.s_max = 100                    # Максимальное значение функции
-        self.s_min = - self.s_max
+        self.s_max = 100                        # Максимальное значение функции
+        self.s_min = - self.s_max               # Минимальное значение ф-ии
+        self.s_without_spikes = self.s_max      # Значение функции без спаек
+        self.axis_max = self.s_max * 1.2
+        self.axis_min = self.s_min * 1.2
 
         self.axis_y_delta = 10          # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
         self.argument = 0   # Константа на сколько поднять/опустить точки на аномальном участке
@@ -265,6 +268,10 @@ class Model:
             trend_2 = self.generating_spikes()
 
             self.y = trend_1 + trend_2
+
+            self.flag_normalisation = 0
+            self.axis_max = np.amax(self.y) * 1.2
+            self.axis_min = np.amin(self.y) * 1.2
 
         # График Рандом + спайки + trend
         if self.option == 21:

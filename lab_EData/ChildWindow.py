@@ -87,8 +87,8 @@ class ChildWindow(Toplevel):
         b2 = Button(self, text="Закрыть", command=self.click_button_close, width="15", height="2")
         b2.place(x=450, y=350)
 
-        self.grab_set()  # Перехватывает все события происходящие в приложении
-        self.focus_set()  # Захватывает и удерживает фокус
+        self.grab_set()     # Перехватывает все события происходящие в приложении
+        self.focus_set()    # Захватывает и удерживает фокус
 
     def set_custom_values_for_model(self, model):
 
