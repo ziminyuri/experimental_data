@@ -35,14 +35,14 @@ class Model:
 
     # Генерируем спайки
     def generating_spikes(self):
-        self.argument = self.s * 2
+        self.argument = self.s_max * 2
         temp = np.zeros(self.n)
 
         number_spikes = int(self.n * 0.01)
 
         for i in range(number_spikes):
             rand_index_array = random.randint(0, self.n-1)
-            rand_value = random.uniform(-self.s, self.s)
+            rand_value = random.uniform(self.s_min, self.s_max)
 
             if rand_value > 0:
                 rand_value += self.argument
@@ -52,13 +52,13 @@ class Model:
 
             temp[rand_index_array] = rand_value
 
-        self.s = self.argument * 1.1
+        self.s_max = self.argument * 1.1
         return temp
 
     # Генерируем значение встроенным рандомом
     def generating_trend_random(self):
 
-        random_trend = np.random.uniform(-self.s, self.s, self.n)
+        random_trend = np.random.uniform(self.s_min, self.s_max, self.n)
         return random_trend
 
     # Генерация тренда прямой линии
@@ -78,7 +78,7 @@ class Model:
         x_min = np.amin(self.y)
         c = x_max - x_min
 
-        self.y = ((((self.y - x_min) / c) - 0.5) * 2 * self.s)
+        self.y = ((((self.y - x_min) / c) - 0.5) * 2 * self.s_max)
 
     def calculation(self):
 
@@ -155,11 +155,11 @@ class Model:
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
 
-            self.argument = self.s * 1000
+            self.argument = self.s_max * 1000
 
             self.y = self.generating_trend_random()
             self.y = self.y + self.argument
-            self.s = self.argument
+            self.s_max = self.argument
 
         # Значения за областью
         if self.option == 8:
@@ -213,7 +213,7 @@ class Model:
 
                     if i < self.piecewise_function * 2:
                         if i >= self.piecewise_function:
-                            yn = random.uniform(- self.s, self.s)
+                            yn = random.uniform(self.s_min, self.s_max)
 
                     if i >= self.piecewise_function * 2:
                         yn = self.k * i + self.b

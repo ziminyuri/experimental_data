@@ -35,91 +35,91 @@ class MainWindow(Frame):
     @staticmethod
     def dispersion_click_button(analysis):
 
-        check_result = analysis.dispersion(1)
+        check_result = analysis.calculation_dispersion(1)
         messagebox.showinfo("Дисперсия", "Дисперсия: " + str(check_result))
 
     # Обработка нажатия на кнопку "Дисперсия х10"
     @staticmethod
     def dispersion_x_10_click_button(analysis):
 
-        check_result = analysis.dispersion(10)
+        check_result = analysis.calculation_dispersion(10)
         messagebox.showinfo("Дисперсия", "Дисперсия x10: " + str(check_result))
 
     # Обработка нажатия на кнопку "Среднее значение"
     @staticmethod
     def average_value_click_button(analysis):
 
-        check_result = analysis.average_value()
+        check_result = analysis.calculation_average_value()
         messagebox.showinfo("Среднее значение", "Среднее значение: " + str(check_result))
 
     # Обработка нажатия на кнопку "Асимметрия"
     @staticmethod
     def asymmetry_click_button(analysis):
 
-        result = analysis.asymmetry()
+        result = analysis.calculation_asymmetry()
         messagebox.showinfo("Ассиметрия", "Ассиметрия: " + str(result))
 
     # Обработка нажатия на кнопку "Стандартное отклонение"
     @staticmethod
     def standard_deviation(analysis):
 
-        result = analysis.standard_deviation()
+        result = analysis.calculation_standard_deviation()
         messagebox.showinfo("Стандартное отклонение", "Стандартное отклонение: " + str(result))
 
     # Обработка нажатия на кнопку "Коэффициент асимметрии"
     @staticmethod
     def asymmetry_coefficient_click_button(analysis):
 
-        result = analysis.asymmetry_coefficient()
+        result = analysis.calculation_asymmetry_coefficient()
         messagebox.showinfo("Коэффициент асимметрии", "Коэффициент асимметрии: " + str(result))
 
     # Обработка нажатия на кнопку "Эксцесс"
     @staticmethod
     def excess_click_button(analysis):
 
-        result = analysis.excess()
+        result = analysis.calculation_excess()
         messagebox.showinfo("Эксцесс", "Эксцесс: " + str(result))
 
     # Обработка нажатия на кнопку "Куртозис"
     @staticmethod
     def kurtosis_click_button(analysis):
 
-        result = analysis.kurtosis()
+        result = analysis.calculation_kurtosis()
         messagebox.showinfo("Куртозис", "Куртозис: " + str(result))
 
     # Обработка нажатия на кнопку "Стандартный коэфифциент"
     @staticmethod
     def standard_ratio_click_button(analysis):
 
-        result = analysis.standard_ratio()
+        result = analysis.calculation_standard_ratio()
         messagebox.showinfo("Стандартный коэфифциент", "Стандартный коэфифциент: " + str(result))
 
     # Обработка нажатия на кнопку "Среднеквадратичная ошибка"
     @staticmethod
     def standard_error_click_button(analysis):
 
-        result = analysis.standard_error()
+        result = analysis.calculation_standard_error()
         messagebox.showinfo("Среднеквадратичная ошибка", "Среднеквадратичная ошибка: " + str(result))
 
     # Обработка нажатия на кнопку "Среднее абсолютное отклонение"
     @staticmethod
     def mean_absolute_deviation_click_button(analysis):
 
-        result = analysis.mean_absolute_deviation()
+        result = analysis.calculation_mean_absolute_deviation()
         messagebox.showinfo("Среднее абсолютное отклонение", "Среднее абсолютное отклонение: " + str(result))
 
     # Обработка нажатия на кнопку "Минимальный Х"
     @staticmethod
     def x_min_click_button(analysis):
 
-        result = analysis.min_X()
+        result = analysis.calculation_min_x()
         messagebox.showinfo("Минимальный Х", "Минимальный Х: " + str(result))
 
     # Обработка нажатия на кнопку "Максимальный Х"
     @staticmethod
     def x_max_click_button(analysis):
 
-        result = analysis.max_X()
+        result = analysis.calculation_max_x()
         messagebox.showinfo("Максимальный Х", "Максимальный Х: " + str(result))
 
     def click_button_add_and_close(self, window, choice_of_calculation):
@@ -186,11 +186,11 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.bar_graph()
-        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
 
         j = 0
         for i in self.graph:
-            if i.get_graph() == int(self.c2.get()):
+            if i.graph == int(self.c2.get()):
                 del self.graph[j]
             j = j + 1
 
@@ -208,8 +208,8 @@ class MainWindow(Frame):
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
-        model = analysis.autocorrelation()
-        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+        model = analysis.calculation_autocorrelation()
+        model.graph = int(self.c2.get())                  # Указали какому графику принадлежит график
 
         j = 0
         for i in self.graph:
@@ -231,8 +231,8 @@ class MainWindow(Frame):
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
-        model = analysis.nested_correlation()
-        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+        model = analysis.calculation_nested_correlation()
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
 
         j = 0
         for i in self.graph:
@@ -241,8 +241,6 @@ class MainWindow(Frame):
             j = j + 1
 
         self.graph.append(model)
-        # self.draw_graph(model)
-
         window.destroy()
 
     def click_button_fourier_transform(self, window):
@@ -254,8 +252,8 @@ class MainWindow(Frame):
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
-        model = analysis.fourier_transform()
-        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
+        model = analysis.calculation_fourier_transform()
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
 
         j = 0
         for i in self.graph:
@@ -280,7 +278,7 @@ class MainWindow(Frame):
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
-        model = analysis.fourier_transform()
+        model = analysis.calculation_fourier_transform()
         model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
 
         j = 0
@@ -304,7 +302,7 @@ class MainWindow(Frame):
 
         label1 = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
         label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self._combobox_value, height=4, width="24")
+        self.c1 = ttk.Combobox(a, values=self.combobox_value, height=4, width="24")
         self.c1.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода анализа", height=1, width=24, font='Arial 14')

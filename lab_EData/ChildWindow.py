@@ -95,7 +95,7 @@ class ChildWindow(Toplevel):
         if self.input_k.get() != "":
             try:
                 k = float(self.input_k.get())
-                model.set_k(k)
+                model.k = k
             except:
                 messagebox.showerror("Ошибка", "k должно быть вещественнным")
                 return
@@ -103,7 +103,7 @@ class ChildWindow(Toplevel):
         if self.input_b.get() != "":
             try:
                 b = float(self.input_b.get())
-                model.set_b(b)
+                model.b = b
             except:
                 messagebox.showerror("Ошибка", "b должно быть вещественнным")
                 return
@@ -111,7 +111,7 @@ class ChildWindow(Toplevel):
         if self.input_alpha.get() != "":
             try:
                 alpha = float(self.input_alpha.get())
-                model.set_alpha(alpha)
+                model.alpha = alpha
             except:
                 messagebox.showerror("Ошибка", "alpha должно быть вещественнным")
                 return
@@ -119,15 +119,15 @@ class ChildWindow(Toplevel):
         if self.input_beta.get() != "":
             try:
                 beta = float(self.input_beta.get())
-                model.set_beta(beta)
+                model.beta = beta
             except:
                 messagebox.showerror("Ошибка", "beta должно быть вещественнным")
                 return
 
         if self.input_N.get() != "":
             try:
-                N = int(self.input_N.get())
-                model.set_N(N)
+                n = int(self.input_N.get())
+                model.n = n
             except:
                 messagebox.showerror("Ошибка", "Количество записей должно быть целочисленным")
                 return
@@ -152,7 +152,7 @@ class ChildWindow(Toplevel):
         if self.input_S_min.get() != "":
             try:
                 min = int(self.input_S_min.get())
-                model.set_axis_y_graph_min(min)
+                model.s_max = min
             except:
                 messagebox.showerror("Ошибка", "Минимальное значение ф-ии должно быть целочисленным")
                 return
@@ -160,7 +160,7 @@ class ChildWindow(Toplevel):
         if self.input_S_max.get() != "":
             try:
                 max = int(self.input_S_max.get())
-                model.set_axis_y_graph_max(max)
+                model.s_max = max
             except:
                 messagebox.showerror("Ошибка", "Максимальное значение ф-ии должно быть целочисленным")
                 return
