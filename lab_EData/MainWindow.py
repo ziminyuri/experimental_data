@@ -246,7 +246,7 @@ class MainWindow(Frame):
 
         j = 0
         for i in self.graph:
-            if i.get_graph() == int(self.c2.get()):
+            if i.graph == int(self.c2.get()):
                 del self.graph[j]
             j = j + 1
 
@@ -269,7 +269,7 @@ class MainWindow(Frame):
 
         j = 0
         for i in self.graph:
-            if i.get_graph() == int(self.c2.get()):
+            if i.graph == int(self.c2.get()):
                 del self.graph[j]
             j = j + 1
 
@@ -290,11 +290,37 @@ class MainWindow(Frame):
 
         j = 0
         for i in self.graph:
-            if i.get_graph() == int(self.c2.get()):
+            if i.graph == int(self.c2.get()):
                 del self.graph[j]
             j = j + 1
 
         model.normalization()
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
+    # Нажатие на кнопку антисдвиг
+    def click_button_anti_shift(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.calculation_anti_shift()
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.graph == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        # model.normalization()
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -341,7 +367,7 @@ class MainWindow(Frame):
 
         j = 0
         for i in self.graph:
-            if i.get_graph() == int(self.c2.get()):
+            if i.graph == int(self.c2.get()):
                 del self.graph[j]
             j = j + 1
 
@@ -387,7 +413,7 @@ class MainWindow(Frame):
         button_fourier_transform.place(x=300, y=190)
 
         button_anti_shift = Button(a, text="Антисдвиг",
-                                          command=lambda: self.click_button_fourier_transform(a),
+                                          command=lambda: self.click_button_anti_shift(a),
                                           width="26", height="2")
         button_anti_shift.place(x=600, y=70)
 

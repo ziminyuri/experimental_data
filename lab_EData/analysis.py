@@ -409,6 +409,24 @@ class Analysis:
 
         return model
 
+    # Антисдвиг
+    def calculation_anti_shift(self):
+        model = Model(23)
+        model.y = np.copy(self.model.y)
+
+        # Убираем 0 в начале графика который использовали для отображения
+        for i in range(10):
+            rand_value =  random.uniform(- self.model.s_without_spikes, self.model.s_without_spikes)
+            model.y[i] = rand_value + self.model.argument
+
+        average_value = np.mean(model.y)
+        model.y = model.y - average_value
+
+        model.axis_max = np.amax(model.y) * 2
+        model.axis_min = np.amin(model.y) * 2
+
+        return model
+
     # Антиспайк
     def calculation_anti_spike(self):
         model = Model(22)
