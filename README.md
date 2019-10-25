@@ -1,11 +1,14 @@
 # experimental_data
 Здесь хранятся лабораторная работа СпбПУ по предмету "Методы обработки эксперементальных данных"
-
+***
 Использованы библиотеки:
+***
 Tkinter (road to Qt), Matplotlib, NumPY
+***
 Объектно-ориентированная архитектура
-
+***
 Модели под номерами следующие:
+***
 №1 - y(x)=kx+b (ChildWindow.py)
 №2 - y(x)=-kx+b (ChildWindow.py)
 №3 - y(x) = beta * exp^(alpha * i) (ChildWindow.py)
