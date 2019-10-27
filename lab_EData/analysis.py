@@ -28,6 +28,11 @@ class Analysis:
     # Рассчет среднего значения
     def calculation_average_value(self):
 
+        self.average_value = np.mean(self.model.y)
+
+        return  self.average_value
+
+        """
         average_value = 0
 
         for i in range(self.model.n):
@@ -38,6 +43,7 @@ class Analysis:
         self.average_value = new_average_value
 
         return new_average_value
+        """
 
     def check_stationarity_average_value(self):
 
