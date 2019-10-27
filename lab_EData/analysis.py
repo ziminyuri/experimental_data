@@ -51,7 +51,6 @@ class Analysis:
 
         for i in range(self.model.n):
             average_value = average_value + math.fabs(self.model.y[i])
-            # average_value = average_value + self._model.get_y_i(i)
             if i % gap_length == 0 and i > 0 or i == self.model.n - 1:
                 average_value = average_value / gap_length
                 self.all_average_value.append(average_value)
@@ -61,41 +60,30 @@ class Analysis:
         for i in range(self.all_average_value.__len__() - 1):
 
             if math.fabs(self.all_average_value[i] - self.all_average_value[i + 1]) > delta_min_max:
-                # if self._all_average_value[i] - self._all_average_value[i + 1] > delta_min_max:
                 flag_stationarity = False
 
         return flag_stationarity
 
     # Рассчет дисперсии
     def calculation_dispersion(self, iteration_number):
-        trend_list = []
 
-        for i in range(iteration_number):
+        if iteration_number <= 0:
+            return
+
+        trend_list = np.copy(self.model.y)
+
+        for i in range(iteration_number - 1):
             self.model.calculation()
-            deep_copy_y = copy.deepcopy(self.model.y[i])
-            trend_list.append(deep_copy_y)
+            deep_copy_y = np.copy(self.model.y)
+            trend_list += deep_copy_y
 
-        average_trend_list = []
+        trend_list = trend_list / iteration_number
 
-        for i in range(self.model.n):
-            temp_average_y = 0
-
-            for j in range(iteration_number):
-                temp_average_y = temp_average_y + trend_list[j][i]
-
-            temp_average_y = temp_average_y / iteration_number
-            average_trend_list.append(temp_average_y)
-
-        average_value = 0
-        for i in range(self.model.n):
-            average_value = average_value + average_trend_list[i]
-
-        average_value = average_value / self.model.n
+        average_value = np.mean(trend_list)
 
         dispersion = 0
         for i in range(self.model.n):
-            dispersion = (average_trend_list[i] - average_value) * (
-                    average_trend_list[i] - average_value) + dispersion
+            dispersion += (trend_list[i] - average_value) * (trend_list[i] - average_value)
 
         self.dispersion = dispersion / self.model.n
 
@@ -444,6 +432,39 @@ class Analysis:
                         model.y[i] = model.y[i-1]
                     else:
                         model.y[i] = (model.y[i-1] + model.y[i+1]) / 2
+
+        model.axis_max = np.amax(model.y) * 2
+        model.axis_min = np.amin(model.y) * 2
+
+        return model
+
+    # Антитренд методом скользящего окна
+    def calculation_anti_trend(self):
+        model = Model(24)
+        model.y = np.copy(self.model.y)
+        analysis_model_n = self.model.n
+
+        ''' 
+        for k in range(2):
+            for i in range(analysis_model_n):
+                if
+        '''
+
+        medium = int(analysis_model_n / 2)
+        size_of_sliding_window  = int(analysis_model_n / 50)
+
+        for i in range(analysis_model_n):
+            sum_value_of_window = 0
+
+            for j in range(size_of_sliding_window):
+
+                if i < medium:
+                    sum_value_of_window += model.y[i+j]
+                else:
+                    sum_value_of_window += model.y[i - j]
+
+            average_value = sum_value_of_window / size_of_sliding_window
+            model.y[i] = average_value
 
         model.axis_max = np.amax(model.y) * 2
         model.axis_min = np.amin(model.y) * 2

@@ -11,6 +11,7 @@ class MainWindow(Frame):
 
         self.root = root
         self.graph = []
+        self.analysis_model = []      # Список, где храним модели анализа
 
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
         label1.place(x=165, y=5)
@@ -50,8 +51,22 @@ class MainWindow(Frame):
         self.combobox_value = []  # ComboBox графиков для анализа
 
     def click_button_add_model(self):
-
         ChildWindow(self, self.root, self.graph)
+
+    def get_analysis(self, analysis_model):
+
+        flag_we_have_alraedy_analysis_model = 0
+        if self.analysis_model:
+            for i in self.analysis_model:
+                if i.model == analysis_model:
+                    analysis = i
+                    flag_we_have_alraedy_analysis_model = 1
+
+        if flag_we_have_alraedy_analysis_model == 0:
+            analysis = Analysis(analysis_model)
+            self.analysis_model.append(analysis)
+
+        return analysis
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
@@ -162,7 +177,7 @@ class MainWindow(Frame):
             pass
 
         analysis_model = self.get_model(self.c1.get())
-        analysis = Analysis(analysis_model)
+        analysis = self.get_analysis(analysis_model)
 
         if choice_of_calculation == 1:
             self.check_stationarity_click_button(analysis)
@@ -353,6 +368,32 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    # Нажатие на кнопку антитренд
+    def click_button_anti_trend(self, window):
+
+        if self.c1.get() == "":
+            messagebox.showinfo("Не указан номер графика")
+            pass
+
+        analysis_model = self.get_model(self.c1.get())
+        analysis = Analysis(analysis_model)
+
+        model = analysis.calculation_anti_trend()
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.graph == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
+        # model.normalization()
+
+        self.graph.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
     def click_button_shift(self, window):
 
         if self.c1.get() == "":
@@ -423,7 +464,7 @@ class MainWindow(Frame):
         button_anti_spike.place(x=600, y=110)
 
         button_anti_trend = Button(a, text="Антитренд",
-                                   command=lambda: self.click_button_fourier_transform(a),
+                                   command=lambda: self.click_button_anti_trend(a),
                                    width="26", height="2")
         button_anti_trend.place(x=600, y=150)
 
