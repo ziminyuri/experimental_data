@@ -68,6 +68,22 @@ class MainWindow(Frame):
 
         return analysis
 
+    def check_empty_c1(self):
+        if self.c1.get() == "":
+            messagebox.showinfo("Ошибка","Не указан номер графика")
+            return 1
+        else: return 0
+
+    # Указали какому графику принадлежит график : Refactoring
+    def set_graph(self, model):
+        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
+
+        j = 0
+        for i in self.graph:
+            if i.graph == int(self.c2.get()):
+                del self.graph[j]
+            j = j + 1
+
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
     def check_stationarity_click_button(analysis):
@@ -172,9 +188,8 @@ class MainWindow(Frame):
 
     def click_button_add_and_close(self, window, choice_of_calculation):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = self.get_analysis(analysis_model)
@@ -226,21 +241,14 @@ class MainWindow(Frame):
 
     def click_button_bar_graph(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.bar_graph()
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -249,21 +257,14 @@ class MainWindow(Frame):
 
     def click_button_autocorrelation(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_autocorrelation()
-        model.graph = int(self.c2.get())                  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -272,42 +273,28 @@ class MainWindow(Frame):
 
     def click_button_nested_correlation(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_nested_correlation()
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         self.graph.append(model)
         window.destroy()
 
     def click_button_fourier_transform(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_fourier_transform()
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         model.normalization()
 
@@ -319,21 +306,14 @@ class MainWindow(Frame):
     # Нажатие на кнопку антисдвиг
     def click_button_anti_shift(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_shift()
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         # model.normalization()
 
@@ -345,21 +325,15 @@ class MainWindow(Frame):
     # Нажатие на кнопку антиспайк
     def click_button_anti_spike(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_spike()
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
 
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         # model.normalization()
 
@@ -371,21 +345,14 @@ class MainWindow(Frame):
     # Нажатие на кнопку антитренд
     def click_button_anti_trend(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_trend()
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         # model.normalization()
 
@@ -396,21 +363,14 @@ class MainWindow(Frame):
 
     def click_button_shift(self, window):
 
-        if self.c1.get() == "":
-            messagebox.showinfo("Не указан номер графика")
-            pass
+        if self.check_empty_c1():
+            return
 
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_fourier_transform()
-        model.set_graph(int(self.c2.get()))  # Указали какому графику принадлежит график
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(self.c2.get()):
-                del self.graph[j]
-            j = j + 1
+        self.set_graph(model)
 
         model.normalization()
 
