@@ -11,7 +11,7 @@ class MainWindow(Frame):
 
         self.root = root
         self.graph = []
-        self.analysis_model = []      # Список, где храним модели анализа
+        self.analysis_model = []  # Список, где храним модели анализа
 
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
         label1.place(x=165, y=5)
@@ -55,14 +55,14 @@ class MainWindow(Frame):
 
     def get_analysis(self, analysis_model):
 
-        flag_we_have_alraedy_analysis_model = 0
+        flag_we_have_already_analysis_model = 0
         if self.analysis_model:
             for i in self.analysis_model:
                 if i.model == analysis_model:
                     analysis = i
-                    flag_we_have_alraedy_analysis_model = 1
+                    flag_we_have_already_analysis_model = 1
 
-        if flag_we_have_alraedy_analysis_model == 0:
+        if flag_we_have_already_analysis_model == 0:
             analysis = Analysis(analysis_model)
             self.analysis_model.append(analysis)
 
@@ -70,9 +70,10 @@ class MainWindow(Frame):
 
     def check_empty_c1(self):
         if self.c1.get() == "":
-            messagebox.showinfo("Ошибка","Не указан номер графика")
+            messagebox.showinfo("Ошибка", "Не указан номер графика")
             return 1
-        else: return 0
+        else:
+            return 0
 
     # Указали какому графику принадлежит график : Refactoring
     def set_graph(self, model):
@@ -409,18 +410,18 @@ class MainWindow(Frame):
         button_nested_correlation.place(x=300, y=150)
 
         button_fourier_transform = Button(a, text="Преобразование фурье",
-                                           command=lambda: self.click_button_fourier_transform(a),
-                                           width="26", height="2")
+                                          command=lambda: self.click_button_fourier_transform(a),
+                                          width="26", height="2")
         button_fourier_transform.place(x=300, y=190)
 
         button_anti_shift = Button(a, text="Антисдвиг",
-                                          command=lambda: self.click_button_anti_shift(a),
-                                          width="26", height="2")
+                                   command=lambda: self.click_button_anti_shift(a),
+                                   width="26", height="2")
         button_anti_shift.place(x=600, y=70)
 
         button_anti_spike = Button(a, text="Антиспайк",
-                                          command=lambda: self.click_button_anti_spike(a),
-                                          width="26", height="2")
+                                   command=lambda: self.click_button_anti_spike(a),
+                                   width="26", height="2")
         button_anti_spike.place(x=600, y=110)
 
         button_anti_trend = Button(a, text="Антитренд",
@@ -466,8 +467,8 @@ class MainWindow(Frame):
         b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
         b2.place(x=750, y=450)
 
-        a.grab_set()    # Перехватывает все события происходящие в приложении
-        a.focus_set()   # Захватывает и удерживает фокус
+        a.grab_set()  # Перехватывает все события происходящие в приложении
+        a.focus_set()  # Захватывает и удерживает фокус
 
     def get_model(self, number_of_trend):
         for i in self.graph:

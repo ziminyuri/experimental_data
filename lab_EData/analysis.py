@@ -450,6 +450,11 @@ class Analysis:
         model.y = np.copy(self.model.y)
         analysis_model_n = self.model.n
 
+        for i in range(2):
+            for j in range(analysis_model_n):
+                if j == 0:
+                    if model.y[j] == model.y[j+1]:
+                        model.y[j] = model.y[j+1]
         ''' 
         for k in range(2):
             for i in range(analysis_model_n):

@@ -33,4 +33,5 @@
 * №22 - Антиспайк `(analysis.py)`
 * №23 - Антисдвиг `(analysis.py)`
 * №24 - Антитренд `(analysis.py)`
+* №25 - Гармонический процесс + trend `(ChildWindow.py)`
 

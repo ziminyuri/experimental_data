@@ -33,6 +33,7 @@ class Model:
         self.a_0 = 100  # А0
         self.f_0 = 11  # 11; 110; 250; 510
         self.delta_t = 0.001
+        self.c = 0                      # Константа
 
         self.piecewise_function = int(self.n / 3)
 
@@ -69,6 +70,24 @@ class Model:
         temp = self.k * self.x + self.b
 
         return temp
+
+    # Генерация графика гармонического процесса
+    def generating_harmonic_process(self):
+        temp = []
+        for i in range(self.n):
+            yn = self.a_0 * math.sin(2 * math.pi * self.f_0 * i * self.delta_t)
+            temp.append(yn)
+
+        np_array = np.array(temp)
+        return np_array
+
+    # Нормализация осей
+    def normalisation_axis(self):
+        max_y = np.amax(self.y)
+        min_y = np.amin(self.y)
+
+        self.axis_min = min_y * 1.2
+        self.axis_max = max_y * 1.2
 
     def normalization(self):
 
@@ -234,13 +253,13 @@ class Model:
 
         # График гармонический процесс
         if self.option == 17:
+            self.y = self.generating_harmonic_process()
 
-            temp = []
-            for i in range(self.n):
-                yn = self.a_0 * math.sin(2 * math.pi * self.f_0 * i * self.delta_t)
-                temp.append(yn)
+            if self.c != 0:
+                self.y = self.y + self.c
+                self.flag_normalisation = 0
 
-            self.y = np.array(temp)
+            self.normalisation_axis()
 
         # График полигармонического процесса
         # x(t) = x1(t) + x2(t) = x3(t)
@@ -289,3 +308,10 @@ class Model:
             self.flag_normalisation = 0
             self.axis_max = np.amax(self.y) * 1.2
             self.axis_min = np.amin(self.y) * 1.2
+
+        # График Гармонический процесс + trend
+        if self.option == 22:
+            trend_1 = self.generating_harmonic_process()
+            trend_2 = self.generating_trend_line()
+
+            self.y = trend_1 + trend_2

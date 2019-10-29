@@ -29,7 +29,8 @@ class ChildWindow(Toplevel):
                                              u"Адитивная модель №2", u"Мультипликативная модель №1",
                                              u"Мультипликативная модель №2", u"Кусочная функция",
                                              u"Гармоническое процесс", u"Полигармоническое процесс",
-                                             u"Рандом + сдвиг", u"Рандом + спайки", u"Рандом + спайки + trend"],
+                                             u"Рандом + сдвиг", u"Рандом + спайки", u"Рандом + спайки + trend",
+                                             u"Гармонический процесс + trend"],
                                height=15)
 
         self.c2.place(x=10, y=80)
@@ -69,6 +70,13 @@ class ChildWindow(Toplevel):
         label6.place(x=10, y=210)
         self.input_N = Entry(self, width=22)
         self.input_N.place(x=10, y=230)
+
+        # Ввод C - Константа для гармонического процесса
+        label11 = Label(self, text="Константа", height=1, width=17, font='Arial 14')
+        label11.place(x=10, y=260)
+        self.input_C = Entry(self, width=22)
+        self.input_C.place(x=10, y=280)
+
 
         # Ввод -S - Минимальное значение функции
         label9 = Label(self, text="Минимальное значение ф-ии", height=1, width=24, font='Arial 14')
@@ -231,6 +239,8 @@ class ChildWindow(Toplevel):
             else:
                 model1 = Model(17)
                 model1.f_0 = int(self.input_f_0.get())
+                if self.input_C.get() != "":
+                    model1.c = int(self.input_C.get())
 
         if self.c2.get() == "Полигармоническое процесс":
             model1 = Model(19)
@@ -240,6 +250,9 @@ class ChildWindow(Toplevel):
 
         if self.c2.get() == "Рандом + спайки + trend":
             model1 = Model(21)
+
+        if self.c2.get() == "Гармонический процесс + trend":
+            model1 = Model(22)
 
         self.set_custom_values_for_model(model1)
 
