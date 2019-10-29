@@ -325,3 +325,15 @@ class Model:
 
             self.flag_normalisation = 0
             self.normalisation_axis()
+
+        # График ГП(гармонический процесс) + спайки + рандом + trend
+        if self.option == 27:
+            trend_1 = self.generating_harmonic_process()
+            trend_2 = self.generating_spikes()
+            trend_3 = self.generating_trend_random()
+            trend_4 = self.generating_trend_line()
+
+            self.y = trend_1 + trend_2 + trend_3 + trend_4
+
+            self.flag_normalisation = 0
+            self.normalisation_axis()

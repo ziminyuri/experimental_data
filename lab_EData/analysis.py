@@ -328,7 +328,7 @@ class Analysis:
         n = analyses.n
         for i in range(n-1):
             for j in range(n-1):
-                # xk =
+                xk = analyses.y[j]
                 # xk = analyses.get_y_i(j)
                 yn = xk * math.cos((2 * math.pi * i * j) / n)
                 rem + rem + yn
