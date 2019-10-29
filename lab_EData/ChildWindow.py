@@ -30,7 +30,7 @@ class ChildWindow(Toplevel):
                                              u"Мультипликативная модель №2", u"Кусочная функция",
                                              u"Гармоническое процесс", u"Полигармоническое процесс",
                                              u"Рандом + сдвиг", u"Рандом + спайки", u"Рандом + спайки + trend",
-                                             u"Гармонический процесс + trend"],
+                                             u"Гармонический процесс + trend", u"Гармонический процесс + спайки"],
                                height=15)
 
         self.c2.place(x=10, y=80)
@@ -72,11 +72,10 @@ class ChildWindow(Toplevel):
         self.input_N.place(x=10, y=230)
 
         # Ввод C - Константа для гармонического процесса
-        label11 = Label(self, text="Константа", height=1, width=17, font='Arial 14')
+        label11 = Label(self, text="Константа", height=1, width=9, font='Arial 14')
         label11.place(x=10, y=260)
         self.input_C = Entry(self, width=22)
         self.input_C.place(x=10, y=280)
-
 
         # Ввод -S - Минимальное значение функции
         label9 = Label(self, text="Минимальное значение ф-ии", height=1, width=24, font='Arial 14')
@@ -252,7 +251,10 @@ class ChildWindow(Toplevel):
             model1 = Model(21)
 
         if self.c2.get() == "Гармонический процесс + trend":
-            model1 = Model(22)
+            model1 = Model(25)
+
+        if self.c2.get() == "Гармонический процесс + спайки":
+            model1 = Model(26)
 
         self.set_custom_values_for_model(model1)
 

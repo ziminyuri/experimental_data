@@ -310,8 +310,18 @@ class Model:
             self.axis_min = np.amin(self.y) * 1.2
 
         # График Гармонический процесс + trend
-        if self.option == 22:
+        if self.option == 25:
             trend_1 = self.generating_harmonic_process()
             trend_2 = self.generating_trend_line()
 
             self.y = trend_1 + trend_2
+
+        # График Гармонический процесс + спайки
+        if self.option == 26:
+            trend_1 = self.generating_harmonic_process()
+            trend_2 = self.generating_spikes()
+
+            self.y = trend_1 + trend_2
+
+            self.flag_normalisation = 0
+            self.normalisation_axis()
