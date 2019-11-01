@@ -31,7 +31,7 @@ class ChildWindow(Toplevel):
                                              u"Гармоническое процесс", u"Полигармоническое процесс",
                                              u"Рандом + сдвиг", u"Рандом + спайки", u"Рандом + спайки + trend",
                                              u"Гармонический процесс + trend", u"Гармонический процесс + спайки",
-                                             u"ГП + спайки + рандом + trend"],
+                                             u"ГП + спайки + рандом + trend", u"Загрузить из файла"],
                                height=15)
 
         self.c2.place(x=10, y=80)
@@ -259,6 +259,9 @@ class ChildWindow(Toplevel):
 
         if self.c2.get() == "ГП + спайки + рандом + trend":
             model1 = Model(27)
+
+        if self.c2.get() == "Загрузить из файла":
+            model1 = Model(28)
 
         self.set_custom_values_for_model(model1)
 

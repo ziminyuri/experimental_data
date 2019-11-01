@@ -34,4 +34,7 @@
 * №23 - Антисдвиг `(analysis.py)`
 * №24 - Антитренд `(analysis.py)`
 * №25 - Гармонический процесс + trend `(ChildWindow.py)`
+* №26 - Гармонический процесс + спайки `(ChildWindow.py)`
+* №27 - ГП + спайки + рандом + trend `(ChildWindow.py)`
+* №28 - Загрузить из файла `(ChildWindow.py)`
 

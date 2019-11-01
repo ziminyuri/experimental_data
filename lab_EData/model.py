@@ -2,6 +2,8 @@ import math
 import random
 import time
 import numpy as np
+import pickle  # Для работы с бинарным файлом
+import struct
 
 
 class Model:
@@ -11,29 +13,29 @@ class Model:
         self.beta = 20
         self.alpha = 0.05
 
-        self.n = 1000                           # Количество точек по оси Х
+        self.n = 1000  # Количество точек по оси Х
 
         self.x = np.arange(0, self.n)
-        self.y = np.zeros(self.n)               # Сгенерировали матрицу из нулей
+        self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
 
-        self.option = option                    # Тип функции
-        self.graph = 0                          # Номер графика
-        self.flag_normalisation = 1             # Флаг, что необходима нормализация
+        self.option = option  # Тип функции
+        self.graph = 0  # Номер графика
+        self.flag_normalisation = 1  # Флаг, что необходима нормализация
 
-        self.s_max = 100                        # Максимальное значение функции
-        self.s_min = - self.s_max               # Минимальное значение ф-ии
-        self.s_without_spikes = self.s_max      # Значение функции без спаек
+        self.s_max = 100  # Максимальное значение функции
+        self.s_min = - self.s_max  # Минимальное значение ф-ии
+        self.s_without_spikes = self.s_max  # Значение функции без спаек
         self.axis_max = self.s_max * 1.2
         self.axis_min = self.s_min * 1.2
 
-        self.axis_y_delta = 10          # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
-        self.argument = 0               # Константа на сколько поднять/опустить точки на аномальном участке
+        self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
+        self.argument = 0  # Константа на сколько поднять/опустить точки на аномальном участке
 
         # Гармоничекое процесс
         self.a_0 = 100  # А0
         self.f_0 = 11  # 11; 110; 250; 510
         self.delta_t = 0.001
-        self.c = 0                      # Константа
+        self.c = 0  # Константа
 
         self.piecewise_function = int(self.n / 3)
 
@@ -45,7 +47,7 @@ class Model:
         number_spikes = int(self.n * 0.01)
 
         for i in range(number_spikes):
-            rand_index_array = random.randint(0, self.n-1)
+            rand_index_array = random.randint(0, self.n - 1)
             rand_value = random.uniform(self.s_min, self.s_max)
 
             if rand_value > 0:
@@ -80,6 +82,25 @@ class Model:
 
         np_array = np.array(temp)
         return np_array
+
+    # Гененрируем тренд из файла
+    def generating_trend_from_file(self):
+
+        filename = "/Users/zimin/PycharmProjects/lab_EData/input files/input.dat"
+
+        f = open(filename, "rb")
+        data = f.read(4)
+
+        y_list =[]
+        while data:
+            temp_tuple = struct.unpack('<f', data)
+            temp_value = temp_tuple[0]
+            y_list.append(temp_value)
+            data = f.read(4)
+
+        y = np.array(y_list)
+
+        return y
 
     # Нормализация осей
     def normalisation_axis(self):
@@ -191,14 +212,12 @@ class Model:
 
         # Значения за областью
         if self.option == 8:
-
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
             self.y = self.generating_spikes()
 
         # Адитивная модель №1
         if self.option == 9:
-
             trend_1 = self.generating_trend_line()
             trend_1 = np.flip(trend_1)
 
@@ -208,7 +227,6 @@ class Model:
 
         # Адитивная модель №2
         if self.option == 10:
-
             trend_1 = self.generating_trend_line()
             trend_2 = self.generating_trend_random()
 
@@ -225,7 +243,6 @@ class Model:
 
         # Мультипликативная модель №2
         if self.option == 12:
-
             trend_1 = self.generating_trend_line()
             trend_2 = self.generating_trend_random()
 
@@ -337,3 +354,11 @@ class Model:
 
             self.flag_normalisation = 0
             self.normalisation_axis()
+
+        # График из файла
+        if self.option == 28:
+            self.y = self.generating_trend_from_file()
+
+            self.flag_normalisation = 0
+            self.normalisation_axis()
+
