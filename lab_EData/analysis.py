@@ -349,6 +349,8 @@ class Analysis:
         new_model.y = np.array(y)
         new_model.n = n-1
 
+        new_model.display_n = int(new_model.n / 2)
+
         return new_model
 
     # Автокорреляция

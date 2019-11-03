@@ -479,7 +479,7 @@ class MainWindow(Frame):
     def draw_graph(self, model):
 
         chart_number = str(model.graph)
-        x = model.n
+        x = model.display_n
         y_min = model.axis_min
         y_max = model.axis_max
 

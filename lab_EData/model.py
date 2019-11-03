@@ -14,6 +14,7 @@ class Model:
         self.alpha = 0.05
 
         self.n = 1000  # Количество точек по оси Х
+        self.display_n = self.n
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
