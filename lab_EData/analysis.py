@@ -448,37 +448,86 @@ class Analysis:
     # Антитренд методом скользящего окна
     def calculation_anti_trend(self):
         model = Model(24)
+        size_of_window = 100
+        half_size_of_window = int(size_of_window / 2)
+        analysis_model_n = self.model.n
+        sum_value_of_window = 0
+        model.y = np.copy(self.model.y)
+
+        for i in range(analysis_model_n - size_of_window):
+            for j in range(size_of_window):
+                sum_value_of_window += model.y[i + j]
+
+            average = sum_value_of_window / size_of_window
+            model.y[i] = average
+            sum_value_of_window = 0
+
+        for i in range(analysis_model_n - size_of_window, analysis_model_n):
+            for j in range(size_of_window):
+                sum_value_of_window += model.y[i - j]
+
+            average = sum_value_of_window / size_of_window
+            model.y[i] = average
+            sum_value_of_window = 0
+
+        model.y = self.model.y - model.y
+
+        model.axis_max = np.amax(model.y) * 1.2
+        model.axis_min = np.amin(model.y) * 1.2
+
+        return model
+
+        """
+        # Метод скользящего среднего
+        model = Model(24)
+        size_of_window = 10
+        half_size_of_window = int(size_of_window / 2)
+        analysis_model_n = self.model.n
+        sum_value_of_window = 0
+        model.y = np.copy(self.model.y)
+
+        for i in range(half_size_of_window, analysis_model_n - half_size_of_window):
+            for j in range(- half_size_of_window, half_size_of_window):
+                sum_value_of_window += model.y[i + j]
+
+            average = sum_value_of_window / size_of_window
+            model.y[i] = average
+            sum_value_of_window = 0
+
+        for i in range(half_size_of_window):
+            model.y[i] = 0
+
+        for i in range(analysis_model_n - half_size_of_window, analysis_model_n):
+            model.y[i] = 0
+
+        model.axis_max = np.amax(model.y) * 1.3
+        model.axis_min = np.amin(model.y) * 1.3
+
+        return model
+        """
+
+
+        """
+        model = Model(24)
         model.y = np.copy(self.model.y)
         analysis_model_n = self.model.n
 
-        for i in range(2):
-            for j in range(analysis_model_n):
-                if j == 0:
-                    if model.y[j] == model.y[j+1]:
-                        model.y[j] = model.y[j+1]
-        ''' 
-        for k in range(2):
-            for i in range(analysis_model_n):
-                if
-        '''
-
-        medium = int(analysis_model_n / 2)
-        size_of_sliding_window  = int(analysis_model_n / 50)
-
+        size_of_window = 10
+        sum_value_of_window = 0
         for i in range(analysis_model_n):
-            sum_value_of_window = 0
+            for j in range(size_of_window):
 
-            for j in range(size_of_sliding_window):
-
-                if i < medium:
+                if i < analysis_model_n / 2:
                     sum_value_of_window += model.y[i+j]
                 else:
-                    sum_value_of_window += model.y[i - j]
+                    sum_value_of_window += model.y[i-j]
 
-            average_value = sum_value_of_window / size_of_sliding_window
-            model.y[i] = average_value
+            average = sum_value_of_window / size_of_window
+            model.y[i] = average
+            sum_value_of_window = 0
 
         model.axis_max = np.amax(model.y) * 2
         model.axis_min = np.amin(model.y) * 2
 
         return model
+        """

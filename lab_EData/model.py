@@ -314,13 +314,12 @@ class Model:
             self.axis_max = np.amax(self.y) * 1.2
             self.axis_min = np.amin(self.y) * 1.2
 
-        # График Рандом + спайки + trend
+        # График Рандом  + trend
         if self.option == 21:
             trend_1 = self.generating_trend_random()
             trend_2 = self.generating_trend_line()
-            trend_3 = self.generating_spikes()
 
-            self.y = trend_1 + trend_2 + trend_3
+            self.y = trend_1 + trend_2
 
             self.flag_normalisation = 0
             self.axis_max = np.amax(self.y) * 1.2
