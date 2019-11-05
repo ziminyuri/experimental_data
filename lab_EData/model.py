@@ -77,6 +77,8 @@ class Model:
     # Генерация графика гармонического процесса
     def generating_harmonic_process(self):
         temp = []
+
+        self.delta_t = 0.002
         for i in range(self.n):
             yn = self.a_0 * math.sin(2 * math.pi * self.f_0 * i * self.delta_t)
             temp.append(yn)
@@ -277,6 +279,7 @@ class Model:
                 self.y = self.y + self.c
                 self.flag_normalisation = 0
 
+            self.flag_normalisation = 0
             self.normalisation_axis()
 
         # График полигармонического процесса

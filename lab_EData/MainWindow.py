@@ -75,6 +75,7 @@ class MainWindow(Frame):
         else:
             return 0
 
+
     # Указали какому графику принадлежит график : Refactoring
     def set_graph(self, model):
         model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
@@ -248,7 +249,7 @@ class MainWindow(Frame):
         analysis_model = self.get_model(self.c1.get())
         analysis = Analysis(analysis_model)
 
-        model = analysis.bar_graph()
+        model = analysis.calculation_bar_graph()
         self.set_graph(model)
 
         self.graph.append(model)
@@ -284,6 +285,8 @@ class MainWindow(Frame):
         self.set_graph(model)
 
         self.graph.append(model)
+        self.draw_graph(model)
+
         window.destroy()
 
     def click_button_fourier_transform(self, window):
@@ -297,7 +300,7 @@ class MainWindow(Frame):
         model = analysis.calculation_fourier_transform()
         self.set_graph(model)
 
-        model.normalization()
+        # model.normalization()
 
         self.graph.append(model)
         self.draw_graph(model)

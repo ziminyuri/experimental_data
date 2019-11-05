@@ -30,7 +30,7 @@ class Analysis:
 
         self.average_value = np.mean(self.model.y)
 
-        return  self.average_value
+        return self.average_value
 
         """
         average_value = 0
@@ -243,10 +243,11 @@ class Analysis:
             temp_value_hit_count = 0
 
         model.n = self.number_of_intervals
+        model.display_n = model.n
         model.y = np.array(self.bar_graph)
         model.x = np.array(x)
-        model.s_min(0)
-        model.s_max(max_bar_graph_value)
+        model.s_min = 0
+        model.s_max = max_bar_graph_value
 
         return model
 
@@ -297,11 +298,13 @@ class Analysis:
 
             result_y = numerator / denominator
 
+            """
             if result_y_min > result_y:
                 result_y_min = result_y
 
             if result_y_max < result_y:
                 result_y_max = result_y
+            """
 
             x.append(i)
             y.append(result_y)
@@ -309,8 +312,17 @@ class Analysis:
         model.n = self.l
         model.y = np.array(y)
         model.x = np.array(x)
-        model.s_min = result_y_min
-        model.s_max = result_y_max
+
+        mac_y = np.amax(model.y)
+        mac_x = np.amin(model.y)
+
+        # model.s_min = result_y_min
+        # model.s_max = result_y_max
+        # model.y = model.y * 99
+        # model.normalization()
+
+        model.axis_max = np.amax(model.y)
+        model.axis_min = np.amin(model.y)
 
         return model
 
@@ -345,11 +357,25 @@ class Analysis:
             rem = 0
             imm = 0
 
+        delta_t = 0.001
+        delta_f = 1 / (self.model.n * delta_t)
+        # new_model.x = np.array(x)
+
+        end = 0
+        for i in x:
+            x[i] = x[i] * delta_f
+            end += 1
+
+        # new_model.x = new_model.x * delta_f
         new_model.x = np.array(x)
         new_model.y = np.array(y)
-        new_model.n = n-1
+        new_model.n = new_model.x[end-1]
 
-        new_model.display_n = int(new_model.n / 2)
+        new_model.display_n = new_model.n / 2
+        # new_model.display_n = int(new_model.n / 2)
+
+        new_model.axis_max = np.amax(new_model.y) * 2
+        new_model.axis_min = np.amin(new_model.y) * 2
 
         return new_model
 
@@ -367,6 +393,8 @@ class Analysis:
 
         result_y_min = 0
         result_y_max = 0
+
+        # self.l = 100
 
         # Считаем знаменатель
         denominator = 0
@@ -389,20 +417,24 @@ class Analysis:
 
             result_y = numerator / denominator
 
+            """
             if result_y_min > result_y:
                 result_y_min = result_y
 
             if result_y_max < result_y:
                 result_y_max = result_y
-
+            """
             x.append(i)
             y.append(result_y)
 
         model.n = self.l
         model.y = np.array(y)
         model.x = np.array(x)
-        model.s_min = result_y_min
-        model.s_max = result_y_max
+        # model.s_min = result_y_min
+        # model.s_max = result_y_max
+
+        model.axis_max = np.amax(model.y)
+        model.axis_min = np.amin(model.y)
 
         return model
 
