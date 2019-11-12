@@ -1,7 +1,8 @@
 from tkinter import *
 import tkinter.ttk as ttk
-from model import *
 from tkinter import messagebox
+
+from lab_EData.model import Model
 
 
 class ChildWindow(Toplevel):

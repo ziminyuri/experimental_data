@@ -1,8 +1,9 @@
 from tkinter import *
-from ChildWindow import *
+from tkinter import messagebox, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from analysis import *
+from lab_EData.ChildWindow import ChildWindow
+from lab_EData.analysis import Analysis
 
 
 class MainWindow(Frame):
@@ -295,7 +296,14 @@ class MainWindow(Frame):
             return
 
         analysis_model = self.get_model(self.c1.get())
-        analysis = Analysis(analysis_model)
+
+
+        if self.input_delta_t.get():
+            delta_t = float(self.input_delta_t.get())
+        else:
+            delta_t = 0.001
+
+        analysis = Analysis(analysis_model, delta_t)
 
         model = analysis.calculation_fourier_transform()
         self.set_graph(model)
@@ -412,10 +420,16 @@ class MainWindow(Frame):
                                            width="26", height="2")
         button_nested_correlation.place(x=300, y=150)
 
+        # Ввод дельта t
+        label_delta_t = Label(a, text="delta T", height=2, width=7, font='Arial 14')
+        label_delta_t.place(x=295, y=190)
+        self.input_delta_t = Entry(a, width=6)
+        self.input_delta_t.place(x=300, y=215)
+
         button_fourier_transform = Button(a, text="Преобразование фурье",
                                           command=lambda: self.click_button_fourier_transform(a),
-                                          width="26", height="2")
-        button_fourier_transform.place(x=300, y=190)
+                                          width="18", height="2")
+        button_fourier_transform.place(x=370, y=210)
 
         button_anti_shift = Button(a, text="Антисдвиг",
                                    command=lambda: self.click_button_anti_shift(a),

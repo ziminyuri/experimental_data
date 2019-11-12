@@ -1,10 +1,12 @@
 import math
 import copy
-from model import *
+
+import numpy as np
+from lab_EData.model import Model
 
 
 class Analysis:
-    def __init__(self, model):
+    def __init__(self, model, delta_t):
 
         self.model = model                 # Модель, которую анализиурем
 
@@ -24,6 +26,9 @@ class Analysis:
 
         # Параметры для автокорреляции
         self.l = model.n - 1         # Сдвиг
+
+        # Параментр для Преобразования Фурье (Спектр)
+        self.delta_t = delta_t
 
     # Рассчет среднего значения
     def calculation_average_value(self):
@@ -357,8 +362,7 @@ class Analysis:
             rem = 0
             imm = 0
 
-        delta_t = 0.001
-        delta_f = 1 / (self.model.n * delta_t)
+        delta_f = 1 / (self.model.n * self.delta_t)
         # new_model.x = np.array(x)
 
         end = 0

@@ -1,5 +1,5 @@
 from tkinter import *
-from MainWindow import *
+from lab_EData.MainWindow import MainWindow
 
 
 def main():
