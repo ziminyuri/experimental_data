@@ -1,18 +1,25 @@
-import math
-import random
-import time
 import numpy as np
-import pickle  # Для работы с бинарным файлом
-import struct
+from lab_EData.trend import Trend
+
+
+def sum_trend(trend_1, trend_2):
+    trend = Trend()
+    trend.y = trend_1.y + trend_2.y
+    trend.x = trend_1.x
+
+    return trend
+
+
+def multi(trend_1, trend_2):
+    trend = Trend()
+    trend.y = trend_1.y * trend_2.y
+    trend.x = trend_1.x
+
+    return trend
 
 
 class Model:
     def __init__(self, option):
-        self.k = 0.1
-        self.b = 4
-        self.beta = 20
-        self.alpha = 0.05
-
         self.n = 1000  # Количество точек по оси Х
         self.display_n = self.n
 
@@ -40,71 +47,6 @@ class Model:
 
         self.piecewise_function = int(self.n / 3)
 
-    # Генерируем спайки
-    def generating_spikes(self):
-        self.argument = self.s_max * 2
-        temp = np.zeros(self.n)
-
-        number_spikes = int(self.n * 0.01)
-
-        for i in range(number_spikes):
-            rand_index_array = random.randint(0, self.n - 1)
-            rand_value = random.uniform(self.s_min, self.s_max)
-
-            if rand_value > 0:
-                rand_value += self.argument
-
-            else:
-                rand_value -= self.argument
-
-            temp[rand_index_array] = rand_value
-
-        self.s_max = self.argument * 1.1
-        return temp
-
-    # Генерируем значение встроенным рандомом
-    def generating_trend_random(self):
-
-        random_trend = np.random.uniform(self.s_min, self.s_max, self.n)
-        return random_trend
-
-    # Генерация тренда прямой линии
-    def generating_trend_line(self):
-        temp = self.k * self.x + self.b
-
-        return temp
-
-    # Генерация графика гармонического процесса
-    def generating_harmonic_process(self):
-        temp = []
-
-        self.delta_t = 0.002
-        for i in range(self.n):
-            yn = self.a_0 * math.sin(2 * math.pi * self.f_0 * i * self.delta_t)
-            temp.append(yn)
-
-        np_array = np.array(temp)
-        return np_array
-
-    # Гененрируем тренд из файла
-    def generating_trend_from_file(self):
-
-        filename = "/Users/zimin/PycharmProjects/lab_EData/input files/input.dat"
-
-        f = open(filename, "rb")
-        data = f.read(4)
-
-        y_list =[]
-        while data:
-            temp_tuple = struct.unpack('<f', data)
-            temp_value = temp_tuple[0]
-            y_list.append(temp_value)
-            data = f.read(4)
-
-        y = np.array(y_list)
-
-        return y
-
     # Нормализация осей
     def normalisation_axis(self):
         max_y = np.amax(self.y)
@@ -113,6 +55,7 @@ class Model:
         self.axis_min = min_y * 1.2
         self.axis_max = max_y * 1.2
 
+    # Нормализация
     def normalization(self):
 
         if self.flag_normalisation == 0:
@@ -126,158 +69,150 @@ class Model:
 
         self.y = ((((self.y - x_min) / c) - 0.5) * 2 * self.s_max)
 
+    def shift(self, trend):
+        trend.y = trend.y + self.argument
+
+        for i in range(10):
+            trend.y[i] = 0
+
+        return trend
+
     def calculation(self):
 
         # y(x)=kx+b
         if self.option == 1:
-            self.y = self.generating_trend_line()
+            trend = Trend()
+            trend.generating_trend_line()
+
+            self.y = trend.y
 
         # y(x)=-kx+b
         if self.option == 2:
-            self.y = self.generating_trend_line()
-            self.y = np.flip(self.y)
+            trend = Trend()
+            trend.generating_trend_line()
+            trend.y = np.flip(trend.y)
+
+            self.y = trend.y
 
         # y(x) = beta * exp^(alpha * i)
         if self.option == 3:
+            trend = Trend()
+            trend.generating_exhibitor()
 
-            temp_y = []
-            for i in range(self.n):
-                try:
-                    yn = self.beta * math.exp((self.alpha * i))
-                    temp_y.append(yn)
-
-                except:
-                    temp_y.append(0)
-
-            self.y = np.array(temp_y)
+            self.y = trend.y
 
         # y(x) = beta * exp^(alpha * -i)
         if self.option == 4:
+            trend = Trend()
+            trend.generating_exhibitor()
+            trend.y = np.flip(trend.y)
 
-            temp_y = []
-            for i in range(self.n):
-                try:
-                    yn = self.beta * math.exp((self.alpha * -i))
-                    temp_y.append(yn)
-
-                except:
-                    temp_y.append(0)
-
-            self.y = np.array(temp_y)
+            self.y = trend.y
 
         # Встроенный рандом
         if self.option == 5:
-            self.y = self.generating_trend_random()
+            trend = Trend()
+            trend.generating_trend_random()
+
+            self.y = trend.y
 
         # Кастомный рандом
         if self.option == 6:
+            trend = Trend()
+            trend.generating_custom_random()
 
-            temp_y = []
-            for i in range(self.n):
-                try:
-                    temp_string_time = str(time.time())
-                    reverse_temp_string_time = temp_string_time[::-1]
-                    new_value = float(reverse_temp_string_time[0])
-                    new_value = new_value / 10
-
-                    temp_string_time_for_even = str(time.time())
-                    reverse_temp_string_time_for_even = temp_string_time_for_even[::-1]
-                    new_value_for_even = int(reverse_temp_string_time_for_even[0])
-                    new_value_for_even = new_value_for_even % 2
-
-                    if new_value_for_even == 1:
-                        new_value = - new_value
-
-                    temp_y.append(new_value)
-
-                except:
-                    temp_y.append(0)
-
-            self.y = np.array(temp_y)
+            self.y = trend.y
 
         # Рандом + сдвиг
         if self.option == 7:
 
+            trend1 = Trend()
+            trend1.generating_trend_random()
+
+            trend = self.shift(trend1)
+
+            self.y = trend.y
+
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
-
-            self.argument = self.s_max * 100
-
-            self.y = self.generating_trend_random()
-            self.y = self.y + self.argument
-
-            for i in range(10):
-                self.y[i] = 0
-
-            self.s_max = self.argument
-            self.axis_max = self.s_max * 1.1
-            self.axis_min = 0
 
         # Значения за областью
         if self.option == 8:
+            trend1 = Trend()
+            trend1.generating_spikes()
+
+            self.y = trend1.y
+
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
-            self.y = self.generating_spikes()
 
         # Адитивная модель №1
         if self.option == 9:
-            trend_1 = self.generating_trend_line()
-            trend_1 = np.flip(trend_1)
+            trend1 = Trend()
+            trend1.generating_trend_line()
+            trend1.y = np.flip(trend1.y)
 
-            trend_2 = self.generating_trend_random()
+            trend2 = Trend()
+            trend2.generating_trend_random()
 
-            self.y = trend_1 + trend_2
+            trend = sum_trend(trend1, trend2)
+
+            self.y = trend.y
 
         # Адитивная модель №2
         if self.option == 10:
-            trend_1 = self.generating_trend_line()
-            trend_2 = self.generating_trend_random()
+            trend1 = Trend()
+            trend1.generating_trend_line()
 
-            self.y = trend_1 + trend_2
+            trend2 = Trend()
+            trend2.generating_trend_random()
+
+            trend = sum_trend(trend1, trend2)
+
+            self.y = trend.y
 
         # Мультипликативная модель №1
         if self.option == 11:
-            trend_1 = self.generating_trend_line()
-            trend_1 = np.flip(trend_1)
+            trend1 = Trend()
+            trend1.generating_trend_line()
+            trend1.y = np.flip(trend1.y)
 
-            trend_2 = self.generating_trend_random()
+            trend2 = Trend()
+            trend2.generating_trend_random()
 
-            self.y = trend_1 * trend_2
+            trend = multi(trend1, trend2)
+
+            self.y = trend.y
 
         # Мультипликативная модель №2
         if self.option == 12:
-            trend_1 = self.generating_trend_line()
-            trend_2 = self.generating_trend_random()
+            trend1 = Trend()
+            trend1.generating_trend_line()
 
-            self.y = trend_1 * trend_2
+            trend2 = Trend()
+            trend2.generating_trend_random()
+
+            trend = multi(trend1, trend2)
+
+            self.y = trend.y
 
         # График кусочной функции
         if self.option == 13:
+            trend = Trend()
+            trend.generating_piecewise_function()
 
-            for i in range(self.n):
-                try:
-                    if i < self.piecewise_function:
-                        yn = -self.k * i + self.b
-
-                    if i < self.piecewise_function * 2:
-                        if i >= self.piecewise_function:
-                            yn = random.uniform(self.s_min, self.s_max)
-
-                    if i >= self.piecewise_function * 2:
-                        yn = self.k * i + self.b
-
-                    self.y.append(yn)
-
-                except:
-                    self.y.append(0)
+            self.y = trend.y
 
         # График гармонический процесс
         if self.option == 17:
-            self.y = self.generating_harmonic_process()
+            trend = Trend()
+            trend.generating_harmonic_process()
 
             if self.c != 0:
                 self.y = self.y + self.c
-                self.flag_normalisation = 0
+
+            else:
+                self.y = trend.y
 
             self.flag_normalisation = 0
             self.normalisation_axis()
@@ -288,42 +223,40 @@ class Model:
         # A1 = 25       f1 = 11
         # A2 = 35       f2 = 41
         # A3 = 30       f3 = 141
+
         if self.option == 19:
-            a1 = 25
-            a2 = 35
-            a3 = 30
+            trend1 = Trend()
+            trend2 = Trend()
+            trend3 = Trend()
 
-            f1 = 11
-            f2 = 41
-            f3 = 141
+            trend1.a_0 = 25
+            trend1.f_0 = 11
+            trend1.generating_harmonic_process()
 
-            temp = []
-            for i in range(self.n):
-                yn1 = a1 * math.sin(2 * math.pi * f1 * i)
-                yn2 = a2 * math.sin(2 * math.pi * f2 * i)
-                yn3 = a3 * math.sin(2 * math.pi * f3 * i)
-                yn = yn1 + yn2 + yn3
-                temp.append(yn)
+            trend2.a_0 = 35
+            trend2.f_0 = 41
+            trend2.generating_harmonic_process()
 
-            self.y = np.array(temp)
+            trend3.a_0 = 30
+            trend3.f_0 = 141
+            trend3.generating_harmonic_process()
+
+            trend4 = sum_trend(trend1, trend2)
+            trend = sum_trend(trend4, trend3)
+
+            self.y = trend.y
 
         # График Рандом + спайки
         if self.option == 20:
-            trend_1 = self.generating_trend_random()
-            trend_2 = self.generating_spikes()
+            trend_1 = Trend()
+            trend_1.generating_trend_random()
 
-            self.y = trend_1 + trend_2
+            trend_2 = Trend()
+            trend_2.generating_spikes()
 
-            self.flag_normalisation = 0
-            self.axis_max = np.amax(self.y) * 1.2
-            self.axis_min = np.amin(self.y) * 1.2
+            trend = sum_trend(trend_1, trend_2)
 
-        # График Рандом  + trend
-        if self.option == 21:
-            trend_1 = self.generating_trend_random()
-            trend_2 = self.generating_trend_line()
-
-            self.y = trend_1 + trend_2
+            self.y = trend.y
 
             self.flag_normalisation = 0
             self.axis_max = np.amax(self.y) * 1.2
@@ -331,37 +264,69 @@ class Model:
 
         # График Гармонический процесс + trend
         if self.option == 25:
-            trend_1 = self.generating_harmonic_process()
-            trend_2 = self.generating_trend_line()
+            trend_1 = Trend()
+            trend_2 = Trend()
 
-            self.y = trend_1 + trend_2
+            trend_1.generating_harmonic_process()
+            trend_2.generating_trend_line()
+            trend = sum_trend(trend_1, trend_2)
+
+            self.y = trend.y
 
         # График Гармонический процесс + спайки
         if self.option == 26:
-            trend_1 = self.generating_harmonic_process()
-            trend_2 = self.generating_spikes()
+            trend_1= Trend()
+            trend_2 = Trend()
 
-            self.y = trend_1 + trend_2
+            trend_1.generating_harmonic_process()
+            trend_2.generating_spikes()
+
+            trend = sum_trend(trend_1, trend_2)
+
+            self.y = trend.y
 
             self.flag_normalisation = 0
             self.normalisation_axis()
 
         # График ГП(гармонический процесс) + спайки + рандом + trend
         if self.option == 27:
-            trend_1 = self.generating_harmonic_process()
-            trend_2 = self.generating_spikes()
-            trend_3 = self.generating_trend_random()
-            trend_4 = self.generating_trend_line()
+            trend_1 = Trend()
+            trend_2 = Trend()
+            trend_3 = Trend()
+            trend_4 = Trend()
 
-            self.y = trend_1 + trend_2 + trend_3 + trend_4
+            trend_1.generating_harmonic_process()
+            trend_2.generating_spikes()
+            trend_3.generating_trend_random()
+            trend_4.generating_trend_line()
+
+            trend = (trend_1, trend_2)
+            trend = (trend, trend_3)
+            trend = (trend, trend_4)
+
+            self.y = trend.y
 
             self.flag_normalisation = 0
             self.normalisation_axis()
 
         # График из файла
         if self.option == 28:
-            self.y = self.generating_trend_from_file()
+            trend = Trend()
+            trend.generating_trend_from_file()
+
+            self. y = trend.y
 
             self.flag_normalisation = 0
             self.normalisation_axis()
+
+        # График ГП + экспонента
+        #if self.option == 29:
+            # self.n = 200
+         #   self.delta_t = 0.005
+            # self.display_n = self.n
+
+          #  trend_1 = self.generating_harmonic_process()
+           # trend_2 = self.generating_exhibitor()
+
+            #self.y = trend_1 * trend_2
 
