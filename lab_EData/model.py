@@ -32,20 +32,15 @@ class Model:
 
         self.s_max = 100  # Максимальное значение функции
         self.s_min = - self.s_max  # Минимальное значение ф-ии
-        self.s_without_spikes = self.s_max  # Значение функции без спаек
-        self.axis_max = self.s_max * 1.2
-        self.axis_min = self.s_min * 1.2
+
+        self.axis_max = 100
+        self.axis_min = -100
 
         self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
         self.argument = 0  # Константа на сколько поднять/опустить точки на аномальном участке
 
         # Гармоничекое процесс
-        self.a_0 = 100  # А0
-        self.f_0 = 11  # 11; 110; 250; 510
-        self.delta_t = 0.001
         self.c = 0  # Константа
-
-        self.piecewise_function = int(self.n / 3)
 
     # Нормализация осей
     def normalisation_axis(self):
@@ -112,7 +107,7 @@ class Model:
         # Встроенный рандом
         if self.option == 5:
             trend = Trend()
-            trend.generating_trend_random()
+            trend.generating_trend_random(self.s_min, self.s_max)
 
             self.y = trend.y
 
@@ -127,7 +122,7 @@ class Model:
         if self.option == 7:
 
             trend1 = Trend()
-            trend1.generating_trend_random()
+            trend1.generating_trend_random(self.s_min, self.s_max)
 
             trend = self.shift(trend1)
 
@@ -139,7 +134,7 @@ class Model:
         # Значения за областью
         if self.option == 8:
             trend1 = Trend()
-            trend1.generating_spikes()
+            trend1.generating_spikes(self.s_min, self.s_max)
 
             self.y = trend1.y
 
@@ -153,7 +148,7 @@ class Model:
             trend1.y = np.flip(trend1.y)
 
             trend2 = Trend()
-            trend2.generating_trend_random()
+            trend2.generating_trend_random(self.s_min, self.s_max)
 
             trend = sum_trend(trend1, trend2)
 
@@ -165,7 +160,7 @@ class Model:
             trend1.generating_trend_line()
 
             trend2 = Trend()
-            trend2.generating_trend_random()
+            trend2.generating_trend_random(self.s_min, self.s_max)
 
             trend = sum_trend(trend1, trend2)
 
@@ -178,7 +173,7 @@ class Model:
             trend1.y = np.flip(trend1.y)
 
             trend2 = Trend()
-            trend2.generating_trend_random()
+            trend2.generating_trend_random(self.s_min, self.s_max)
 
             trend = multi(trend1, trend2)
 
@@ -190,7 +185,7 @@ class Model:
             trend1.generating_trend_line()
 
             trend2 = Trend()
-            trend2.generating_trend_random()
+            trend2.generating_trend_random(self.s_min, self.s_max)
 
             trend = multi(trend1, trend2)
 
@@ -199,7 +194,7 @@ class Model:
         # График кусочной функции
         if self.option == 13:
             trend = Trend()
-            trend.generating_piecewise_function()
+            trend.generating_piecewise_function(self.s_min, self.s_max)
 
             self.y = trend.y
 
@@ -249,10 +244,10 @@ class Model:
         # График Рандом + спайки
         if self.option == 20:
             trend_1 = Trend()
-            trend_1.generating_trend_random()
+            trend_1.generating_trend_random(self.s_min, self.s_max)
 
             trend_2 = Trend()
-            trend_2.generating_spikes()
+            trend_2.generating_spikes(self.s_min, self.s_max)
 
             trend = sum_trend(trend_1, trend_2)
 
@@ -279,7 +274,7 @@ class Model:
             trend_2 = Trend()
 
             trend_1.generating_harmonic_process()
-            trend_2.generating_spikes()
+            trend_2.generating_spikes(self.s_min, self.s_max)
 
             trend = sum_trend(trend_1, trend_2)
 
@@ -296,8 +291,8 @@ class Model:
             trend_4 = Trend()
 
             trend_1.generating_harmonic_process()
-            trend_2.generating_spikes()
-            trend_3.generating_trend_random()
+            trend_2.generating_spikes(self.s_min, self.s_max)
+            trend_3.generating_trend_random(self.s_min, self.s_max)
             trend_4.generating_trend_line()
 
             trend = (trend_1, trend_2)
@@ -320,13 +315,22 @@ class Model:
             self.normalisation_axis()
 
         # График ГП + экспонента
-        #if self.option == 29:
-            # self.n = 200
-         #   self.delta_t = 0.005
-            # self.display_n = self.n
+        if self.option == 29:
+            self.n = 200
+            self.x = np.arange(0, self.n)
+            # self.delta_t = 0.005
+            self.display_n = self.n
 
-          #  trend_1 = self.generating_harmonic_process()
-           # trend_2 = self.generating_exhibitor()
+            trend_1 = Trend()
+            trend_1.n = self.n
+            trend_1.x = self.x
+            trend_1.delta_t = 0.005
+            trend_1.generating_harmonic_process()
 
-            #self.y = trend_1 * trend_2
+            trend_2 = Trend()
+            trend_2.n = self.n
+            trend_2.x = self.x
+            trend_2.generating_exhibitor()
+
+            self.y = multi(trend_1,trend_2)
 

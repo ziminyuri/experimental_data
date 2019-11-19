@@ -510,22 +510,17 @@ class MainWindow(Frame):
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
 
+        canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
+        canvas.draw()
+
         if chart_number == "1":
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
             canvas.get_tk_widget().place(x=5, y=35)
 
         if chart_number == "2":
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
             canvas.get_tk_widget().place(x=550, y=35)
 
         if chart_number == "3":
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
             canvas.get_tk_widget().place(x=5, y=400)
 
         if chart_number == "4":
-            canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
-            canvas.draw()
             canvas.get_tk_widget().place(x=550, y=400)

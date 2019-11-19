@@ -18,10 +18,6 @@ class Trend:
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
 
-        self.s_max = 100  # Максимальное значение функции
-        self.s_min = - self.s_max  # Минимальное значение ф-ии
-        self.s_without_spikes = self.s_max  # Значение функции без спаек
-
         self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
         self.argument = 0  # Константа на сколько поднять/опустить точки на аномальном участке
 
@@ -34,14 +30,14 @@ class Trend:
         self.piecewise_function = int(self.n / 3)
 
     # Генерируем спайки
-    def generating_spikes(self):
-        self.argument = self.s_max * 2
+    def generating_spikes(self, min, max):
+        self.argument = max * 2
 
         number_spikes = int(self.n * 0.01)
 
         for i in range(number_spikes):
             rand_index_array = random.randint(0, self.n - 1)
-            rand_value = random.uniform(self.s_min, self.s_max)
+            rand_value = random.uniform(min, min)
 
             if rand_value > 0:
                 rand_value += self.argument
@@ -79,7 +75,7 @@ class Trend:
             self.y = np.array(temp_y)
 
     # Генерируем кусочную функцию
-    def generating_piecewise_function(self):
+    def generating_piecewise_function(self, min, max):
         y = []
         for i in range(self.n):
             try:
@@ -88,7 +84,7 @@ class Trend:
 
                 if i < self.piecewise_function * 2:
                     if i >= self.piecewise_function:
-                        yn = random.uniform(self.s_min, self.s_max)
+                        yn = random.uniform(min, max)
 
                 if i >= self.piecewise_function * 2:
                     yn = self.k * i + self.b
@@ -101,8 +97,8 @@ class Trend:
         self.y = np.array(y)
 
     # Генерируем значение встроенным рандомом
-    def generating_trend_random(self):
-        self.y = np.random.uniform(self.s_min, self.s_max, self.n)
+    def generating_trend_random(self, min, max):
+        self.y = np.random.uniform(min, max, self.n)
 
     # Генерация тренда прямой линии
     def generating_trend_line(self):
