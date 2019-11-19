@@ -13,19 +13,18 @@ class Trend:
         self.alpha = 0.05
 
         self.n = 1000  # Количество точек по оси Х
-        self.display_n = self.n
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
 
         self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
-        self.argument = 0  # Константа на сколько поднять/опустить точки на аномальном участке
+        self.argument = 0       # Константа на сколько поднять/опустить точки на аномальном участке
 
         # Гармоничекое процесс
         self.a_0 = 100  # А0
-        self.f_0 = 11  # 11; 110; 250; 510
+        self.f_0 = 11   # 11; 110; 250; 510
         self.delta_t = 0.001
-        self.c = 0  # Константа
+        self.c = 0      # Константа
 
         self.piecewise_function = int(self.n / 3)
 
@@ -46,8 +45,6 @@ class Trend:
                 rand_value -= self.argument
 
             self.y[rand_index_array] = rand_value
-
-        self.s_max = self.argument * 1.1
 
     # Гененрируем кастомный рандом
     def generating_custom_random(self):

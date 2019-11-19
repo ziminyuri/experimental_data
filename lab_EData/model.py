@@ -20,24 +20,24 @@ def multi(trend_1, trend_2):
 
 class Model:
     def __init__(self, option):
-        self.n = 1000  # Количество точек по оси Х
+        self.n = 1000                   # Количество точек по оси Х
         self.display_n = self.n
 
         self.x = np.arange(0, self.n)
-        self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
+        self.y = np.zeros(self.n)       # Сгенерировали матрицу из нулей
 
-        self.option = option  # Тип функции
-        self.graph = 0  # Номер графика
-        self.flag_normalisation = 1  # Флаг, что необходима нормализация
+        self.option = option            # Тип функции
+        self.graph = 0                  # Номер графика
+        self.flag_normalisation = 1     # Флаг, что необходима нормализация
 
-        self.s_max = 100  # Максимальное значение функции
-        self.s_min = - self.s_max  # Минимальное значение ф-ии
+        self.s_max = 100                # Максимальное значение функции
+        self.s_min = - self.s_max       # Минимальное значение ф-ии
 
         self.axis_max = 100
         self.axis_min = -100
 
         self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
-        self.argument = 0  # Константа на сколько поднять/опустить точки на аномальном участке
+        self.argument = 0       # Константа на сколько поднять/опустить точки на аномальном участке
 
         # Гармоничекое процесс
         self.c = 0  # Константа
@@ -332,5 +332,10 @@ class Model:
             trend_2.x = self.x
             trend_2.generating_exhibitor()
 
-            self.y = multi(trend_1,trend_2)
+            trend = multi(trend_1, trend_2)
+
+            self.y = trend.y
+
+            #max = np.amax(self.y)
+
 

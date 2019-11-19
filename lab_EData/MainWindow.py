@@ -49,6 +49,9 @@ class MainWindow(Frame):
         b3 = Button(text="Вычисления", command=self.click_button_calculation1, width="26", height="2")
         b3.place(x=1120, y=120)
 
+        button_filter = Button(text="Фильтр", command=self.click_button_filter, width="26", height="2")
+        button_filter.place(x=1120, y=170)
+
         self.combobox_value = []  # ComboBox графиков для анализа
 
     def click_button_add_model(self):
@@ -75,7 +78,6 @@ class MainWindow(Frame):
             return 1
         else:
             return 0
-
 
     # Указали какому графику принадлежит график : Refactoring
     def set_graph(self, model):
@@ -297,7 +299,6 @@ class MainWindow(Frame):
 
         analysis_model = self.get_model(self.c1.get())
 
-
         if self.input_delta_t.get():
             delta_t = float(self.input_delta_t.get())
         else:
@@ -391,6 +392,10 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    # Выполнение процесса фильтрация
+    def filtration(self, subWindow):
+        subWindow.destroy()
+
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
         a = Toplevel()
@@ -483,6 +488,49 @@ class MainWindow(Frame):
         b1.place(x=600, y=450)
         b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
         b2.place(x=750, y=450)
+
+        a.grab_set()  # Перехватывает все события происходящие в приложении
+        a.focus_set()  # Захватывает и удерживает фокус
+
+    # Нажатие на клавишу "Фильтр" в главном окне
+    def click_button_filter(self):
+        a = Toplevel()
+        a.title('Фильтр')
+        a.geometry('600x300')
+
+        label1 = Label(a, text="Номер графика для фильтрации", height=1, width=28, font='Arial 14')
+        label1.place(x=10, y=10)
+        self.c1 = ttk.Combobox(a, values=self.combobox_value, height=4, width="28")
+        self.c1.place(x=10, y=30)
+
+        label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
+        label2.place(x=300, y=10)
+        self.c2 = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
+        self.c2.place(x=300, y=30)
+
+        # Ввод дельта t
+        label_delta_t = Label(a, text="delta T", height=2, width=7, font='Arial 14')
+        label_delta_t.place(x=10, y=70)
+        self.input_delta_t = Entry(a, width=28)
+        self.input_delta_t.place(x=10, y=100)
+
+        # Ввод m
+        label_m = Label(a, text="m", height=2, width=1, font='Arial 14')
+        label_m.place(x=10, y=130)
+        self.input_m = Entry(a, width=28)
+        self.input_m.place(x=10, y=160)
+
+        # Ввод fc
+        label_fc = Label(a, text="fc", height=2, width=2, font='Arial 14')
+        label_fc.place(x=10, y=190)
+        self.input_fc = Entry(a, width=28)
+        self.input_fc.place(x=10, y=220)
+
+        b1 = Button(a, text="Выполнить",
+                    command=lambda: self.filtration(a), width="14", height="2")
+        b1.place(x=300, y=250)
+        b2 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="14", height="2")
+        b2.place(x=450, y=250)
 
         a.grab_set()  # Перехватывает все события происходящие в приложении
         a.focus_set()  # Захватывает и удерживает фокус
