@@ -28,8 +28,8 @@ class Trend:
 
         self.piecewise_function = int(self.n / 3)
 
-    # Генерируем спайки
-    def generating_spikes(self, min, max):
+    # Генерируем рандомно спайки
+    def generating_random_spikes(self, min, max):
         self.argument = max * 2
 
         number_spikes = int(self.n * 0.01)
@@ -45,6 +45,18 @@ class Trend:
                 rand_value -= self.argument
 
             self.y[rand_index_array] = rand_value
+
+    # Генерируем спайки
+    def generating_spikes(self, max):
+        number_of_spike = 5
+
+        gap = int(self.n / number_of_spike)
+
+        i = 0
+        while i < self.n:
+            self.y[i] = max
+            i += gap
+
 
     # Гененрируем кастомный рандом
     def generating_custom_random(self):

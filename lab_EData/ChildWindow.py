@@ -269,6 +269,7 @@ class ChildWindow(Toplevel):
 
         model1.calculation()
         model1.normalization()
+        model1.normalisation_axis()
 
         self.add_model(model1)
         self.main.draw_graph(model1)
