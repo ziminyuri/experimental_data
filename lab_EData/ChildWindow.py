@@ -30,9 +30,10 @@ class ChildWindow(Toplevel):
                                              u"Адитивная модель №2", u"Мультипликативная модель №1",
                                              u"Мультипликативная модель №2", u"Кусочная функция",
                                              u"Гармоническое процесс", u"Полигармоническое процесс",
-                                             u"Рандом + сдвиг", u"Рандом + спайки", u"Рандом + trend",
+                                             u"Рандом + сдвиг", u"Рандом + спайки",
                                              u"ГП + trend", u"ГП + спайки",
-                                             u"ГП + спайки + рандом + trend", u"Загрузить из файла"],
+                                             u"ГП + спайки + рандом + trend", u"Загрузить из файла",
+                                             u"ГП + exp"],
                                height=15)
 
         self.c2.place(x=10, y=80)
@@ -249,9 +250,6 @@ class ChildWindow(Toplevel):
         if self.c2.get() == "Рандом + спайки":
             model1 = Model(20)
 
-        if self.c2.get() == "Рандом + trend":
-            model1 = Model(21)
-
         if self.c2.get() == "ГП + trend":
             model1 = Model(25)
 
@@ -264,10 +262,14 @@ class ChildWindow(Toplevel):
         if self.c2.get() == "Загрузить из файла":
             model1 = Model(28)
 
+        if self.c2.get() == "ГП + exp":
+            model1 = Model(29)
+
         self.set_custom_values_for_model(model1)
 
         model1.calculation()
         model1.normalization()
+        model1.normalisation_axis()
 
         self.add_model(model1)
         self.main.draw_graph(model1)

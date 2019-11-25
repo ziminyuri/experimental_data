@@ -29,7 +29,6 @@
 * №18 - Преобразование фурье `(analysis.py)`
 * №19 - Полигармоническое процесс `(ChildWindow.py)`
 * №20 - Рандом + спайки `(ChildWindow.py)`
-* №21 - Рандом + спайки + trend `(ChildWindow.py)`
 * №22 - Антиспайк `(analysis.py)`
 * №23 - Антисдвиг `(analysis.py)`
 * №24 - Антитренд `(analysis.py)`
