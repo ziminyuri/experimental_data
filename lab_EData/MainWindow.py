@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from lab_EData.ChildWindow import ChildWindow
 from lab_EData.analysis import Analysis
+from lab_EData.model import Model
 
 
 class MainWindow(Frame):
@@ -394,6 +395,28 @@ class MainWindow(Frame):
 
     # Выполнение процесса фильтрация
     def filtration(self, subWindow):
+        choice_of_filtration = self.combobox_type_filter.get()
+
+        if choice_of_filtration == "Низких частот":
+            model = Model(30)
+
+        if choice_of_filtration == "Высоких частот":
+            model = Model(31)
+
+        if choice_of_filtration == "Полосовой":
+            model = Model(32)
+
+        if choice_of_filtration == "Режекторный":
+            model = Model(32)
+
+        model.calculation()
+        model.normalisation_axis()
+
+        place_graph = int(self.combobox_place_graph.get())
+        model.graph = place_graph
+
+        self.draw_graph(model)
+
         subWindow.destroy()
 
     # Нажатие на клавишу "Вычисления"
@@ -505,8 +528,14 @@ class MainWindow(Frame):
 
         label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
         label2.place(x=300, y=10)
-        self.c2 = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
-        self.c2.place(x=300, y=30)
+        self.combobox_place_graph = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
+        self.combobox_place_graph.place(x=300, y=30)
+
+        label3 = Label(a, text="Тип фильтра", height=1, width=28, font='Arial 14')
+        label3.place(x=300, y=70)
+        self.combobox_type_filter = ttk.Combobox(a, values=[u"Низких частот", u"Высоких частот", u"Полосовой",
+                                                            u"Режекторный"], height=4, width="28")
+        self.combobox_type_filter.place(x=300, y=100)
 
         # Ввод дельта t
         label_delta_t = Label(a, text="delta T", height=2, width=7, font='Arial 14')
