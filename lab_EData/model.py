@@ -1,6 +1,6 @@
 import numpy as np
 from lab_EData.trend import Trend
-
+from lab_EData.filter import *
 
 def sum_trend(trend_1, trend_2):
     trend = Trend()
@@ -374,5 +374,19 @@ class Model:
             self.x = trend.x
             self.s_max = 100
             self.s_min = - self.s_max
+
+        # Реализация фильтров
+        # Низких частот
+        if self.option == 30:
+            m = 32
+            dt = 0.001
+            fc = 100
+            lpw = filter_potter(m, dt, fc)
+            #self.graph = 1
+
+            self.n = m
+            self.x = np.arange(0, self.n * 2 + 1)
+            self.y = lpw
+            self.display_n = self.n * 2 + 1
 
 
