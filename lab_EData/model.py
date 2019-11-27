@@ -382,7 +382,6 @@ class Model:
             dt = 0.001
             fc = 100
             lpw = filter_potter(m, dt, fc)
-            #self.graph = 1
 
             self.n = m
             self.x = np.arange(0, self.n * 2 + 1)
