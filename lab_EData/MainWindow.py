@@ -53,6 +53,9 @@ class MainWindow(Frame):
         button_filter = Button(text="Фильтр", command=self.click_button_filter, width="26", height="2")
         button_filter.place(x=1120, y=170)
 
+        button_sound = Button(text="Звук", command=self.click_button_sound, width="26", height="2")
+        button_sound.place(x=1120, y=220)
+
         self.combobox_value = []  # ComboBox графиков для анализа
 
     def click_button_add_model(self):
@@ -80,15 +83,34 @@ class MainWindow(Frame):
         else:
             return 0
 
-    # Указали какому графику принадлежит график : Refactoring
-    def set_graph(self, model):
-        model.graph = int(self.c2.get())  # Указали какому графику принадлежит график
+    # Указали какому графику принадлежит график и добавили в combobox
+    def set_graph(self, model, place_of_graph):
+        model.graph = int(place_of_graph)
 
         j = 0
         for i in self.graph:
-            if i.graph == int(self.c2.get()):
+            if i.graph == int(place_of_graph):
                 del self.graph[j]
             j = j + 1
+
+
+    def get_model(self, number_of_trend):
+        for i in self.graph:
+            g = i.graph
+            if g == int(number_of_trend):
+                return i
+
+    def set_combobox_value_of_graph(self, value):
+
+        flag = 0                                # Переменная не встречается в массиве
+        for i in range(self.combobox_value):
+
+            if i == value:
+                flag = 1
+
+        if flag is 0:
+            self.combobox_value.append(value)
+
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
@@ -254,7 +276,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_bar_graph()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -270,7 +294,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_autocorrelation()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -286,7 +312,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_nested_correlation()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         self.graph.append(model)
         self.draw_graph(model)
@@ -308,7 +336,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model, delta_t)
 
         model = analysis.calculation_fourier_transform()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         # model.normalization()
 
@@ -327,7 +357,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_shift()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         # model.normalization()
 
@@ -347,7 +379,8 @@ class MainWindow(Frame):
 
         model = analysis.calculation_anti_spike()
 
-        self.set_graph(model)
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         # model.normalization()
 
@@ -366,7 +399,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_trend()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         # model.normalization()
 
@@ -384,7 +419,9 @@ class MainWindow(Frame):
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_fourier_transform()
-        self.set_graph(model)
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
 
         model.normalization()
 
@@ -407,17 +444,38 @@ class MainWindow(Frame):
             model = Model(32)
 
         if choice_of_filtration == "Режекторный":
-            model = Model(32)
+            model = Model(33)
 
         model.calculation()
         model.normalisation_axis()
 
         place_graph = int(self.combobox_place_graph.get())
-        model.graph = place_graph
+        self.set_graph(model, place_graph)
 
         self.draw_graph(model)
 
         subWindow.destroy()
+
+    def sound(self, subWindow):
+        model = Model(34)
+
+        if self.input_const_sound.get() == "":
+            const = 1
+        else:
+            const = float(self.input_const_sound.get())
+
+        model.c = const
+
+        model.calculation()
+        model.normalisation_axis()
+
+        place_graph = int(self.combobox_place_graph.get())
+        self.set_graph(model, place_graph)
+
+        self.draw_graph(model)
+
+        subWindow.destroy()
+
 
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
@@ -564,26 +622,45 @@ class MainWindow(Frame):
         a.grab_set()  # Перехватывает все события происходящие в приложении
         a.focus_set()  # Захватывает и удерживает фокус
 
-    def get_model(self, number_of_trend):
-        for i in self.graph:
-            g = i.graph
-            if g == int(number_of_trend):
-                return i
+    # Нажатие на клавишу "Звук" в главном окне
+    def click_button_sound(self):
+        a = Toplevel()
+        a.title('Звук')
+        a.geometry('600x300')
+
+        label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
+        label2.place(x=10, y=10)
+        self.combobox_place_graph = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
+        self.combobox_place_graph.place(x=10, y=30)
+
+        # Ввод константы
+        label_const= Label(a, text="Констанста", height=2, width=7, font='Arial 14')
+        label_const.place(x=10, y=70)
+        self.input_const_sound = Entry(a, width=28)
+        self.input_const_sound.place(x=10, y=100)
+
+        b1 = Button(a, text="Выполнить", command=lambda: self.sound(a), width="14", height="2")
+        b1.place(x=300, y=250)
+        b2 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="14", height="2")
+        b2.place(x=450, y=250)
+
+        a.grab_set()  # Перехватывает все события происходящие в приложении
+        a.focus_set()  # Захватывает и удерживает фокус
 
     def draw_graph(self, model):
 
         chart_number = str(model.graph)
-        x = model.display_n
-        y_min = model.axis_min
-        y_max = model.axis_max
+        # x = model.display_n
+        # y_min = model.axis_min
+        # y_max = model.axis_max
 
         x_list = model.x
         y_list = model.y
 
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
-        ax.set_xlim([0, x])
-        ax.set_ylim([y_min, y_max])
+        # ax.set_xlim([0, x])
+        # ax.set_ylim([y_min, y_max])
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
 

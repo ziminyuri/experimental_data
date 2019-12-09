@@ -1,6 +1,9 @@
 import numpy as np
 from lab_EData.trend import Trend
 from lab_EData.filter import *
+from lab_EData.sound import Sound
+import matplotlib.pyplot as plt
+
 
 def sum_trend(trend_1, trend_2):
     trend = Trend()
@@ -387,5 +390,28 @@ class Model:
             self.x = np.arange(0, self.n * 2 + 1)
             self.y = lpw
             self.display_n = self.n * 2 + 1
+
+        # Фильтр высоких частот
+        if self.option == 31:
+            m = 32
+            dt = 0.001
+            fc = 100
+
+            hpf = high_potter_filter(m, dt, fc)
+
+            self.n = m
+            self.x = np.arange(0, self.n * 2 + 1)
+            self.y = hpf
+            self.display_n = self.n * 2 + 1
+
+        # Звук WAV
+        if self.option == 34:
+            sound_trend = Sound()
+
+            self.x = sound_trend.x
+            self.y = sound_trend.y * self.c
+
+            self.n = len(self.x)
+            self.display_n = self.n
 
 
