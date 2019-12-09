@@ -1,6 +1,7 @@
 import math
 import numpy as np
 
+
 # m -  количество значений
 # на выходе должно быть 2m + 1
 def filter_potter(m, dt, fc):
@@ -9,7 +10,7 @@ def filter_potter(m, dt, fc):
     lpw = [arg]
     arg *= math.pi
 
-    for i in range(1, m+1):
+    for i in range(1, m + 1):
         append_value = (math.sin(arg * i)) / (math.pi * i)
         lpw.append(append_value)
 
@@ -21,7 +22,7 @@ def filter_potter(m, dt, fc):
 
     sum_g = lpw[0]
 
-    for i in range(1, m+1):
+    for i in range(1, m + 1):
         summ = d[0]
         arg = math.pi * i / m
         for k in range(1, 3):
@@ -30,10 +31,9 @@ def filter_potter(m, dt, fc):
         sum_g += 2 * lpw[i]
 
     # нормализация
-    for i in range(m+1):
+    for i in range(m + 1):
         lpw[i] /= sum_g
 
-    #lpw_1 = np.array(lpw)
     lpw_2 = lpw.copy()
     lpw_2.reverse()
 
@@ -41,10 +41,20 @@ def filter_potter(m, dt, fc):
         lpw_2.append(lpw[i])
 
     lpw = np.array(lpw_2)
-    print('fdsaf')
 
     return lpw
 
-    #final = lpw_2.copy()
-    #final = np.append(lpw_1)
-    #return final
+
+def high_potter_filter(m, dt, fc):
+    low_potter_filter = filter_potter(m, dt, fc)
+
+    high_potter_filter_graph = []
+    n = 2 * m + 1
+
+    for i in range(n):
+        if i == m:
+            high_potter_filter_graph.append(1 - low_potter_filter[i])
+        else:
+            high_potter_filter_graph.append(-low_potter_filter[i])
+
+    return high_potter_filter_graph
