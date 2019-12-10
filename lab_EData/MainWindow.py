@@ -58,8 +58,21 @@ class MainWindow(Frame):
 
         self.combobox_value = []  # ComboBox графиков для анализа
 
+    # Обработка нажатия на кнопку "Добавить"
     def click_button_add_model(self):
         ChildWindow(self, self.root, self.graph)
+
+    # Обновляем combobox построенных графиков
+    def update_combobox_value(self, add_value):
+
+        flag = 0
+        for i in self.combobox_value:
+            if i == add_value:
+                flag = 1
+
+        if flag == 0:
+            self.combobox_value.append(add_value)
+            self.combobox_value.sort()
 
     def get_analysis(self, analysis_model):
 
@@ -85,32 +98,32 @@ class MainWindow(Frame):
 
     # Указали какому графику принадлежит график и добавили в combobox
     def set_graph(self, model, place_of_graph):
+
+        # Указали какому графику на интерфейсе принадлежит модель
         model.graph = int(place_of_graph)
 
+        # Обновили массив объектов модели
         j = 0
         for i in self.graph:
             if i.graph == int(place_of_graph):
                 del self.graph[j]
             j = j + 1
 
+        # Обновляем combobox построенных графиков
+        flag = 0
+        for i in self.combobox_value:
+            if i == model.graph:
+                flag = 1
+
+        if flag == 0:
+            self.combobox_value.append(place_of_graph)
+            self.combobox_value.sort()
 
     def get_model(self, number_of_trend):
         for i in self.graph:
             g = i.graph
             if g == int(number_of_trend):
                 return i
-
-    def set_combobox_value_of_graph(self, value):
-
-        flag = 0                                # Переменная не встречается в массиве
-        for i in range(self.combobox_value):
-
-            if i == value:
-                flag = 1
-
-        if flag is 0:
-            self.combobox_value.append(value)
-
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
@@ -446,6 +459,9 @@ class MainWindow(Frame):
         if choice_of_filtration == "Режекторный":
             model = Model(33)
 
+        else:
+            model = Model(0)
+
         model.calculation()
         model.normalisation_axis()
 
@@ -475,7 +491,6 @@ class MainWindow(Frame):
         self.draw_graph(model)
 
         subWindow.destroy()
-
 
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
@@ -567,7 +582,7 @@ class MainWindow(Frame):
                     command=lambda: self.click_button_add_and_close(a, choice_of_calculation.get()),
                     width="15", height="2")
         b1.place(x=600, y=450)
-        b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
+        b2 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="15", height="2")
         b2.place(x=750, y=450)
 
         a.grab_set()  # Перехватывает все события происходящие в приложении
@@ -634,7 +649,7 @@ class MainWindow(Frame):
         self.combobox_place_graph.place(x=10, y=30)
 
         # Ввод константы
-        label_const= Label(a, text="Констанста", height=2, width=7, font='Arial 14')
+        label_const = Label(a, text="Констанста", height=2, width=7, font='Arial 14')
         label_const.place(x=10, y=70)
         self.input_const_sound = Entry(a, width=28)
         self.input_const_sound.place(x=10, y=100)

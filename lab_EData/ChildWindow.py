@@ -274,7 +274,7 @@ class ChildWindow(Toplevel):
         self.add_model(model1)
         self.main.draw_graph(model1)
 
-        self.main.combobox_value = self.c1.get()
+        self.main.update_combobox_value(self.c1.get())
         self.destroy()
 
     def click_button_close(self):
