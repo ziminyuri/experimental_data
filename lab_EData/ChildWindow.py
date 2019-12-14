@@ -6,10 +6,9 @@ from lab_EData.model import Model
 
 
 class ChildWindow(Toplevel):
-    def __init__(self, main_window, root, graph_array):
+    def __init__(self, main_window, root):
         super().__init__(root)
         self.root = root
-        self.graph_array = graph_array
 
         self.main = main_window
 
@@ -142,23 +141,6 @@ class ChildWindow(Toplevel):
                 messagebox.showerror("Ошибка", "Количество записей должно быть целочисленным")
                 return
 
-        """
-        if self.input_n.get() != "":
-            try:
-                n = int(self.input_n.get())
-                model.set_n(n)
-            except:
-                messagebox.showerror("Ошибка", "Начало промежутка должно быть целочисленным")
-                return
-
-        if self.input_m.get() != "":
-            try:
-                m = int(self.input_m.get())
-                model.set_m(m)
-            except:
-                messagebox.showerror("Ошибка", "Окончание промежутка должно быть целочисленным")
-                return
-        """
         if self.input_S_min.get() != "":
             try:
                 min = int(self.input_S_min.get())
@@ -175,106 +157,99 @@ class ChildWindow(Toplevel):
                 messagebox.showerror("Ошибка", "Максимальное значение ф-ии должно быть целочисленным")
                 return
 
-        # Указали какому графику принадлежит график
-        model.graph = int(self.c1.get())
-
+    # Добавили в список объектов и обновили комбобокс построенных графиков
     def add_model(self, model):
 
-        j = 0
-        for i in self.graph_array:
-            if i.graph == int(self.c1.get()):
-                del self.graph_array[j]
-            j = j + 1
-
-        self.graph_array.append(model)
+        if self.c1.get() != "":
+            model.graph = int(self.c1.get())
+            self.main.append_graph_to_list_and_combobox(model)
 
     def click_button_add_and_close(self):
 
-        global model1
+        global model
         if self.c1.get() == "":
             messagebox.showinfo("Не указан номер графика")
             return
 
         if self.c2.get() == "y(x)=kx+b":
-            model1 = Model(1)
+            model = Model(1)
 
         if self.c2.get() == "y(x)=-kx+b":
-            model1 = Model(2)
+            model = Model(2)
 
         if self.c2.get() == "y(x) = beta * exp^(alpha * i)":
-            model1 = Model(3)
+            model = Model(3)
 
         if self.c2.get() == "y(x) = beta * exp^(alpha * -i)":
-            model1 = Model(4)
+            model = Model(4)
 
         if self.c2.get() == "Встроенный рандом":
-            model1 = Model(5)
+            model = Model(5)
 
         if self.c2.get() == "Кастомный рандом":
-            model1 = Model(6)
+            model = Model(6)
 
         if self.c2.get() == "Рандом + сдвиг":
-            model1 = Model(7)
+            model = Model(7)
 
         if self.c2.get() == "Значения за областью":
-            model1 = Model(8)
+            model = Model(8)
 
         if self.c2.get() == "Адитивная модель №1":
-            model1 = Model(9)
+            model = Model(9)
 
         if self.c2.get() == "Адитивная модель №2":
-            model1 = Model(10)
+            model = Model(10)
 
         if self.c2.get() == "Мультипликативная модель №1":
-            model1 = Model(11)
+            model = Model(11)
 
         if self.c2.get() == "Мультипликативная модель №2":
-            model1 = Model(12)
+            model = Model(12)
 
         if self.c2.get() == "Кусочная функция":
-            model1 = Model(13)
+            model = Model(13)
 
         if self.c2.get() == "Гармоническое процесс":
             if self.input_f_0.get() == "":
                 messagebox.showinfo("Ошибка", "Не указан f0 (Например 11)")
                 pass
             else:
-                model1 = Model(17)
-                model1.f_0 = int(self.input_f_0.get())
+                model = Model(17)
+                model.f_0 = int(self.input_f_0.get())
                 if self.input_C.get() != "":
-                    model1.c = int(self.input_C.get())
+                    model.c = int(self.input_C.get())
 
         if self.c2.get() == "Полигармоническое процесс":
-            model1 = Model(19)
+            model = Model(19)
 
         if self.c2.get() == "Рандом + спайки":
-            model1 = Model(20)
+            model = Model(20)
 
         if self.c2.get() == "ГП + trend":
-            model1 = Model(25)
+            model = Model(25)
 
         if self.c2.get() == "ГП + спайки":
-            model1 = Model(26)
+            model = Model(26)
 
         if self.c2.get() == "ГП + спайки + рандом + trend":
-            model1 = Model(27)
+            model = Model(27)
 
         if self.c2.get() == "Загрузить из файла":
-            model1 = Model(28)
+            model = Model(28)
 
         if self.c2.get() == "ГП + exp":
-            model1 = Model(29)
+            model = Model(29)
 
-        self.set_custom_values_for_model(model1)
+        self.set_custom_values_for_model(model)
 
-        model1.calculation()
-        model1.normalization()
-        model1.normalisation_axis()
+        model.calculation()
+        model.normalization()
+        model.normalisation_axis()
 
-        self.add_model(model1)
-        self.main.draw_graph(model1)
+        self.add_model(model)         # Добавили в список объектов и обновили комбобокс построенных графиков
+        self.main.draw_graph(model)
 
-        self.main.update_combobox_value(self.c1.get())
         self.destroy()
 
     def click_button_close(self):

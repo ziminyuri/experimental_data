@@ -12,7 +12,6 @@ class MainWindow(Frame):
         super().__init__(root)
 
         self.root = root
-        self.graph = []
         self.analysis_model = []  # Список, где храним модели анализа
 
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
@@ -56,23 +55,31 @@ class MainWindow(Frame):
         button_sound = Button(text="Звук", command=self.click_button_sound, width="26", height="2")
         button_sound.place(x=1120, y=220)
 
-        self.combobox_value = []  # ComboBox графиков для анализа
+        self.combobox_graph = []  # ComboBox графиков для анализа
+        self.graph_list = []     # Спис
 
     # Обработка нажатия на кнопку "Добавить"
     def click_button_add_model(self):
-        ChildWindow(self, self.root, self.graph)
+        ChildWindow(self, self.root)
 
-    # Обновляем combobox построенных графиков
-    def update_combobox_value(self, add_value):
-
+    # Добавление в комбобокс построенных графиков и в список объектов моделей
+    def append_graph_to_list_and_combobox(self, model):
         flag = 0
-        for i in self.combobox_value:
-            if i == add_value:
+
+        for i in self.combobox_graph:
+            if i == str(model.graph) and flag == 0:
                 flag = 1
 
         if flag == 0:
-            self.combobox_value.append(add_value)
-            self.combobox_value.sort()
+            self.combobox_graph.append(str(model.graph))
+            self.combobox_graph.sort()
+
+        for i in self.graph_list:
+            if i.graph == model.graph:
+                i = model
+                return
+
+        self.graph_list.append(model)
 
     def get_analysis(self, analysis_model):
 
@@ -95,35 +102,6 @@ class MainWindow(Frame):
             return 1
         else:
             return 0
-
-    # Указали какому графику принадлежит график и добавили в combobox
-    def set_graph(self, model, place_of_graph):
-
-        # Указали какому графику на интерфейсе принадлежит модель
-        model.graph = int(place_of_graph)
-
-        # Обновили массив объектов модели
-        j = 0
-        for i in self.graph:
-            if i.graph == int(place_of_graph):
-                del self.graph[j]
-            j = j + 1
-
-        # Обновляем combobox построенных графиков
-        flag = 0
-        for i in self.combobox_value:
-            if i == model.graph:
-                flag = 1
-
-        if flag == 0:
-            self.combobox_value.append(place_of_graph)
-            self.combobox_value.sort()
-
-    def get_model(self, number_of_trend):
-        for i in self.graph:
-            g = i.graph
-            if g == int(number_of_trend):
-                return i
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
@@ -293,7 +271,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -311,7 +289,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -329,7 +307,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -355,7 +333,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -376,7 +354,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -397,7 +375,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -418,7 +396,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -438,7 +416,7 @@ class MainWindow(Frame):
 
         model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -500,7 +478,7 @@ class MainWindow(Frame):
 
         label1 = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
         label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self.combobox_value, height=4, width="24")
+        self.c1 = ttk.Combobox(a, values=self.combobox_graph, height=4, width="24")
         self.c1.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода анализа", height=1, width=24, font='Arial 14')
@@ -596,7 +574,7 @@ class MainWindow(Frame):
 
         label1 = Label(a, text="Номер графика для фильтрации", height=1, width=28, font='Arial 14')
         label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self.combobox_value, height=4, width="28")
+        self.c1 = ttk.Combobox(a, values=self.combobox_graph, height=4, width="28")
         self.c1.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
