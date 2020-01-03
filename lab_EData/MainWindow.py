@@ -55,8 +55,9 @@ class MainWindow(Frame):
         button_sound = Button(text="Звук", command=self.click_button_sound, width="26", height="2")
         button_sound.place(x=1120, y=220)
 
-        self.combobox_graph = []  # ComboBox графиков для анализа
-        self.graph_list = []     # Спис
+        self.combobox_graph = []        # ComboBox графиков для анализа
+        self.graph_list = []            # Список объектов модели
+        self.analysis_model_list = []   # Список объектов объектов класса Analysis
 
     # Обработка нажатия на кнопку "Добавить"
     def click_button_add_model(self):
@@ -81,20 +82,11 @@ class MainWindow(Frame):
 
         self.graph_list.append(model)
 
-    def get_analysis(self, analysis_model):
-
-        flag_we_have_already_analysis_model = 0
-        if self.analysis_model:
-            for i in self.analysis_model:
-                if i.model == analysis_model:
-                    analysis = i
-                    flag_we_have_already_analysis_model = 1
-
-        if flag_we_have_already_analysis_model == 0:
-            analysis = Analysis(analysis_model)
-            self.analysis_model.append(analysis)
-
-        return analysis
+    # Возвращаем объект модели из списка
+    def get_model(self):
+        for i in self.graph_list:
+            if i.graph == int(self.c1.get()):
+                return i
 
     def check_empty_c1(self):
         if self.c1.get() == "":
@@ -205,55 +197,67 @@ class MainWindow(Frame):
         result = analysis.calculation_max_x()
         messagebox.showinfo("Максимальный Х", "Максимальный Х: " + str(result))
 
+    # Получаем объект класса Analysis, если его нет, то инициализируем такой объект
+    def get_analysis(self, analyzed_model):
+        for i in self.analysis_model_list:
+            if i.model == analyzed_model:
+                return i
+
+        analysis_model = Analysis(analyzed_model)
+        self.analysis_model_list.append(analysis_model)
+        return analysis_model
+
+    # Обработка нажатия на кнопку "Вычислить" в окне Вычисления
     def click_button_add_and_close(self, window, choice_of_calculation):
 
         if self.check_empty_c1():
             return
 
-        analysis_model = self.get_model(self.c1.get())
-        analysis = self.get_analysis(analysis_model)
+        analyzed_model = self.get_model()
+        analysis_model = self.get_analysis(analyzed_model)
 
         if choice_of_calculation == 1:
-            self.check_stationarity_click_button(analysis)
+            self.check_stationarity_click_button(analysis_model)
 
         if choice_of_calculation == 2:
-            self.average_value_click_button(analysis)
+            self.average_value_click_button(analysis_model)
 
         if choice_of_calculation == 3:
-            self.dispersion_click_button(analysis)
+            self.dispersion_click_button(analysis_model)
 
         if choice_of_calculation == 4:
-            self.dispersion_x_10_click_button(analysis)
+            self.dispersion_x_10_click_button(analysis_model)
 
         if choice_of_calculation == 5:
-            self.standard_deviation(analysis)
+            self.standard_deviation(analysis_model)
 
         if choice_of_calculation == 6:
-            self.asymmetry_click_button(analysis)
+            self.asymmetry_click_button(analysis_model)
 
         if choice_of_calculation == 7:
-            self.asymmetry_coefficient_click_button(analysis)
+            self.asymmetry_coefficient_click_button(analysis_model)
 
         if choice_of_calculation == 8:
-            self.excess_click_button(analysis)
+            self.excess_click_button(analysis_model)
 
         if choice_of_calculation == 9:
-            self.kurtosis_click_button(analysis)
+            self.kurtosis_click_button(analysis_model)
 
         if choice_of_calculation == 10:
-            self.standard_ratio_click_button(analysis)
+            self.standard_ratio_click_button(analysis_model)
 
         if choice_of_calculation == 11:
-            self.mean_absolute_deviation_click_button(analysis)
+            self.mean_absolute_deviation_click_button(analysis_model)
 
         if choice_of_calculation == 12:
-            self.x_min_click_button(analysis)
+            self.x_min_click_button(analysis_model)
 
         if choice_of_calculation == 13:
-            self.x_max_click_button(analysis)
+            self.x_max_click_button(analysis_model)
 
         window.destroy()
 
+    # Обрабатывает событие закрытия окна
     @staticmethod
     def click_button_close(window):
         window.destroy()

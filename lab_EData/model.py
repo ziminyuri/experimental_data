@@ -1,4 +1,3 @@
-import numpy as np
 from lab_EData.trend import Trend
 from lab_EData.filter import *
 from lab_EData.sound import Sound
