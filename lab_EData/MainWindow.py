@@ -55,7 +55,7 @@ class MainWindow(Frame):
         button_sound = Button(text="Звук", command=self.click_button_sound, width="26", height="2")
         button_sound.place(x=1120, y=220)
 
-        self.combobox_graph = []        # ComboBox графиков для анализа
+        self.combobox_graph_list = []        # ComboBox графиков для анализа
         self.graph_list = []            # Список объектов модели
         self.analysis_model_list = []   # Список объектов объектов класса Analysis
 
@@ -67,13 +67,13 @@ class MainWindow(Frame):
     def append_graph_to_list_and_combobox(self, model):
         flag = 0
 
-        for i in self.combobox_graph:
+        for i in self.combobox_graph_list:
             if i == str(model.graph) and flag == 0:
                 flag = 1
 
         if flag == 0:
-            self.combobox_graph.append(str(model.graph))
-            self.combobox_graph.sort()
+            self.combobox_graph_list.append(str(model.graph))
+            self.combobox_graph_list.sort()
 
         for i in self.graph_list:
             if i.graph == model.graph:
@@ -85,15 +85,20 @@ class MainWindow(Frame):
     # Возвращаем объект модели из списка
     def get_model(self):
         for i in self.graph_list:
-            if i.graph == int(self.c1.get()):
+            if i.graph == int(self.combobox_graph.get()):
                 return i
 
-    def check_empty_c1(self):
-        if self.c1.get() == "":
+    def check_empty_combobox_graph(self):
+        if self.combobox_graph.get() == "":
             messagebox.showinfo("Ошибка", "Не указан номер графика")
             return 1
         else:
             return 0
+
+    # Закрепляем место вывода за определенным графиком
+    @staticmethod
+    def set_graph(model, place):
+        model.graph = int(place)
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
@@ -210,7 +215,7 @@ class MainWindow(Frame):
     # Обработка нажатия на кнопку "Вычислить" в окне Вычисления
     def click_button_add_and_close(self, window, choice_of_calculation):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
         analyzed_model = self.get_model()
@@ -264,10 +269,10 @@ class MainWindow(Frame):
 
     def click_button_bar_graph(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_bar_graph()
@@ -275,17 +280,17 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
 
     def click_button_autocorrelation(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_autocorrelation()
@@ -300,10 +305,10 @@ class MainWindow(Frame):
 
     def click_button_nested_correlation(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_nested_correlation()
@@ -311,17 +316,17 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph_array.append(model)
+        #self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
 
     def click_button_fourier_transform(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
 
         if self.input_delta_t.get():
             delta_t = float(self.input_delta_t.get())
@@ -337,7 +342,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -345,10 +350,10 @@ class MainWindow(Frame):
     # Нажатие на кнопку антисдвиг
     def click_button_anti_shift(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_shift()
@@ -358,7 +363,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -366,10 +371,10 @@ class MainWindow(Frame):
     # Нажатие на кнопку антиспайк
     def click_button_anti_spike(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_spike()
@@ -379,7 +384,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -387,10 +392,10 @@ class MainWindow(Frame):
     # Нажатие на кнопку антитренд
     def click_button_anti_trend(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_anti_trend()
@@ -400,17 +405,17 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
 
     def click_button_shift(self, window):
 
-        if self.check_empty_c1():
+        if self.check_empty_combobox_graph():
             return
 
-        analysis_model = self.get_model(self.c1.get())
+        analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
 
         model = analysis.calculation_fourier_transform()
@@ -420,7 +425,7 @@ class MainWindow(Frame):
 
         model.normalization()
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -480,10 +485,10 @@ class MainWindow(Frame):
         a.title('Вычисления')
         a.geometry('900x500')
 
-        label1 = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
-        label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self.combobox_graph, height=4, width="24")
-        self.c1.place(x=10, y=30)
+        label_combobox_graph = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
+        label_combobox_graph.place(x=10, y=10)
+        self.combobox_graph = ttk.Combobox(a, values=self.combobox_graph_list, height=4, width="24")
+        self.combobox_graph.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода анализа", height=1, width=24, font='Arial 14')
         label2.place(x=300, y=10)
@@ -576,10 +581,10 @@ class MainWindow(Frame):
         a.title('Фильтр')
         a.geometry('600x300')
 
-        label1 = Label(a, text="Номер графика для фильтрации", height=1, width=28, font='Arial 14')
-        label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self.combobox_graph, height=4, width="28")
-        self.c1.place(x=10, y=30)
+        label_combobox_graph = Label(a, text="Номер графика для фильтрации", height=1, width=28, font='Arial 14')
+        label_combobox_graph.place(x=10, y=10)
+        self.combobox_graph = ttk.Combobox(a, values=self.combobox_graph_list, height=4, width="28")
+        self.combobox_graph.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
         label2.place(x=300, y=10)
