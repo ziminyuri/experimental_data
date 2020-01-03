@@ -30,6 +30,10 @@ class Analysis:
         # Параментр для Преобразования Фурье (Спектр)
         self.delta_t = 0.01
 
+    # Устанавилваем delta t
+    def set_delta_t(self, delta_t):
+        self.delta_t = delta_t
+
     # Рассчет среднего значения
     def calculation_average_value(self):
 

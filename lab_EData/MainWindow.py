@@ -333,8 +333,8 @@ class MainWindow(Frame):
         else:
             delta_t = 0.001
 
-        analysis = Analysis(analysis_model, delta_t)
-
+        analysis = Analysis(analysis_model)
+        analysis.set_delta_t(delta_t)
         model = analysis.calculation_fourier_transform()
 
         place_of_graph = self.c2.get()
