@@ -1,8 +1,6 @@
-import numpy as np
 from lab_EData.trend import Trend
 from lab_EData.filter import *
 from lab_EData.sound import Sound
-import matplotlib.pyplot as plt
 
 
 def sum_trend(trend_1, trend_2):
@@ -56,7 +54,7 @@ class Model:
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
 
         self.option = option  # Тип функции
-        self.graph = 0  # Номер графика
+        self.graph = 0        # Номер места где расположен график
         self.flag_normalisation = 1  # Флаг, что необходима нормализация
 
         self.s_max = 100  # Максимальное значение функции

@@ -12,7 +12,6 @@ class MainWindow(Frame):
         super().__init__(root)
 
         self.root = root
-        self.graph = []
         self.analysis_model = []  # Список, где храним модели анализа
 
         label1 = Label(text="График №1", height=1, width=15, font='Arial 18')
@@ -56,25 +55,38 @@ class MainWindow(Frame):
         button_sound = Button(text="Звук", command=self.click_button_sound, width="26", height="2")
         button_sound.place(x=1120, y=220)
 
-        self.combobox_value = []  # ComboBox графиков для анализа
+        self.combobox_graph = []        # ComboBox графиков для анализа
+        self.graph_list = []            # Список объектов модели
+        self.analysis_model_list = []   # Список объектов объектов класса Analysis
 
+    # Обработка нажатия на кнопку "Добавить"
     def click_button_add_model(self):
-        ChildWindow(self, self.root, self.graph)
+        ChildWindow(self, self.root)
 
-    def get_analysis(self, analysis_model):
+    # Добавление в комбобокс построенных графиков и в список объектов моделей
+    def append_graph_to_list_and_combobox(self, model):
+        flag = 0
 
-        flag_we_have_already_analysis_model = 0
-        if self.analysis_model:
-            for i in self.analysis_model:
-                if i.model == analysis_model:
-                    analysis = i
-                    flag_we_have_already_analysis_model = 1
+        for i in self.combobox_graph:
+            if i == str(model.graph) and flag == 0:
+                flag = 1
 
-        if flag_we_have_already_analysis_model == 0:
-            analysis = Analysis(analysis_model)
-            self.analysis_model.append(analysis)
+        if flag == 0:
+            self.combobox_graph.append(str(model.graph))
+            self.combobox_graph.sort()
 
-        return analysis
+        for i in self.graph_list:
+            if i.graph == model.graph:
+                i = model
+                return
+
+        self.graph_list.append(model)
+
+    # Возвращаем объект модели из списка
+    def get_model(self):
+        for i in self.graph_list:
+            if i.graph == int(self.c1.get()):
+                return i
 
     def check_empty_c1(self):
         if self.c1.get() == "":
@@ -82,35 +94,6 @@ class MainWindow(Frame):
             return 1
         else:
             return 0
-
-    # Указали какому графику принадлежит график и добавили в combobox
-    def set_graph(self, model, place_of_graph):
-        model.graph = int(place_of_graph)
-
-        j = 0
-        for i in self.graph:
-            if i.graph == int(place_of_graph):
-                del self.graph[j]
-            j = j + 1
-
-
-    def get_model(self, number_of_trend):
-        for i in self.graph:
-            g = i.graph
-            if g == int(number_of_trend):
-                return i
-
-    def set_combobox_value_of_graph(self, value):
-
-        flag = 0                                # Переменная не встречается в массиве
-        for i in range(self.combobox_value):
-
-            if i == value:
-                flag = 1
-
-        if flag is 0:
-            self.combobox_value.append(value)
-
 
     # Обработка нажатия на кнопку "Стационарность: СЗ"
     @staticmethod
@@ -214,55 +197,67 @@ class MainWindow(Frame):
         result = analysis.calculation_max_x()
         messagebox.showinfo("Максимальный Х", "Максимальный Х: " + str(result))
 
+    # Получаем объект класса Analysis, если его нет, то инициализируем такой объект
+    def get_analysis(self, analyzed_model):
+        for i in self.analysis_model_list:
+            if i.model == analyzed_model:
+                return i
+
+        analysis_model = Analysis(analyzed_model)
+        self.analysis_model_list.append(analysis_model)
+        return analysis_model
+
+    # Обработка нажатия на кнопку "Вычислить" в окне Вычисления
     def click_button_add_and_close(self, window, choice_of_calculation):
 
         if self.check_empty_c1():
             return
 
-        analysis_model = self.get_model(self.c1.get())
-        analysis = self.get_analysis(analysis_model)
+        analyzed_model = self.get_model()
+        analysis_model = self.get_analysis(analyzed_model)
 
         if choice_of_calculation == 1:
-            self.check_stationarity_click_button(analysis)
+            self.check_stationarity_click_button(analysis_model)
 
         if choice_of_calculation == 2:
-            self.average_value_click_button(analysis)
+            self.average_value_click_button(analysis_model)
 
         if choice_of_calculation == 3:
-            self.dispersion_click_button(analysis)
+            self.dispersion_click_button(analysis_model)
 
         if choice_of_calculation == 4:
-            self.dispersion_x_10_click_button(analysis)
+            self.dispersion_x_10_click_button(analysis_model)
 
         if choice_of_calculation == 5:
-            self.standard_deviation(analysis)
+            self.standard_deviation(analysis_model)
 
         if choice_of_calculation == 6:
-            self.asymmetry_click_button(analysis)
+            self.asymmetry_click_button(analysis_model)
 
         if choice_of_calculation == 7:
-            self.asymmetry_coefficient_click_button(analysis)
+            self.asymmetry_coefficient_click_button(analysis_model)
 
         if choice_of_calculation == 8:
-            self.excess_click_button(analysis)
+            self.excess_click_button(analysis_model)
 
         if choice_of_calculation == 9:
-            self.kurtosis_click_button(analysis)
+            self.kurtosis_click_button(analysis_model)
 
         if choice_of_calculation == 10:
-            self.standard_ratio_click_button(analysis)
+            self.standard_ratio_click_button(analysis_model)
 
         if choice_of_calculation == 11:
-            self.mean_absolute_deviation_click_button(analysis)
+            self.mean_absolute_deviation_click_button(analysis_model)
 
         if choice_of_calculation == 12:
-            self.x_min_click_button(analysis)
+            self.x_min_click_button(analysis_model)
 
         if choice_of_calculation == 13:
-            self.x_max_click_button(analysis)
+            self.x_max_click_button(analysis_model)
 
         window.destroy()
 
+    # Обрабатывает событие закрытия окна
     @staticmethod
     def click_button_close(window):
         window.destroy()
@@ -280,7 +275,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -298,7 +293,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -316,7 +311,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -342,7 +337,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -363,7 +358,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -384,7 +379,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -405,7 +400,7 @@ class MainWindow(Frame):
 
         # model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -425,7 +420,7 @@ class MainWindow(Frame):
 
         model.normalization()
 
-        self.graph.append(model)
+        self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -445,6 +440,9 @@ class MainWindow(Frame):
 
         if choice_of_filtration == "Режекторный":
             model = Model(33)
+
+        else:
+            model = Model(0)
 
         model.calculation()
         model.normalisation_axis()
@@ -476,7 +474,6 @@ class MainWindow(Frame):
 
         subWindow.destroy()
 
-
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
         a = Toplevel()
@@ -485,7 +482,7 @@ class MainWindow(Frame):
 
         label1 = Label(a, text="Номер графика для анализа", height=1, width=25, font='Arial 14')
         label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self.combobox_value, height=4, width="24")
+        self.c1 = ttk.Combobox(a, values=self.combobox_graph, height=4, width="24")
         self.c1.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода анализа", height=1, width=24, font='Arial 14')
@@ -567,7 +564,7 @@ class MainWindow(Frame):
                     command=lambda: self.click_button_add_and_close(a, choice_of_calculation.get()),
                     width="15", height="2")
         b1.place(x=600, y=450)
-        b2 = Button(a, text="Закрыть", command=self.click_button_close, width="15", height="2")
+        b2 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="15", height="2")
         b2.place(x=750, y=450)
 
         a.grab_set()  # Перехватывает все события происходящие в приложении
@@ -581,7 +578,7 @@ class MainWindow(Frame):
 
         label1 = Label(a, text="Номер графика для фильтрации", height=1, width=28, font='Arial 14')
         label1.place(x=10, y=10)
-        self.c1 = ttk.Combobox(a, values=self.combobox_value, height=4, width="28")
+        self.c1 = ttk.Combobox(a, values=self.combobox_graph, height=4, width="28")
         self.c1.place(x=10, y=30)
 
         label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
@@ -634,7 +631,7 @@ class MainWindow(Frame):
         self.combobox_place_graph.place(x=10, y=30)
 
         # Ввод константы
-        label_const= Label(a, text="Констанста", height=2, width=7, font='Arial 14')
+        label_const = Label(a, text="Констанста", height=2, width=7, font='Arial 14')
         label_const.place(x=10, y=70)
         self.input_const_sound = Entry(a, width=28)
         self.input_const_sound.place(x=10, y=100)

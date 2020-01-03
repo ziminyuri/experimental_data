@@ -1,34 +1,34 @@
 import math
 import copy
-
+from random import random
 import numpy as np
 from lab_EData.model import Model
 
 
 class Analysis:
-    def __init__(self, model, delta_t):
+    def __init__(self, model):
 
-        self.model = model                 # Модель, которую анализиурем
+        self.model = model  # Модель, которую анализиурем
 
-        self.all_average_value = []        # Все средние значения
-        self.average_value = 0             # Среднее значения тренда
-        self.dispersion = 0                # Дисперсия
-        self.standard_deviation = 0        # Стандартное отклонение
-        self.asymmetry = 0                 # Асимметрия
-        self.asymmetry_coefficient = 0     # Коэффициент асимметрии
-        self.standard_ratio = 0            # Стандартный коэффициент
-        self.excess = 0                    # Эксцесс
+        self.all_average_value = []     # Все средние значения
+        self.average_value = 0          # Среднее значения тренда
+        self.dispersion = 0    # Дисперсия
+        self.standard_deviation = 0  # Стандартное отклонение
+        self.asymmetry = 0  # Асимметрия
+        self.asymmetry_coefficient = 0  # Коэффициент асимметрии
+        self.standard_ratio = 0  # Стандартный коэффициент
+        self.excess = 0  # Эксцесс
 
         # Параметры для гистограммы
-        self.bar_graph = []                # Значения для графика гистограммы
-        self.number_of_intervals = 40      # Количество интервалов для гистограмм
+        self.bar_graph = []  # Значения для графика гистограммы
+        self.number_of_intervals = 40  # Количество интервалов для гистограмм
         self.max_bar_graph_value = 0
 
         # Параметры для автокорреляции
-        self.l = model.n - 1         # Сдвиг
+        self.l = model.n - 1  # Сдвиг
 
         # Параментр для Преобразования Фурье (Спектр)
-        self.delta_t = delta_t
+        self.delta_t = 0.01
 
     # Рассчет среднего значения
     def calculation_average_value(self):
@@ -36,19 +36,6 @@ class Analysis:
         self.average_value = np.mean(self.model.y)
 
         return self.average_value
-
-        """
-        average_value = 0
-
-        for i in range(self.model.n):
-            average_value = average_value + self.model.y[i]
-
-        new_average_value = average_value / self.model.n
-
-        self.average_value = new_average_value
-
-        return new_average_value
-        """
 
     def check_stationarity_average_value(self):
 
@@ -259,7 +246,7 @@ class Analysis:
     # Взаимной корреляция
     def calculation_nested_correlation(self):
 
-        model = Model(16)                       # Модель графика взаимной корреляция
+        model = Model(16)  # Модель графика взаимной корреляция
         analysis_model_n = self.model.n
 
         y_list_1 = copy.deepcopy(self.model.y)
@@ -273,9 +260,6 @@ class Analysis:
 
         x = []
         y = []
-
-        result_y_min = 0
-        result_y_max = 0
 
         # Знаменатель
         sum_1 = 0
@@ -298,18 +282,10 @@ class Analysis:
             numerator = 0
 
             for j in range(analysis_model_n - i - 1):
-                temp_value = (y_list_1[j] - average_value1) * (y_list_2[j+i] - average_value2)
+                temp_value = (y_list_1[j] - average_value1) * (y_list_2[j + i] - average_value2)
                 numerator = numerator + temp_value
 
             result_y = numerator / denominator
-
-            """
-            if result_y_min > result_y:
-                result_y_min = result_y
-
-            if result_y_max < result_y:
-                result_y_max = result_y
-            """
 
             x.append(i)
             y.append(result_y)
@@ -318,20 +294,13 @@ class Analysis:
         model.y = np.array(y)
         model.x = np.array(x)
 
-        mac_y = np.amax(model.y)
-        mac_x = np.amin(model.y)
-
-        # model.s_min = result_y_min
-        # model.s_max = result_y_max
-        # model.y = model.y * 99
-        # model.normalization()
-
         model.axis_max = np.amax(model.y)
         model.axis_min = np.amin(model.y)
 
         return model
 
         # Преобразование фурье
+
     def calculation_fourier_transform(self):
 
         new_model = Model(18)  # Модель графика фурье
@@ -343,8 +312,8 @@ class Analysis:
         imm = 0
 
         n = analyses.n
-        for i in range(n-1):
-            for j in range(n-1):
+        for i in range(n - 1):
+            for j in range(n - 1):
                 xk = analyses.y[j]
                 # xk = analyses.get_y_i(j)
                 yn = xk * math.cos((2 * math.pi * i * j) / n)
@@ -363,20 +332,17 @@ class Analysis:
             imm = 0
 
         delta_f = 1 / (self.model.n * self.delta_t)
-        # new_model.x = np.array(x)
 
         end = 0
         for i in x:
             x[i] = x[i] * delta_f
             end += 1
 
-        # new_model.x = new_model.x * delta_f
         new_model.x = np.array(x)
         new_model.y = np.array(y)
-        new_model.n = new_model.x[end-1]
+        new_model.n = new_model.x[end - 1]
 
         new_model.display_n = new_model.n / 2
-        # new_model.display_n = int(new_model.n / 2)
 
         new_model.axis_max = np.amax(new_model.y) * 2
         new_model.axis_min = np.amin(new_model.y) * 2
@@ -395,11 +361,6 @@ class Analysis:
         x = []
         y = []
 
-        result_y_min = 0
-        result_y_max = 0
-
-        # self.l = 100
-
         # Считаем знаменатель
         denominator = 0
         for j in range(analysis_model_n - 1):
@@ -415,27 +376,18 @@ class Analysis:
 
             for j in range(analysis_model_n - i - 1):
                 y_i = self.model.y[j]
-                y_l = self.model.y[j+i]
+                y_l = self.model.y[j + i]
                 temp_value = (y_i - self.average_value) * (y_l - self.average_value)
                 numerator = numerator + temp_value
 
             result_y = numerator / denominator
 
-            """
-            if result_y_min > result_y:
-                result_y_min = result_y
-
-            if result_y_max < result_y:
-                result_y_max = result_y
-            """
             x.append(i)
             y.append(result_y)
 
         model.n = self.l
         model.y = np.array(y)
         model.x = np.array(x)
-        # model.s_min = result_y_min
-        # model.s_max = result_y_max
 
         model.axis_max = np.amax(model.y)
         model.axis_min = np.amin(model.y)
@@ -449,7 +401,7 @@ class Analysis:
 
         # Убираем 0 в начале графика который использовали для отображения
         for i in range(10):
-            rand_value =  random.uniform(- self.model.s_without_spikes, self.model.s_without_spikes)
+            rand_value = random.uniform(- self.model.s_without_spikes, self.model.s_without_spikes)
             model.y[i] = rand_value + self.model.argument
 
         average_value = np.mean(model.y)
@@ -471,12 +423,12 @@ class Analysis:
             yn = math.fabs(model.y[i])
             if yn > spike_min:
                 if i == 0:
-                    model.y[i] = model.y[i+1]
+                    model.y[i] = model.y[i + 1]
                 else:
                     if i == analysis_model_n - 1:
-                        model.y[i] = model.y[i-1]
+                        model.y[i] = model.y[i - 1]
                     else:
-                        model.y[i] = (model.y[i-1] + model.y[i+1]) / 2
+                        model.y[i] = (model.y[i - 1] + model.y[i + 1]) / 2
 
         model.axis_max = np.amax(model.y) * 2
         model.axis_min = np.amin(model.y) * 2
@@ -487,7 +439,6 @@ class Analysis:
     def calculation_anti_trend(self):
         model = Model(24)
         size_of_window = 100
-        half_size_of_window = int(size_of_window / 2)
         analysis_model_n = self.model.n
         sum_value_of_window = 0
         model.y = np.copy(self.model.y)
@@ -514,58 +465,3 @@ class Analysis:
         model.axis_min = np.amin(model.y) * 1.2
 
         return model
-
-        """
-        # Метод скользящего среднего
-        model = Model(24)
-        size_of_window = 10
-        half_size_of_window = int(size_of_window / 2)
-        analysis_model_n = self.model.n
-        sum_value_of_window = 0
-        model.y = np.copy(self.model.y)
-
-        for i in range(half_size_of_window, analysis_model_n - half_size_of_window):
-            for j in range(- half_size_of_window, half_size_of_window):
-                sum_value_of_window += model.y[i + j]
-
-            average = sum_value_of_window / size_of_window
-            model.y[i] = average
-            sum_value_of_window = 0
-
-        for i in range(half_size_of_window):
-            model.y[i] = 0
-
-        for i in range(analysis_model_n - half_size_of_window, analysis_model_n):
-            model.y[i] = 0
-
-        model.axis_max = np.amax(model.y) * 1.3
-        model.axis_min = np.amin(model.y) * 1.3
-
-        return model
-        """
-
-
-        """
-        model = Model(24)
-        model.y = np.copy(self.model.y)
-        analysis_model_n = self.model.n
-
-        size_of_window = 10
-        sum_value_of_window = 0
-        for i in range(analysis_model_n):
-            for j in range(size_of_window):
-
-                if i < analysis_model_n / 2:
-                    sum_value_of_window += model.y[i+j]
-                else:
-                    sum_value_of_window += model.y[i-j]
-
-            average = sum_value_of_window / size_of_window
-            model.y[i] = average
-            sum_value_of_window = 0
-
-        model.axis_max = np.amax(model.y) * 2
-        model.axis_min = np.amin(model.y) * 2
-
-        return model
-        """
