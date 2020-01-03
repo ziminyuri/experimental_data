@@ -298,7 +298,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
