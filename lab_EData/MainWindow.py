@@ -463,10 +463,10 @@ class MainWindow(Frame):
 
     def sound(self, subWindow):
 
-        if self.combobox_type_of_sound == "ma.wav":
+        if self.combobox_type_of_sound.get() == "ma.wav":
             model = Model(34)
 
-        if self.combobox_type_of_sound == "my_voice.wav":
+        if self.combobox_type_of_sound.get() == "my_voice.wav":
             model = Model(35)
 
         if self.input_const_sound.get() == "":
@@ -669,8 +669,8 @@ class MainWindow(Frame):
 
         chart_number = str(model.graph)
         x = model.display_n
-        # y_min = model.axis_min
-        # y_max = model.axis_max
+        y_min = model.axis_min
+        y_max = model.axis_max
 
         x_list = model.x
         y_list = model.y
@@ -678,7 +678,7 @@ class MainWindow(Frame):
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
         ax.set_xlim([0, x])
-        # ax.set_ylim([y_min, y_max])
+        ax.set_ylim([y_min, y_max])
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
 

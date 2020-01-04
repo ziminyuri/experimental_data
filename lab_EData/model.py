@@ -404,7 +404,7 @@ class Model:
 
         # Звук ma.wav
         if self.option == 34:
-            name_of_wav_file = "input files/ma.wav"
+            name_of_wav_file = "input files/your_1.wav"
             sound_trend = Sound(name_of_wav_file)
 
             self.x = sound_trend.x
