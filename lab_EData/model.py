@@ -402,9 +402,21 @@ class Model:
             self.y = hpf
             self.display_n = self.n * 2 + 1
 
-        # Звук WAV
+        # Звук ma.wav
         if self.option == 34:
-            sound_trend = Sound()
+            name_of_wav_file = "input files/ma.wav"
+            sound_trend = Sound(name_of_wav_file)
+
+            self.x = sound_trend.x
+            self.y = sound_trend.y * self.c
+
+            self.n = len(self.x)
+            self.display_n = self.n
+
+        # Звук my_voice.wav
+        if self.option == 35:
+            name_of_wav_file = "input files/my_voice.wav"
+            sound_trend = Sound(name_of_wav_file)
 
             self.x = sound_trend.x
             self.y = sound_trend.y * self.c
