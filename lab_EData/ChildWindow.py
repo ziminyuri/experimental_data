@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter.ttk as ttk
 from tkinter import messagebox
 
-from lab_EData.model import Model
+from model import Model
 
 
 class ChildWindow(Toplevel):

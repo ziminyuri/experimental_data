@@ -2,9 +2,9 @@ from tkinter import *
 from tkinter import messagebox, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from lab_EData.ChildWindow import ChildWindow
-from lab_EData.analysis import Analysis
-from lab_EData.model import Model
+from ChildWindow import ChildWindow
+from analysis import Analysis
+from model import Model
 
 
 class MainWindow(Frame):

@@ -2,7 +2,7 @@ import math
 import copy
 from random import random
 import numpy as np
-from lab_EData.model import Model
+from model import Model
 
 
 class Analysis:

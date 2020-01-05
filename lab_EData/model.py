@@ -1,6 +1,6 @@
-from lab_EData.trend import Trend
-from lab_EData.filter import *
-from lab_EData.sound import Sound
+from trend import Trend
+from filter import *
+from sound import Sound
 
 
 def sum_trend(trend_1, trend_2):
