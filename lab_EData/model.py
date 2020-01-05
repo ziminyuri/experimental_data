@@ -1,6 +1,6 @@
-from lab_EData.trend import Trend
-from lab_EData.filter import *
-from lab_EData.sound import Sound
+from trend import Trend
+from filter import *
+from sound import Sound
 
 
 def sum_trend(trend_1, trend_2):
@@ -49,6 +49,7 @@ class Model:
     def __init__(self, option):
         self.n = 1000  # Количество точек по оси Х
         self.display_n = self.n
+        self.flag_checking_display_n = 0    # Флаг использования dislpay_n при отрисовки графика
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
@@ -402,14 +403,26 @@ class Model:
             self.y = hpf
             self.display_n = self.n * 2 + 1
 
-        # Звук WAV
+        # Звук ma.wav
         if self.option == 34:
-            sound_trend = Sound()
+            name_of_wav_file = "input files/your_1.wav"
+            sound_trend = Sound(name_of_wav_file)
 
             self.x = sound_trend.x
             self.y = sound_trend.y * self.c
 
             self.n = len(self.x)
-            self.display_n = self.n
+            self.flag_checking_display_n = 1
+
+        # Звук my_voice.wav
+        if self.option == 35:
+            name_of_wav_file = "input files/my_voice.wav"
+            sound_trend = Sound(name_of_wav_file)
+
+            self.x = sound_trend.x
+            self.y = sound_trend.y * self.c
+
+            self.n = len(self.x)
+            self.flag_checking_display_n = 1
 
 

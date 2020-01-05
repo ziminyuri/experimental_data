@@ -2,9 +2,9 @@ from tkinter import *
 from tkinter import messagebox, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from lab_EData.ChildWindow import ChildWindow
-from lab_EData.analysis import Analysis
-from lab_EData.model import Model
+from ChildWindow import ChildWindow
+from analysis import Analysis
+from model import Model
 
 
 class MainWindow(Frame):
@@ -298,7 +298,7 @@ class MainWindow(Frame):
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
-        self.graph_array.append(model)
+        # self.graph_array.append(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -333,10 +333,12 @@ class MainWindow(Frame):
         else:
             delta_t = 0.001
 
-        analysis = Analysis(analysis_model, delta_t)
-
+        analysis = Analysis(analysis_model)
+        analysis.set_delta_t(delta_t)
         model = analysis.calculation_fourier_transform()
 
+        n = model.n
+        model.display_n = int(n/2)
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
 
@@ -460,7 +462,12 @@ class MainWindow(Frame):
         subWindow.destroy()
 
     def sound(self, subWindow):
-        model = Model(34)
+
+        if self.combobox_type_of_sound.get() == "ma.wav":
+            model = Model(34)
+
+        if self.combobox_type_of_sound.get() == "my_voice.wav":
+            model = Model(35)
 
         if self.input_const_sound.get() == "":
             const = 1
@@ -615,6 +622,10 @@ class MainWindow(Frame):
         self.input_fc = Entry(a, width=28)
         self.input_fc.place(x=10, y=220)
 
+        b3 = Button(a, text="Добавить график фильтра",
+                    command=lambda: self.click_button_add_graph_filtr(a), width="30", height="2")
+        b3.place(x=300, y=150)
+
         b1 = Button(a, text="Выполнить",
                     command=lambda: self.filtration(a), width="14", height="2")
         b1.place(x=300, y=250)
@@ -630,16 +641,21 @@ class MainWindow(Frame):
         a.title('Звук')
         a.geometry('600x300')
 
-        label2 = Label(a, text="Место для вывода результата", height=1, width=28, font='Arial 14')
-        label2.place(x=10, y=10)
+        label_combobox_place_graph = Label(a, text="Место для вывода результата", height=1, width=27, font='Arial 14')
+        label_combobox_place_graph.place(x=10, y=10)
         self.combobox_place_graph = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
         self.combobox_place_graph.place(x=10, y=30)
 
         # Ввод константы
-        label_const = Label(a, text="Констанста", height=2, width=7, font='Arial 14')
-        label_const.place(x=10, y=70)
+        label_const = Label(a, text="Констанста", height=1, width=10, font='Arial 14')
+        label_const.place(x=300, y=10)
         self.input_const_sound = Entry(a, width=28)
-        self.input_const_sound.place(x=10, y=100)
+        self.input_const_sound.place(x=300, y=30)
+
+        label_combobox_type_of_sound = Label(a, text="Выберите звуковой файл", height=1, width=27, font='Arial 14')
+        label_combobox_type_of_sound.place(x=10, y=70)
+        self.combobox_type_of_sound = ttk.Combobox(a, values=[u"ma.wav", u"my_voice.wav"], height=4, width="28")
+        self.combobox_type_of_sound.place(x=10, y=100)
 
         b1 = Button(a, text="Выполнить", command=lambda: self.sound(a), width="14", height="2")
         b1.place(x=300, y=250)
@@ -652,7 +668,7 @@ class MainWindow(Frame):
     def draw_graph(self, model):
 
         chart_number = str(model.graph)
-        # x = model.display_n
+
         # y_min = model.axis_min
         # y_max = model.axis_max
 
@@ -661,10 +677,14 @@ class MainWindow(Frame):
 
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
-        # ax.set_xlim([0, x])
+
+        if model.flag_checking_display_n == 0:
+            x = model.display_n
+            ax.set_xlim([0, x])
         # ax.set_ylim([y_min, y_max])
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
+
 
         canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
         canvas.draw()
