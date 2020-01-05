@@ -405,8 +405,8 @@ class Model:
 
         # Звук ma.wav
         if self.option == 34:
-            name_of_wav_file = "input files/your_1.wav"
-            sound_trend = Sound(name_of_wav_file)
+            self.name_of_wav_file = "input files/your_1.wav"
+            sound_trend = Sound(self.name_of_wav_file)
 
             self.x = sound_trend.x
             self.y = sound_trend.y * self.c
@@ -416,8 +416,8 @@ class Model:
 
         # Звук my_voice.wav
         if self.option == 35:
-            name_of_wav_file = "input files/my_voice.wav"
-            sound_trend = Sound(name_of_wav_file)
+            self.name_of_wav_file = "input files/my_voice.wav"
+            sound_trend = Sound(self.name_of_wav_file)
 
             self.x = sound_trend.x
             self.y = sound_trend.y * self.c

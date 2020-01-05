@@ -5,6 +5,7 @@ from matplotlib.figure import Figure
 from ChildWindow import ChildWindow
 from analysis import Analysis
 from model import Model
+import pyglet
 
 
 class MainWindow(Frame):
@@ -483,8 +484,27 @@ class MainWindow(Frame):
         self.set_graph(model, place_graph)
 
         self.draw_graph(model)
+        self.add_button_play(model)
 
         subWindow.destroy()
+
+    @staticmethod
+    def play(model):
+        """
+        music = pyglet.resource.media(model.name_of_wav_file)
+        music.play()
+
+        pyglet.app.run()
+        """
+        pyglet.options['audio'] = ('openal', 'pulse', 'directsound', 'silent')
+        source = pyglet.media.StaticSource(pyglet.media.load(model.name_of_wav_file))
+
+        player = pyglet.media.Player()
+        player.queue(source)
+        player.EOS_LOOP = 'loop'
+        player.play()
+
+        pyglet.app.run()
 
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
@@ -685,7 +705,6 @@ class MainWindow(Frame):
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
 
-
         canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
         canvas.draw()
 
@@ -700,3 +719,25 @@ class MainWindow(Frame):
 
         if chart_number == "4":
             canvas.get_tk_widget().place(x=550, y=400)
+
+
+    def add_button_play(self, model):
+        chart_number = str(model.graph)
+
+        if chart_number == "1":
+            self.button_play_sound = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            self.button_play_sound.place(x=330, y=20)
+
+        if chart_number == "2":
+            self.button_play_sound = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            self.button_play_sound.place(x=870, y=20)
+
+        if chart_number == "3":
+            self.button_play_sound = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            self.button_play_sound.place(x=330, y=390)
+
+        if chart_number == "4":
+            b1 = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            b1.place(x=870, y=390)
+
+
