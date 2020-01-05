@@ -668,19 +668,23 @@ class MainWindow(Frame):
     def draw_graph(self, model):
 
         chart_number = str(model.graph)
-        x = model.display_n
-        y_min = model.axis_min
-        y_max = model.axis_max
+
+        # y_min = model.axis_min
+        # y_max = model.axis_max
 
         x_list = model.x
         y_list = model.y
 
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
-        ax.set_xlim([0, x])
-        ax.set_ylim([y_min, y_max])
+
+        if model.flag_checking_display_n == 0:
+            x = model.display_n
+            ax.set_xlim([0, x])
+        # ax.set_ylim([y_min, y_max])
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
+
 
         canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
         canvas.draw()

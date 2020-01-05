@@ -49,6 +49,7 @@ class Model:
     def __init__(self, option):
         self.n = 1000  # Количество точек по оси Х
         self.display_n = self.n
+        self.flag_checking_display_n = 0    # Флаг использования dislpay_n при отрисовки графика
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
@@ -411,7 +412,7 @@ class Model:
             self.y = sound_trend.y * self.c
 
             self.n = len(self.x)
-            self.display_n = self.n
+            self.flag_checking_display_n = 1
 
         # Звук my_voice.wav
         if self.option == 35:
@@ -422,6 +423,6 @@ class Model:
             self.y = sound_trend.y * self.c
 
             self.n = len(self.x)
-            self.display_n = self.n
+            self.flag_checking_display_n = 1
 
 
