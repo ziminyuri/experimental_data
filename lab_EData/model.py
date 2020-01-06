@@ -410,6 +410,7 @@ class Model:
 
             self.x = sound_trend.x
             self.y = sound_trend.y * self.c
+            self.rate = sound_trend.rate
 
             self.n = len(self.x)
             self.flag_checking_display_n = 1
@@ -421,8 +422,7 @@ class Model:
 
             self.x = sound_trend.x
             self.y = sound_trend.y * self.c
+            self.rate = sound_trend.rate
 
             self.n = len(self.x)
             self.flag_checking_display_n = 1
-
-

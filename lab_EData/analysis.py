@@ -4,7 +4,7 @@ from random import random
 import numpy as np
 from model import Model
 
-from numpy.fft import rfft
+from numpy.fft import rfft, rfftfreq
 
 
 class Analysis:
@@ -360,7 +360,10 @@ class Analysis:
     def calculation_spectrum(self):
         new_model = Model(18)  # Модель графика фурье
         spectrum = rfft(self.model.y)
-        a = spectrum
+
+        n = self.model.n
+        new_model.x = rfftfreq(n, 1./self.model.rate)
+        new_model.y = np.abs(spectrum/n)
 
         return new_model
 
