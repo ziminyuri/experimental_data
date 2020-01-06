@@ -4,6 +4,8 @@ from random import random
 import numpy as np
 from model import Model
 
+from numpy.fft import rfft
+
 
 class Analysis:
     def __init__(self, model):
@@ -305,6 +307,7 @@ class Analysis:
 
         # Преобразование фурье
 
+    # Преобразование Фурье (Спектр) - Custom
     def calculation_fourier_transform(self):
 
         new_model = Model(18)  # Модель графика фурье
@@ -350,6 +353,14 @@ class Analysis:
 
         new_model.axis_max = np.amax(new_model.y) * 2
         new_model.axis_min = np.amin(new_model.y) * 2
+
+        return new_model
+
+    # Преобразование фурье (Спектр) - Стандартные библиотеки Python
+    def calculation_spectrum(self):
+        new_model = Model(18)  # Модель графика фурье
+        spectrum = rfft(self.model.y)
+        a = spectrum
 
         return new_model
 

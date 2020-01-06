@@ -350,6 +350,22 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    # Обработка нажатия по кнопке спектр - Рассчет преобразования фурье через библиотеки Python
+    def click_button_spectrum(self, window):
+        if self.check_empty_combobox_graph():
+            return
+
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+        model = analysis.calculation_spectrum()
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
+
+        self.draw_graph(model)
+
+        window.destroy()
+
     # Нажатие на кнопку антисдвиг
     def click_button_anti_shift(self, window):
 
@@ -462,6 +478,7 @@ class MainWindow(Frame):
 
         subWindow.destroy()
 
+    # Нажатие на кнопку "Выполнить" в окне Звук
     def sound(self, subWindow):
 
         if self.combobox_type_of_sound.get() == "ma.wav":
@@ -483,6 +500,7 @@ class MainWindow(Frame):
         place_graph = int(self.combobox_place_graph.get())
         self.set_graph(model, place_graph)
 
+        self.append_graph_to_list_and_combobox(model)    #  Добавили модель в комбобокс для анализа
         self.draw_graph(model)
         self.add_button_play(model)
 
@@ -505,6 +523,8 @@ class MainWindow(Frame):
         player.play()
 
         pyglet.app.run()
+
+        event_loop = pyglet.app.EventLoop()
 
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
@@ -545,6 +565,11 @@ class MainWindow(Frame):
                                           command=lambda: self.click_button_fourier_transform(a),
                                           width="18", height="2")
         button_fourier_transform.place(x=370, y=210)
+
+        button_spectrum = Button(a, text="Спектр",
+                                          command=lambda: self.click_button_spectrum(a),
+                                          width="26", height="2")
+        button_spectrum.place(x=300, y=270)
 
         button_anti_shift = Button(a, text="Антисдвиг",
                                    command=lambda: self.click_button_anti_shift(a),
@@ -719,7 +744,6 @@ class MainWindow(Frame):
 
         if chart_number == "4":
             canvas.get_tk_widget().place(x=550, y=400)
-
 
     def add_button_play(self, model):
         chart_number = str(model.graph)
