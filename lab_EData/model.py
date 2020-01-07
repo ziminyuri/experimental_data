@@ -403,6 +403,20 @@ class Model:
             self.y = hpf
             self.display_n = self.n * 2 + 1
 
+        # Полосовой фильтр
+        if self.option == 32:
+            m = 32
+            dt = 0.001
+            fc_1 = 100
+            fc_2 = 200
+
+            bpf = bandpass_filter(m, dt, fc_1, fc_2)
+
+            self.n = m
+            self.x = np.arange(0, self.n * 2 + 1)
+            self.y = bpf
+            self.display_n = self.n * 2 + 1
+
         # Звук ma.wav
         if self.option == 34:
             self.name_of_wav_file = "input files/custom.wav"

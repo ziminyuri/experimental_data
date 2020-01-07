@@ -4,6 +4,7 @@ import numpy as np
 
 # m -  количество значений
 # на выходе должно быть 2m + 1
+# Фильтр низких частот
 def filter_potter(m, dt, fc):
     # прямоуголник
     arg = 2 * dt * fc
@@ -45,6 +46,7 @@ def filter_potter(m, dt, fc):
     return lpw
 
 
+# Фильтр высоких частот
 def high_potter_filter(m, dt, fc):
     low_potter_filter = filter_potter(m, dt, fc)
 
@@ -58,3 +60,18 @@ def high_potter_filter(m, dt, fc):
             high_potter_filter_graph.append(-low_potter_filter[i])
 
     return high_potter_filter_graph
+
+
+# Полосовой фильтр
+def bandpass_filter(m, dt, fc_1, fc_2):
+    bandpass_filter_graph = []
+
+    low_potter_filter_1 = filter_potter(m, dt, fc_1)
+    low_potter_filter_2 = filter_potter(m, dt, fc_2)
+
+    n = 2 * m + 1
+    for i in range(n):
+        value = low_potter_filter_2[i] - low_potter_filter_1[i]
+        bandpass_filter_graph.append(value)
+
+    return bandpass_filter_graph
