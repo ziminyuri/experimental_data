@@ -5,6 +5,7 @@ from matplotlib.figure import Figure
 from ChildWindow import ChildWindow
 from analysis import Analysis
 from model import Model
+import pyglet
 
 
 class MainWindow(Frame):
@@ -349,6 +350,38 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    # Обработка нажатия по кнопке спектр - Рассчет преобразования фурье через библиотеки Python (для звука)
+    def click_button_spectrum(self, window):
+        if self.check_empty_combobox_graph():
+            return
+
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+        model = analysis.calculation_spectrum()
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
+
+        self.draw_graph(model)
+
+        window.destroy()
+
+    # Обработка нажатия по кнопке БПФ - Рассчет быстрого преобразования фурье через библиотеки Python (для всех
+    # остальных случаев)
+    def click_button_bpf(self, window):
+        if self.check_empty_combobox_graph():
+            return
+
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+        model = analysis.calculation_bpf()
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
+
+        self.draw_graph(model)
+        window.destroy()
+
     # Нажатие на кнопку антисдвиг
     def click_button_anti_shift(self, window):
 
@@ -434,33 +467,35 @@ class MainWindow(Frame):
 
     # Выполнение процесса фильтрация
     def filtration(self, subWindow):
-        choice_of_filtration = self.combobox_type_filter.get()
 
-        if choice_of_filtration == "Низких частот":
+        subWindow.destroy()
+
+    # Обработка нажатия на кнопку "Добавить график фильтра"
+    def click_button_add_graph_filtr(self, subWindow):
+
+        if self.combobox_type_filter.get() == "Низких частот":
             model = Model(30)
 
-        if choice_of_filtration == "Высоких частот":
+        if self.combobox_type_filter.get() == "Высоких частот":
             model = Model(31)
 
-        if choice_of_filtration == "Полосовой":
+        if self.combobox_type_filter.get() == "Полосовой":
             model = Model(32)
 
-        if choice_of_filtration == "Режекторный":
+        if self.combobox_type_filter.get() == "Режекторный":
             model = Model(33)
-
-        else:
-            model = Model(0)
 
         model.calculation()
         model.normalisation_axis()
 
         place_graph = int(self.combobox_place_graph.get())
         self.set_graph(model, place_graph)
-
+        self.append_graph_to_list_and_combobox(model)  # Добавили модель в комбобокс для анализа
         self.draw_graph(model)
 
         subWindow.destroy()
 
+    # Нажатие на кнопку "Выполнить" в окне Звук
     def sound(self, subWindow):
 
         if self.combobox_type_of_sound.get() == "ma.wav":
@@ -482,9 +517,31 @@ class MainWindow(Frame):
         place_graph = int(self.combobox_place_graph.get())
         self.set_graph(model, place_graph)
 
+        self.append_graph_to_list_and_combobox(model)    #  Добавили модель в комбобокс для анализа
         self.draw_graph(model)
+        self.add_button_play(model)
 
         subWindow.destroy()
+
+    @staticmethod
+    def play(model):
+        """
+        music = pyglet.resource.media(model.name_of_wav_file)
+        music.play()
+
+        pyglet.app.run()
+        """
+        pyglet.options['audio'] = ('openal', 'pulse', 'directsound', 'silent')
+        source = pyglet.media.StaticSource(pyglet.media.load(model.name_of_wav_file))
+
+        player = pyglet.media.Player()
+        player.queue(source)
+        player.EOS_LOOP = 'loop'
+        player.play()
+
+        pyglet.app.run()
+
+        event_loop = pyglet.app.EventLoop()
 
     # Нажатие на клавишу "Вычисления"
     def click_button_calculation1(self):
@@ -525,6 +582,16 @@ class MainWindow(Frame):
                                           command=lambda: self.click_button_fourier_transform(a),
                                           width="18", height="2")
         button_fourier_transform.place(x=370, y=210)
+
+        button_spectrum = Button(a, text="Спектр",
+                                          command=lambda: self.click_button_spectrum(a),
+                                          width="26", height="2")
+        button_spectrum.place(x=300, y=270)
+
+        button_bpf = Button(a, text="БПФ",
+                                 command=lambda: self.click_button_bpf(a),
+                                 width="26", height="2")
+        button_bpf.place(x=300, y=330)
 
         button_anti_shift = Button(a, text="Антисдвиг",
                                    command=lambda: self.click_button_anti_shift(a),
@@ -632,8 +699,8 @@ class MainWindow(Frame):
         b2 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="14", height="2")
         b2.place(x=450, y=250)
 
-        a.grab_set()  # Перехватывает все события происходящие в приложении
-        a.focus_set()  # Захватывает и удерживает фокус
+        a.grab_set()        # Перехватывает все события происходящие в приложении
+        a.focus_set()       # Захватывает и удерживает фокус
 
     # Нажатие на клавишу "Звук" в главном окне
     def click_button_sound(self):
@@ -685,7 +752,6 @@ class MainWindow(Frame):
 
         ax.plot(x_list, y_list, color='red', label='Линия 1')
 
-
         canvas = FigureCanvasTkAgg(fig, master=self.root)  # A tk.DrawingArea.
         canvas.draw()
 
@@ -700,3 +766,24 @@ class MainWindow(Frame):
 
         if chart_number == "4":
             canvas.get_tk_widget().place(x=550, y=400)
+
+    def add_button_play(self, model):
+        chart_number = str(model.graph)
+
+        if chart_number == "1":
+            self.button_play_sound = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            self.button_play_sound.place(x=330, y=20)
+
+        if chart_number == "2":
+            self.button_play_sound = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            self.button_play_sound.place(x=870, y=20)
+
+        if chart_number == "3":
+            self.button_play_sound = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            self.button_play_sound.place(x=330, y=390)
+
+        if chart_number == "4":
+            b1 = Button(text="Воспроизведение", command=lambda: self.play(model), width="14", height="2")
+            b1.place(x=870, y=390)
+
+

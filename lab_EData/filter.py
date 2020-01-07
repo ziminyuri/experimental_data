@@ -25,7 +25,7 @@ def filter_potter(m, dt, fc):
     for i in range(1, m + 1):
         summ = d[0]
         arg = math.pi * i / m
-        for k in range(1, 3):
+        for k in range(1, 4):
             summ += 2 * d[k] * math.cos(arg * k)
         lpw[i] *= summ
         sum_g += 2 * lpw[i]
