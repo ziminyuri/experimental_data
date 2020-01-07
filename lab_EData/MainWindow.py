@@ -350,7 +350,7 @@ class MainWindow(Frame):
 
         window.destroy()
 
-    # Обработка нажатия по кнопке спектр - Рассчет преобразования фурье через библиотеки Python
+    # Обработка нажатия по кнопке спектр - Рассчет преобразования фурье через библиотеки Python (для звука)
     def click_button_spectrum(self, window):
         if self.check_empty_combobox_graph():
             return
@@ -364,6 +364,22 @@ class MainWindow(Frame):
 
         self.draw_graph(model)
 
+        window.destroy()
+
+    # Обработка нажатия по кнопке БПФ - Рассчет быстрого преобразования фурье через библиотеки Python (для всех
+    # остальных случаев)
+    def click_button_bpf(self, window):
+        if self.check_empty_combobox_graph():
+            return
+
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+        model = analysis.calculation_bpf()
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
+
+        self.draw_graph(model)
         window.destroy()
 
     # Нажатие на кнопку антисдвиг
@@ -451,29 +467,30 @@ class MainWindow(Frame):
 
     # Выполнение процесса фильтрация
     def filtration(self, subWindow):
-        choice_of_filtration = self.combobox_type_filter.get()
 
-        if choice_of_filtration == "Низких частот":
+        subWindow.destroy()
+
+    # Обработка нажатия на кнопку "Добавить график фильтра"
+    def click_button_add_graph_filtr(self, subWindow):
+
+        if self.combobox_type_filter.get() == "Низких частот":
             model = Model(30)
 
-        if choice_of_filtration == "Высоких частот":
+        if self.combobox_type_filter.get() == "Высоких частот":
             model = Model(31)
 
-        if choice_of_filtration == "Полосовой":
+        if self.combobox_type_filter.get() == "Полосовой":
             model = Model(32)
 
-        if choice_of_filtration == "Режекторный":
+        if self.combobox_type_filter.get() == "Режекторный":
             model = Model(33)
-
-        else:
-            model = Model(0)
 
         model.calculation()
         model.normalisation_axis()
 
         place_graph = int(self.combobox_place_graph.get())
         self.set_graph(model, place_graph)
-
+        self.append_graph_to_list_and_combobox(model)  # Добавили модель в комбобокс для анализа
         self.draw_graph(model)
 
         subWindow.destroy()
@@ -570,6 +587,11 @@ class MainWindow(Frame):
                                           command=lambda: self.click_button_spectrum(a),
                                           width="26", height="2")
         button_spectrum.place(x=300, y=270)
+
+        button_bpf = Button(a, text="БПФ",
+                                 command=lambda: self.click_button_bpf(a),
+                                 width="26", height="2")
+        button_bpf.place(x=300, y=330)
 
         button_anti_shift = Button(a, text="Антисдвиг",
                                    command=lambda: self.click_button_anti_shift(a),
@@ -677,8 +699,8 @@ class MainWindow(Frame):
         b2 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="14", height="2")
         b2.place(x=450, y=250)
 
-        a.grab_set()  # Перехватывает все события происходящие в приложении
-        a.focus_set()  # Захватывает и удерживает фокус
+        a.grab_set()        # Перехватывает все события происходящие в приложении
+        a.focus_set()       # Захватывает и удерживает фокус
 
     # Нажатие на клавишу "Звук" в главном окне
     def click_button_sound(self):

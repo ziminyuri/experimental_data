@@ -7,6 +7,7 @@ from model import Model
 from numpy.fft import rfft, rfftfreq
 
 
+
 class Analysis:
     def __init__(self, model):
 
@@ -356,7 +357,7 @@ class Analysis:
 
         return new_model
 
-    # Преобразование фурье (Спектр) - Стандартные библиотеки Python
+    # Преобразование фурье (Спектр) - Стандартные библиотеки Python для звука
     def calculation_spectrum(self):
         new_model = Model(18)  # Модель графика фурье
         spectrum = rfft(self.model.y)
@@ -365,6 +366,17 @@ class Analysis:
         new_model.x = rfftfreq(n, 1./self.model.rate)
         new_model.y = np.abs(spectrum/n)
 
+        return new_model
+
+    # Быстрое Преобразование фурье (Спектр) - Стандартные библиотеки Python для остальных случаев
+    def calculation_bpf(self):
+        new_model = Model(18)  # Модель графика фурье
+        spectrum = rfft(self.model.y, n=None, axis=-1)
+
+        new_model.y = abs(spectrum)
+        new_model.n = len(spectrum)
+        new_model.display_n = new_model.n
+        new_model.x = np.arange(0, new_model.n)
         return new_model
 
     # Автокорреляция
