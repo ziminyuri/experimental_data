@@ -1,6 +1,6 @@
 from trend import Trend
-from filter import *
 from sound import Sound
+import numpy as np
 
 
 def sum_trend(trend_1, trend_2):
@@ -53,6 +53,7 @@ class Model:
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
+        self.flag_checking_display_x = 0 # Флаг использования половины self.x
 
         self.option = option  # Тип функции
         self.graph = 0        # Номер места где расположен график
@@ -341,7 +342,7 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
-        # График ГП + экспонента
+        # График ГП + экспонента (кардиограма)
         if self.option == 29:
             self.n = 200
             self.x = np.arange(0, self.n)
@@ -380,28 +381,47 @@ class Model:
         # Реализация фильтров
         # Низких частот
         if self.option == 30:
-            m = 32
-            dt = 0.001
-            fc = 100
-            lpw = filter_potter(m, dt, fc)
+            trend = Trend()
+            trend.generation_trend_filter_potter()
 
-            self.n = m
-            self.x = np.arange(0, self.n * 2 + 1)
-            self.y = lpw
-            self.display_n = self.n * 2 + 1
+            self.y = trend.y
+            self.x = trend.x
+            self.n = trend.n
+            self.display_n = trend.display_n
+            self.dt = trend.dt
 
         # Фильтр высоких частот
         if self.option == 31:
-            m = 32
-            dt = 0.001
-            fc = 100
+            trend = Trend()
+            trend.generating_trend_high_potter()
 
-            hpf = high_potter_filter(m, dt, fc)
+            self.y = trend.y
+            self.x = trend.x
+            self.n = trend.n
+            self.display_n = trend.display_n
+            self.dt = trend.dt
 
-            self.n = m
-            self.x = np.arange(0, self.n * 2 + 1)
-            self.y = hpf
-            self.display_n = self.n * 2 + 1
+        # Полосовой фильтр
+        if self.option == 32:
+            trend = Trend()
+            trend.generating_trend_bandpass_filter()
+
+            self.y = trend.y
+            self.x = trend.x
+            self.n = trend.n
+            self.display_n = trend.display_n
+            self.dt = trend.dt
+
+        # Режекторный фильтр
+        if self.option == 33:
+            trend = Trend()
+            trend.generating_trend_notch_filter()
+
+            self.y = trend.y
+            self.x = trend.x
+            self.n = trend.n
+            self.display_n = trend.display_n
+            self.dt = trend.dt
 
         # Звук ma.wav
         if self.option == 34:
@@ -426,3 +446,33 @@ class Model:
 
             self.n = len(self.x)
             self.flag_checking_display_n = 1
+
+    # Метод получения модели после фильтрации
+    def filtration(self, model_for_filtration, choice_filter):
+        trend_filter = Trend() #Тренд фильтра
+
+        # Фильтр низких частот
+        if choice_filter == 1:
+            trend_filter.generation_trend_filter_potter()
+
+        # Фильтр высоких частот
+        if choice_filter == 2:
+            trend_filter.generating_trend_high_potter()
+
+        # Фильтр полосовой
+        if choice_filter == 3:
+            trend_filter.generating_trend_bandpass_filter()
+
+        # Фильтр режекторный
+        if choice_filter == 4:
+            trend_filter.generating_trend_notch_filter()
+
+        # Тренд существущей модели
+        trend_model = Trend()
+        trend_model.x = model_for_filtration.x
+        trend_model.y = model_for_filtration.y
+        trend_model.n = model_for_filtration.n
+
+        trend = convolution(trend_model, trend_filter)
+        self.x = trend.x
+        self.y = trend.y

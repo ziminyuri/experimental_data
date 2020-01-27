@@ -3,6 +3,7 @@ import struct
 import math
 import random
 import time
+from filter import *
 
 
 class Trend:
@@ -153,3 +154,58 @@ class Trend:
             data = f.read(4)
 
         self.y = np.array(y_list)
+
+    # Генерируем тренд фильтра низких частот
+    def generation_trend_filter_potter(self):
+        m = 32
+        self.dt = 0.001
+        fc = 150
+        lpw = filter_potter(m, self.dt, fc)
+
+        self.n = m
+        self.x = np.arange(0, self.n * 2 + 1)
+        self.y = lpw
+        self.display_n = self.n * 2 + 1
+
+    # Генерируем тренд фильтра высоких частот
+    def generating_trend_high_potter(self):
+        m = 32
+        self.dt = 0.001
+        fc = 100
+
+        hpf = high_potter_filter(m, self.dt, fc)
+
+        self.n = m
+        self.x = np.arange(0, self.n * 2 + 1)
+        self.y = hpf
+        self.display_n = self.n * 2 + 1
+
+    # Генерируем тренд фильтра полосового
+    def generating_trend_bandpass_filter(self):
+        m = 32
+        self.dt = 0.001
+        fc_1 = 100
+        fc_2 = 200
+
+        bpf = bandpass_filter(m, self.dt, fc_1, fc_2)
+
+        self.n = m
+        self.x = np.arange(0, self.n * 2 + 1)
+        self.y = bpf
+        self.display_n = self.n * 2 + 1
+
+    # Генерируем тренд фильтра режекторного
+    def generating_trend_notch_filter(self):
+        m = 32
+        self.dt = 0.001
+        fc_1 = 100
+        fc_2 = 300
+
+        bsf = notch_filter(m, self.dt, fc_1, fc_2)
+
+        self.n = m
+        self.x = np.arange(0, self.n * 2 + 1)
+        self.y = bsf
+        self.display_n = self.n * 2 + 1
+
+

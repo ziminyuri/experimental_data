@@ -6,7 +6,7 @@ from ChildWindow import ChildWindow
 from analysis import Analysis
 from model import Model
 import pyglet
-
+import numpy as np
 
 class MainWindow(Frame):
     def __init__(self, root):
@@ -374,7 +374,7 @@ class MainWindow(Frame):
 
         analysis_model = self.get_model()
         analysis = Analysis(analysis_model)
-        model = analysis.calculation_bpf()
+        model = analysis.spectrum()
 
         place_of_graph = self.c2.get()
         self.set_graph(model, place_of_graph)
@@ -467,6 +467,28 @@ class MainWindow(Frame):
 
     # Выполнение процесса фильтрация
     def filtration(self, subWindow):
+        model = Model(36)
+        graph_for_filtration = self.get_model()
+
+        if self.combobox_type_filter.get() == "Низких частот":
+            choice_of_filter = 1
+
+        if self.combobox_type_filter.get() == "Высоких частот":
+            choice_of_filter = 2
+
+        if self.combobox_type_filter.get() == "Полосовой":
+            choice_of_filter = 3
+
+        if self.combobox_type_filter.get() == "Режекторный":
+            choice_of_filter = 4
+
+        model.filtration(graph_for_filtration, choice_of_filter)
+        model.normalisation_axis()
+
+        place_graph = int(self.combobox_place_graph.get())
+        self.set_graph(model, place_graph)
+        self.append_graph_to_list_and_combobox(model)  # Добавили модель в комбобокс для анализа
+        self.draw_graph(model)
 
         subWindow.destroy()
 
@@ -739,13 +761,19 @@ class MainWindow(Frame):
         # y_min = model.axis_min
         # y_max = model.axis_max
 
-        x_list = model.x
-        y_list = model.y
-
         fig = Figure(figsize=(5, 3), dpi=100)
         ax = fig.add_subplot(111)
 
-        if model.flag_checking_display_n == 0:
+        if model.flag_checking_display_x == 1:
+            x_list = model.display_x
+            y_list = model.display_y
+            #x_max = np.amax(x_list)
+            #ax.set_xlim([0, x_max])
+        else:
+            x_list = model.x
+            y_list = model.y
+
+        if model.flag_checking_display_n == 1:
             x = model.display_n
             ax.set_xlim([0, x])
         # ax.set_ylim([y_min, y_max])

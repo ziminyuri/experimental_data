@@ -4,7 +4,7 @@ from random import random
 import numpy as np
 from model import Model
 
-from numpy.fft import rfft, rfftfreq
+from numpy.fft import rfft, rfftfreq, fft
 
 
 
@@ -355,6 +355,8 @@ class Analysis:
         new_model.axis_max = np.amax(new_model.y) * 2
         new_model.axis_min = np.amin(new_model.y) * 2
 
+        new_model.flag_checking_display_n = 1
+
         return new_model
 
     # Преобразование фурье (Спектр) - Стандартные библиотеки Python для звука
@@ -371,12 +373,52 @@ class Analysis:
     # Быстрое Преобразование фурье (Спектр) - Стандартные библиотеки Python для остальных случаев
     def calculation_bpf(self):
         new_model = Model(18)  # Модель графика фурье
-        spectrum = rfft(self.model.y, n=None, axis=-1)
+        spectrum = rfft(self.model.y)
 
         new_model.y = abs(spectrum)
         new_model.n = len(spectrum)
         new_model.display_n = new_model.n
         new_model.x = np.arange(0, new_model.n)
+        return new_model
+
+    # Спектр фильтров
+    def spectrum(self):
+        new_model = Model(18)  # Модель графика фурье
+        number_of_points = int(len(self.model.y))
+        delta_freq_1 = 1 / (2 * self.model.dt)
+        delta_freq_2 = int(number_of_points / 2)
+        delta_freq = delta_freq_1 / delta_freq_2
+        # delta_freq = (1 / (2 * self.model.dt)) / (number_of_points / 2)
+
+        result_y = []
+        result_x = []
+
+        for i in range(number_of_points):
+            real_part = 0
+            imaginary_part = 0
+
+            for j in range(number_of_points):
+                real_part += self.model.y[j] * math.cos(2 * math.pi * i * j / number_of_points)
+                imaginary_part += self.model.y[j] * math.sin(2 * math.pi * i * j / number_of_points)
+
+            real_part /= number_of_points
+            imaginary_part /= number_of_points
+
+            result_x.append(i * delta_freq)
+            value_y = math.sqrt(math.pow(real_part, 2) + math.pow(imaginary_part, 2))
+            result_y.append(value_y)
+
+        for i in range(number_of_points):
+            result_y[i] *= number_of_points
+
+        new_model.x = np.array(result_x)
+        new_model.y = np.array(result_y)
+
+        display_n = int( len(new_model.x) / 2)
+        new_model.display_x = new_model.x[:display_n]
+        new_model.display_y = new_model.y[:display_n]
+        new_model.flag_checking_display_x = 1
+
         return new_model
 
     # Автокорреляция
