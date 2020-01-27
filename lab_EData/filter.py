@@ -25,7 +25,7 @@ def filter_potter(m, dt, fc):
 
     for i in range(1, m + 1):
         summ = d[0]
-        arg = math.pi * i / m
+        arg = (math.pi * i) / m
         for k in range(1, 4):
             summ += 2 * d[k] * math.cos(arg * k)
         lpw[i] *= summ
@@ -75,3 +75,26 @@ def bandpass_filter(m, dt, fc_1, fc_2):
         bandpass_filter_graph.append(value)
 
     return bandpass_filter_graph
+
+
+# Режекторный фильтр
+def notch_filter(m, dt, fc_1, fc_2):
+    notch_filter_graph = []
+
+    if (fc_2 > fc_1):
+        low_potter_filter_1 = filter_potter(m, dt, fc_1)
+        low_potter_filter_2 = filter_potter(m, dt, fc_2)
+    else:
+        low_potter_filter_1 = filter_potter(m, dt, fc_2)
+        low_potter_filter_2 = filter_potter(m, dt, fc_1)
+
+    n = 2 * m + 1
+    for i in range(n):
+        if i == m:
+            value = 1 + low_potter_filter_1[i] - low_potter_filter_2[i]
+            notch_filter_graph.append(value)
+        else:
+            value = low_potter_filter_1[i] - low_potter_filter_2[i]
+            notch_filter_graph.append(value)
+
+    return notch_filter_graph
