@@ -507,6 +507,40 @@ class Analysis:
 
         return model
 
+    def calculation_anti_spike_exam(self):
+        model = Model(22)
+        analysis_model_n = self.model.n
+        model.y = np.copy(self.model.y)
+
+        spike_min = self.model.s_without_spikes_min
+        spike_max = self.model.s_without_spikes_max
+
+        for i in range(analysis_model_n):
+            #yn = math.fabs(model.y[i])
+            yn = model.y[i]
+            if yn < spike_min:
+                if i == 0:
+                    model.y[i] = model.y[i + 1]
+                else:
+                    if i == analysis_model_n - 1:
+                        model.y[i] = model.y[i - 1]
+                    else:
+                        model.y[i] = (model.y[i - 1] + model.y[i + 1]) / 2
+
+            if yn > spike_max:
+                if i == 0:
+                    model.y[i] = model.y[i + 1]
+                else:
+                    if i == analysis_model_n - 1:
+                        model.y[i] = model.y[i - 1]
+                    else:
+                        model.y[i] = (model.y[i - 1] + model.y[i + 1]) / 2
+
+        model.axis_max = np.amax(model.y) * 2
+        model.axis_min = np.amin(model.y) * 2
+
+        return model
+
     # Антитренд методом скользящего окна
     def calculation_anti_trend(self):
         model = Model(24)

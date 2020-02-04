@@ -32,8 +32,8 @@ class ChildWindow(Toplevel):
                                              u"Рандом + сдвиг", u"Рандом + спайки",
                                              u"ГП + trend", u"ГП + спайки",
                                              u"ГП + спайки + рандом + trend", u"Загрузить из файла",
-                                             u"ГП + exp"],
-                               height=15)
+                                             u"ГП + exp", u"Экзамен"],
+                               height=18)
 
         self.c2.place(x=10, y=80)
 
@@ -240,6 +240,9 @@ class ChildWindow(Toplevel):
 
         if self.c2.get() == "ГП + exp":
             model = Model(29)
+
+        if self.c2.get() == "Экзамен":
+            model = Model(36)
 
         self.set_custom_values_for_model(model)
 

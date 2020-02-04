@@ -447,6 +447,41 @@ class Model:
             self.n = len(self.x)
             self.flag_checking_display_n = 1
 
+        # Экзамен
+        if self.option == 36:
+            trend = Trend()
+            trend.generating_trend_from_file_exam()
+
+            self.y = trend.y
+
+            self.flag_normalisation = 0
+            self.normalisation_axis()
+
+        # Модель Input: кардиограма, заполненная нулями с 200 до 1000
+        if self.option == 37:
+            self.n = 200
+            self.x = np.arange(0, self.n)
+            self.s_max = 1
+
+            trend_1 = Trend()
+            trend_1.n = self.n
+            trend_1.x = self.x
+            trend_1.delta_t = 0.005
+            trend_1.generating_harmonic_process()
+
+            trend_2_n = 800
+            trend_2_y = np.zeros(trend_2_n)
+
+            self.n = 1000
+            self.x = np.arange(0, self.n)
+            self.y = np.concatenate([trend_1.y, trend_2_y])
+
+            print(self.y)
+            self.s_max = 100
+            self.s_min = - self.s_max
+
+
+
     # Метод получения модели после фильтрации
     def filtration(self, model_for_filtration, choice_filter):
         trend_filter = Trend() #Тренд фильтра

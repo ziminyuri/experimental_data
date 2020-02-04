@@ -56,6 +56,9 @@ class MainWindow(Frame):
         button_sound = Button(text="Звук", command=self.click_button_sound, width="26", height="2")
         button_sound.place(x=1120, y=220)
 
+        button_task = Button(text="Деконволюция", command=self.click_button_task, width="26", height="2")
+        button_task.place(x=1120, y=270)
+
         self.combobox_graph_list = []        # ComboBox графиков для анализа
         self.graph_list = []            # Список объектов модели
         self.analysis_model_list = []   # Список объектов объектов класса Analysis
@@ -300,6 +303,7 @@ class MainWindow(Frame):
         self.set_graph(model, place_of_graph)
 
         # self.graph_array.append(model)
+        self.append_graph_to_list_and_combobox(model)
         self.draw_graph(model)
 
         window.destroy()
@@ -465,6 +469,29 @@ class MainWindow(Frame):
 
         window.destroy()
 
+    def click_button_anti_trend_anti_spike(self, window):
+        if self.check_empty_combobox_graph():
+            return
+
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+
+        model = analysis.calculation_anti_trend()
+        analysis_2 = Analysis(model)
+        model.s_without_spikes_min = -300
+        model.s_without_spikes_max = 500
+        model_2 = analysis_2.calculation_anti_spike_exam()
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model_2, place_of_graph)
+        self.append_graph_to_list_and_combobox(model_2)
+
+        # model.normalization()
+
+        # self.graph_array.append(model)
+        self.draw_graph(model_2)
+
+        window.destroy()
     # Выполнение процесса фильтрация
     def filtration(self, subWindow):
         model = Model(36)
@@ -630,6 +657,11 @@ class MainWindow(Frame):
                                    width="26", height="2")
         button_anti_trend.place(x=600, y=150)
 
+        button_anti_trend = Button(a, text="Антитренд + антиспайк",
+                                   command=lambda: self.click_button_anti_trend_anti_spike(a),
+                                   width="26", height="2")
+        button_anti_trend.place(x=600, y=190)
+
         choice_of_calculation = IntVar()
         choice_of_calculation.set(0)
         stationarity = Radiobutton(a, text='Стационарность: СЗ', variable=choice_of_calculation, value=1)
@@ -753,6 +785,84 @@ class MainWindow(Frame):
 
         a.grab_set()  # Перехватывает все события происходящие в приложении
         a.focus_set()  # Захватывает и удерживает фокус
+
+    # Выводим спектры из окна "Деконволюция"
+    def task_spectrum(self, window):
+
+
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+
+        model = analysis.calculation_fourier_transform()
+
+        place_of_graph = self.combobox_place_graph.get()
+        self.set_graph(model, place_of_graph)
+
+        model.normalization()
+
+        # self.graph_array.append(model)
+        self.draw_graph(model)
+
+        window.destroy()
+
+    # Выводим графики функции по нажатию на клавишу "Построить" из окна "Деконволюция"
+    def task_build(self, window):
+        type_of_function = self.combobox_type_of_function.get()
+        if type_of_function == "Input:кардиограмма":
+            model = Model(37)
+
+        elif type_of_function == "Output:кардиограмма":
+            model = Model(29)
+
+        model.calculation()
+
+        model.normalisation_axis()
+
+        place_graph = int(self.combobox_place_graph.get())
+        self.set_graph(model, place_graph)
+
+        self.append_graph_to_list_and_combobox(model)  # Добавили модель в комбобокс для анализа
+        self.draw_graph(model)
+
+        window.destroy()
+
+    # Вычисляем новый график
+    def task_reverse(self, windows):
+        
+        windows.destroy()
+
+    # Деконволюция
+    def click_button_task(self):
+        a = Toplevel()
+        a.title('Деконволюция')
+        a.geometry('600x300')
+
+        label_combobox_place_graph = Label(a, text="Место для вывода результата", height=1, width=27, font='Arial 14')
+        label_combobox_place_graph.place(x=10, y=10)
+        self.combobox_place_graph = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
+        self.combobox_place_graph.place(x=10, y=30)
+
+        label_combobox_graph = Label(a, text="Номер графика для спектра", height=1, width=28, font='Arial 14')
+        label_combobox_graph.place(x=10, y=140)
+        self.combobox_graph = ttk.Combobox(a, values=self.combobox_graph_list, height=4, width="28")
+        self.combobox_graph.place(x=10, y=170)
+
+        label_combobox_type_of_function = Label(a, text="Выберите функция", height=1, width=27, font='Arial 14')
+        label_combobox_type_of_function.place(x=10, y=70)
+        self.combobox_type_of_function = ttk.Combobox(a, values=[u"Input:кардиограмма", u"Output:кардиограмма"], height=2, width="28")
+        self.combobox_type_of_function.place(x=10, y=100)
+
+        b1 = Button(a, text="Построить", command=lambda: self.task_build(a), width="14", height="2")
+        b1.place(x=300, y=200)
+
+        b2 = Button(a, text="Спектр", command=lambda: self.task_spectrum(a), width="14", height="2")
+        b2.place(x=450, y=200)
+
+        b3 = Button(a, text="Обратное задание", command=lambda: self.task_reverse(a), width="14", height="2")
+        b3.place(x=300, y=250)
+
+        b4 = Button(a, text="Закрыть", command=lambda: self.click_button_close(a), width="14", height="2")
+        b4.place(x=450, y=250)
 
     def draw_graph(self, model):
 

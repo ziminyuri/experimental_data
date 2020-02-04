@@ -155,11 +155,28 @@ class Trend:
 
         self.y = np.array(y_list)
 
+    # Гененрируем тренд из файла для экзамена
+    def generating_trend_from_file_exam(self):
+
+        filename = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/v1u7.dat"
+
+        f = open(filename, "rb")
+        data = f.read(4)
+
+        y_list = []
+        while data:
+            temp_tuple = struct.unpack('<f', data)
+            temp_value = temp_tuple[0]
+            y_list.append(temp_value)
+            data = f.read(4)
+
+        self.y = np.array(y_list)
+
     # Генерируем тренд фильтра низких частот
     def generation_trend_filter_potter(self):
         m = 32
         self.dt = 0.001
-        fc = 150
+        fc = 70
         lpw = filter_potter(m, self.dt, fc)
 
         self.n = m
@@ -171,7 +188,8 @@ class Trend:
     def generating_trend_high_potter(self):
         m = 32
         self.dt = 0.001
-        fc = 100
+        fc = 60
+
 
         hpf = high_potter_filter(m, self.dt, fc)
 
@@ -184,8 +202,8 @@ class Trend:
     def generating_trend_bandpass_filter(self):
         m = 32
         self.dt = 0.001
-        fc_1 = 100
-        fc_2 = 200
+        fc_1 = 60
+        fc_2 = 80
 
         bpf = bandpass_filter(m, self.dt, fc_1, fc_2)
 
