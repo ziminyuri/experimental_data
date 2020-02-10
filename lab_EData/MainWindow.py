@@ -835,23 +835,38 @@ class MainWindow(Frame):
     def click_button_task(self):
         a = Toplevel()
         a.title('Деконволюция')
-        a.geometry('600x300')
+        a.geometry('1200x400')
 
-        label_combobox_place_graph = Label(a, text="Место для вывода результата", height=1, width=27, font='Arial 14')
-        label_combobox_place_graph.place(x=10, y=10)
-        self.combobox_place_graph = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
-        self.combobox_place_graph.place(x=10, y=30)
+        # Построение графика
+        label_build_graph = Label(a, text="Построение графика", height=1, width=18, font='Arial 18')
+        label_build_graph.place(x=10, y=10)
+        label_combobox_type_of_function = Label(a, text="Выберите функция", height=1, width=16, font='Arial 14')
+        label_combobox_type_of_function.place(x=10, y=40)
+        self.combobox_type_of_function = ttk.Combobox(a, values=[u"Input:кардиограмма", u"Output:кардиограмма"],
+                                                      height=2, width="28")
+        self.combobox_type_of_function.place(x=10, y=60)
 
-        label_combobox_graph = Label(a, text="Номер графика для спектра", height=1, width=28, font='Arial 14')
-        label_combobox_graph.place(x=10, y=140)
+        # Построение спектра
+        label_spectrum = Label(a, text="Построение спектра", height=1, width=18, font='Arial 18')
+        label_spectrum.place(x=300, y=10)
+        label_combobox_graph = Label(a, text="Номер графика для спектра", height=1, width=25, font='Arial 14')
+        label_combobox_graph.place(x=300, y=40)
         self.combobox_graph = ttk.Combobox(a, values=self.combobox_graph_list, height=4, width="28")
-        self.combobox_graph.place(x=10, y=170)
+        self.combobox_graph.place(x=300, y=60)
 
-        label_combobox_type_of_function = Label(a, text="Выберите функция", height=1, width=27, font='Arial 14')
-        label_combobox_type_of_function.place(x=10, y=70)
-        self.combobox_type_of_function = ttk.Combobox(a, values=[u"Input:кардиограмма", u"Output:кардиограмма"], height=2, width="28")
-        self.combobox_type_of_function.place(x=10, y=100)
 
+        # Деконволюция
+        label_deconvolution = Label(a, text="Деконволюция", height=1, width=12, font='Arial 18')
+        label_deconvolution.place(x=600, y=10)
+
+
+        # Область запроса результата
+        label_result = Label(a, text="Запрос результата", height=1, width=17, font='Arial 18')
+        label_result.place(x=900, y=10)
+        label_combobox_place_graph = Label(a, text="Место для вывода результата", height=1, width=27, font='Arial 14')
+        label_combobox_place_graph.place(x=900, y=70)
+        self.combobox_place_graph = ttk.Combobox(a, values=[u"1", u"2", u"3", u"4"], height=4, width="28")
+        self.combobox_place_graph.place(x=900, y=100)
         b1 = Button(a, text="Построить", command=lambda: self.task_build(a), width="14", height="2")
         b1.place(x=300, y=200)
 

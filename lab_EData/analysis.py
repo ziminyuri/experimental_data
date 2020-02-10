@@ -7,6 +7,9 @@ from model import Model
 from numpy.fft import rfft, rfftfreq, fft
 
 
+# Деление двух спектров (действительных и комплексных чисел)
+def spectral_division(analysis_model_1, analysis_model_2):
+    pass
 
 class Analysis:
     def __init__(self, model):
@@ -316,6 +319,10 @@ class Analysis:
         x = []
         y = []
 
+        # Создаем списки для операции деконволюции
+        self.spectrum_real_part_list = []         # Список с действительной частью
+        self.spectrum_imaginary_part_list = []    # Список с мнимой частью
+
         rem = 0
         imm = 0
 
@@ -332,6 +339,9 @@ class Analysis:
 
             rem = rem / n
             imm = imm / n
+
+            self.spectrum_real_part_list.append(rem)
+            self.spectrum_imaginary_part_list.append(imm)
 
             yn = math.sqrt(rem ** 2 + imm ** 2)
             y.append(yn)
@@ -358,6 +368,14 @@ class Analysis:
         new_model.flag_checking_display_n = 1
 
         return new_model
+
+    # Обратное преобразование фурье для операции Деконволюции
+    def inverse_fourier_transform(self):
+        pass
+
+    # Операция деконволюции
+    def deconvolution(self):
+        pass
 
     # Преобразование фурье (Спектр) - Стандартные библиотеки Python для звука
     def calculation_spectrum(self):
