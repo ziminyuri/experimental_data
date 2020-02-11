@@ -7,6 +7,9 @@ from model import Model
 from numpy.fft import rfft, rfftfreq, fft
 
 
+# Деление двух спектров (действительных и комплексных чисел)
+def spectral_division(analysis_model_1, analysis_model_2):
+    pass
 
 class Analysis:
     def __init__(self, model):
@@ -316,6 +319,10 @@ class Analysis:
         x = []
         y = []
 
+        # Создаем списки для операции деконволюции
+        self.spectrum_real_part_list = []         # Список с действительной частью
+        self.spectrum_imaginary_part_list = []    # Список с мнимой частью
+
         rem = 0
         imm = 0
 
@@ -332,6 +339,9 @@ class Analysis:
 
             rem = rem / n
             imm = imm / n
+
+            self.spectrum_real_part_list.append(rem)
+            self.spectrum_imaginary_part_list.append(imm)
 
             yn = math.sqrt(rem ** 2 + imm ** 2)
             y.append(yn)
@@ -358,6 +368,14 @@ class Analysis:
         new_model.flag_checking_display_n = 1
 
         return new_model
+
+    # Обратное преобразование фурье для операции Деконволюции
+    def inverse_fourier_transform(self):
+        pass
+
+    # Операция деконволюции
+    def deconvolution(self):
+        pass
 
     # Преобразование фурье (Спектр) - Стандартные библиотеки Python для звука
     def calculation_spectrum(self):
@@ -494,6 +512,40 @@ class Analysis:
         for i in range(analysis_model_n):
             yn = math.fabs(model.y[i])
             if yn > spike_min:
+                if i == 0:
+                    model.y[i] = model.y[i + 1]
+                else:
+                    if i == analysis_model_n - 1:
+                        model.y[i] = model.y[i - 1]
+                    else:
+                        model.y[i] = (model.y[i - 1] + model.y[i + 1]) / 2
+
+        model.axis_max = np.amax(model.y) * 2
+        model.axis_min = np.amin(model.y) * 2
+
+        return model
+
+    def calculation_anti_spike_exam(self):
+        model = Model(22)
+        analysis_model_n = self.model.n
+        model.y = np.copy(self.model.y)
+
+        spike_min = self.model.s_without_spikes_min
+        spike_max = self.model.s_without_spikes_max
+
+        for i in range(analysis_model_n):
+            #yn = math.fabs(model.y[i])
+            yn = model.y[i]
+            if yn < spike_min:
+                if i == 0:
+                    model.y[i] = model.y[i + 1]
+                else:
+                    if i == analysis_model_n - 1:
+                        model.y[i] = model.y[i - 1]
+                    else:
+                        model.y[i] = (model.y[i - 1] + model.y[i + 1]) / 2
+
+            if yn > spike_max:
                 if i == 0:
                     model.y[i] = model.y[i + 1]
                 else:
