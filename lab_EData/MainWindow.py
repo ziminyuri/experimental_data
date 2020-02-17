@@ -81,7 +81,8 @@ class MainWindow(Frame):
     def button_open_image(self):
         file_name = fd.askopenfilename(filetypes=(("JPG files", "*.jpg"), ("All files", "*.*")))
         image = Image(file_name)
-        image.open()
+        image = image.open()
+        self.draw_image(image)
 
     # Открыть звуковой файл
     def button_open_sound(self):
@@ -805,6 +806,10 @@ class MainWindow(Frame):
     def task_reverse(self, windows):
 
         windows.destroy()
+
+    def draw_image(self, image):
+        panel = Label(self.root, image=image)
+        panel.place(x=10, y=10)
 
     def draw_graph(self, model):
 

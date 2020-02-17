@@ -7,3 +7,8 @@ class MyImage:
 
     def open(self):
         pillow_img = Image.open(self.path)
+        image = ImageTk.PhotoImage(pillow_img)
+
+        return image
+        panel.configure(image=img2)
+        panel.image = img2
