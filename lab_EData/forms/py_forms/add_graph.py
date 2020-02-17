@@ -9,9 +9,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
+# Окно: Добавить новый график
 class Ui_add_graph(object):
+
+    # Закрыть окно
+    def close_window(self):
+        self.add_grpah_window.close()
+
     def setupUi(self, add_graph):
+        self.add_grpah_window = add_graph
         add_graph.setObjectName("add_graph")
         add_graph.resize(613, 437)
         add_graph.setAutoFillBackground(False)
@@ -20,6 +26,7 @@ class Ui_add_graph(object):
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(440, 360, 131, 32))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.close_window)
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(20, 10, 541, 331))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
