@@ -127,12 +127,3 @@ class Ui_add_graph(object):
         self.label_8.setText(_translate("add_graph", "b"))
         self.pushButton.setText(_translate("add_graph", "Добавить"))
 
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    add_graph = QtWidgets.QMainWindow()
-    ui = Ui_add_graph()
-    ui.setupUi(add_graph)
-    add_graph.show()
-    sys.exit(app.exec_())

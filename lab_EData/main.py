@@ -29,5 +29,5 @@ def pyqt5():
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    main()
-    # pyqt5()
+    # main()
+    pyqt5()
