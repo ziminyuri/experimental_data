@@ -8,9 +8,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from forms.py_forms.add_graph import Ui_add_graph
 
 
 class Ui_MainWindow(object):
+    def open_add_graph_window(self):
+        self.add_graph_window = QtWidgets.QMainWindow()
+        self.add_graph_ui = Ui_add_graph()
+        self.add_graph_ui.setupUi(self.add_graph_window)
+        self.add_graph_window.show()
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -30,6 +37,8 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.action = QtWidgets.QAction(MainWindow)
         self.action.setObjectName("action")
+        self.action.triggered.connect(self.open_add_graph_window)
+        self.action.setShortcut('Ctrl+N')
         self.action_2 = QtWidgets.QAction(MainWindow)
         self.action_2.setObjectName("action_2")
         self.action_3 = QtWidgets.QAction(MainWindow)
