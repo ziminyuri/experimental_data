@@ -8,7 +8,7 @@ from tkinter import filedialog as fd
 from PIL import ImageTk, Image, ImageDraw
 import math
 
-path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/lab3/image1.jpg"
+path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/lab3/image2.jpg"
 p_img = Image.open(path)
 
 
@@ -73,8 +73,8 @@ def gamma_correction():
             g = pix[i, j][1]
             b = pix[i, j][2]
 
-            c = 1
-            gamma = 1.5
+            c = 20
+            gamma = 0.3
             new_r = int(c * math.pow(r, gamma))
             new_g = int(c * math.pow(g, gamma))
             new_b = int(c * math.pow(b, gamma))
