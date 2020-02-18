@@ -13,6 +13,7 @@ from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
 from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
+from PyQt5.QtGui import QPixmap
 
 
 class Ui_MainWindow(object):
@@ -51,7 +52,19 @@ class Ui_MainWindow(object):
         self.deconvolution_ui.setupUi(self.deconvolution_window)
         self.deconvolution_window.show()
 
+    def open_image(self):
+        self.image_path = QtWidgets.QFileDialog.getOpenFileName(self.main_window, "Select Image", "",
+                                                        "Image Files (*.png *.jpg *.jpeg *.bmp)")
+        pixmap = QPixmap(self.image_path)
+        self.label.setPixmap(pixmap)
+        self.resize(pixmap.size())
+        self.adjustSize()
+
     def setupUi(self, MainWindow):
+        self.image_path = ''
+
+        self.main_window = MainWindow
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -74,6 +87,7 @@ class Ui_MainWindow(object):
         self.action.setShortcut('Ctrl+N')
         self.action_2 = QtWidgets.QAction(MainWindow)
         self.action_2.setObjectName("action_2")
+        self.action_2.triggered.connect(self.open_image)
         self.action_3 = QtWidgets.QAction(MainWindow)
         self.action_3.setObjectName("action_3")
         self.action_3.triggered.connect(self.open_add_sound_window)
@@ -115,12 +129,3 @@ class Ui_MainWindow(object):
         self.action_7.setText(_translate("MainWindow", "Фильтр"))
         self.action_8.setText(_translate("MainWindow", "Деконволюция"))
 
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
