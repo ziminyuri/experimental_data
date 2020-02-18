@@ -1,11 +1,9 @@
 from tkinter import *
-from MainWindow import MainWindow
 
-
-import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from forms.py_forms.mainwindow import Ui_MainWindow
 
+from forms.py_forms.mainwindow import Ui_MainWindow
+from MainWindow import MainWindow
 
 
 def main():

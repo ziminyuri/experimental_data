@@ -1,8 +1,7 @@
-import numpy as np
-import struct
-import math
 import random
+import struct
 import time
+
 from filter import *
 
 
@@ -225,5 +224,3 @@ class Trend:
         self.x = np.arange(0, self.n * 2 + 1)
         self.y = bsf
         self.display_n = self.n * 2 + 1
-
-

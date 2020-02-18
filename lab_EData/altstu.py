@@ -1,14 +1,14 @@
-from tkinter import *
-import tkinter as tk
-from tkinter import filedialog as fd
-from PIL import ImageTk, Image, ImageDraw
-import scipy
-from scipy import ndimage
-import numpy
-from scipy.ndimage.filters import gaussian_filter
-import cv2
-from PIL import ImageFilter
 import random
+import tkinter as tk
+from tkinter import *
+from tkinter import filedialog as fd
+
+import cv2
+import numpy
+import scipy
+from PIL import Image, ImageDraw, ImageFilter, ImageTk
+from scipy import ndimage
+from scipy.ndimage.filters import gaussian_filter
 
 path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/grace.jpg"
 p_img = Image.open(path)

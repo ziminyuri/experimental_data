@@ -1,10 +1,11 @@
-from tkinter import *
-import tkinter as tk
-from tkinter import filedialog as fd
-from PIL import ImageTk, Image, ImageDraw
 import random
-import numpy as np
+import tkinter as tk
+from tkinter import *
+from tkinter import filedialog as fd
+
 import cv2
+import numpy as np
+from PIL import Image, ImageDraw, ImageTk
 
 path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/grace.jpg"
 p_img = Image.open(path)

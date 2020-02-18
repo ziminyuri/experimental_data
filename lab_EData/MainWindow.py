@@ -1,15 +1,17 @@
+import statistics
 from tkinter import *
-from tkinter import messagebox, ttk, Menu
+from tkinter import Menu
 from tkinter import filedialog as fd
+from tkinter import messagebox, ttk
+
+import pyglet
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from ChildWindow import ChildWindow
+
 from analysis import Analysis
-from model import Model
-import pyglet
-import numpy as np
-import statistics
+from ChildWindow import ChildWindow
 from Image import MyImage as Image
+from model import Model
 
 
 class MainWindow(Frame):
