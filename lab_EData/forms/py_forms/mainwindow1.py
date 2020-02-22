@@ -4,8 +4,8 @@ from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
 from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
+from forms.py_forms.image_processing import image_processing_window
 from Image import MyImage
-from PyQt5.QtGui import QPixmap
 
 
 class Ui_mainwindow(object):
@@ -140,7 +140,9 @@ class Ui_mainwindow(object):
         self.deconvolution_window.show()
 
     def open_processing_image_window(self):
-        self.image.image_processing("negative")
+        self.processing_image_window = QtWidgets.QMainWindow()
+        self.processing_image_ui = image_processing_window(self.processing_image_window, self.image)
+        self.processing_image_window.show()
 
     def retranslateUi(self, mainwindow):
         _translate = QtCore.QCoreApplication.translate

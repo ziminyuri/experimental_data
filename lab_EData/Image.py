@@ -24,7 +24,7 @@ class MyImage:
         return 255 - red, 255 - green, 255 - blue
 
     @staticmethod
-    def gamma_correction(red, green, blue):
+    def gamma_correction(red: int, green: int, blue: int):
         c = 20
         gamma = 0.3
         new_red = int(c * math.pow(red, gamma))
@@ -43,7 +43,7 @@ class MyImage:
         return new_red, new_green, new_blue
 
     @staticmethod
-    def logarithmic(red, green, blue):
+    def logarithmic(red: int, green: int, blue: int):
         c = 60
         new_red = int(c * math.log10(red + 1))
         new_green = int(c * math.log10(green + 1))
@@ -60,7 +60,7 @@ class MyImage:
 
         return new_red, new_green, new_blue
 
-    def update(self):
+    def update(self) -> None:
         self.image = QPixmap("temp.jpg")
         self.place_to_show.setPixmap(self.image)
 
