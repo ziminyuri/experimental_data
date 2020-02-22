@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
@@ -16,60 +16,24 @@ from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from PyQt5.QtGui import QPixmap
 
 
-class Ui_MainWindow(object):
-    # Открыть окно добавления графика
-    def open_add_graph_window(self):
-        self.add_graph_window = QtWidgets.QMainWindow()
-        self.add_graph_ui = Ui_add_graph()
-        self.add_graph_ui.setupUi(self.add_graph_window)
-        self.add_graph_window.show()
-
-    # Открыть окно добавления звукового файла
-    def open_add_sound_window(self):
-        self.add_sound_window = QtWidgets.QMainWindow()
-        self.add_sound_ui = Ui_add_sound()
-        self.add_sound_ui.setupUi(self.add_sound_window)
-        self.add_sound_window.show()
-
-    # Открыть окно рассчета статистик
-    def open_statistics_window(self):
-        self.statistics_window = QtWidgets.QMainWindow()
-        self.statistics_ui = Ui_statistics()
-        self.statistics_ui.setupUi(self.statistics_window)
-        self.statistics_window.show()
-
-    # Открыть окно фильтров
-    def open_filter_window(self):
-        self.filter_window = QtWidgets.QMainWindow()
-        self.filter_ui = Ui_filter_window()
-        self.filter_ui.setupUi(self.filter_window)
-        self.filter_window.show()
-
-    # Открыть окно деконволюций
-    def open_deconvolution_window(self):
-        self.deconvolution_window = QtWidgets.QMainWindow()
-        self.deconvolution_ui = Ui_deconvolution_window()
-        self.deconvolution_ui.setupUi(self.deconvolution_window)
-        self.deconvolution_window.show()
-
-    def open_image(self):
-        self.image_path = QtWidgets.QFileDialog.getOpenFileName(self.main_window, "Select Image", "",
-                                                        "Image Files (*.png *.jpg *.jpeg *.bmp)")
-        pixmap = QPixmap(self.image_path)
-        self.label.setPixmap(pixmap)
-        self.resize(pixmap.size())
-        self.adjustSize()
-
-    def setupUi(self, MainWindow):
+class Ui_MainWindow:
+    def __init__(self, MainWindow):
         self.image_path = ''
 
         self.main_window = MainWindow
 
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.main_window.setObjectName("MainWindow")
+        self.main_window.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(self.main_window)
         self.centralwidget.setObjectName("centralwidget")
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.main_window.setCentralWidget(self.centralwidget)
+        self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 511, 241))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
         self.menubar.setObjectName("menubar")
@@ -87,7 +51,7 @@ class Ui_MainWindow(object):
         self.action.setShortcut('Ctrl+N')
         self.action_2 = QtWidgets.QAction(MainWindow)
         self.action_2.setObjectName("action_2")
-        self.action_2.triggered.connect(self.open_image)
+        self.action_2.triggered.connect(self.open_image_window)
         self.action_3 = QtWidgets.QAction(MainWindow)
         self.action_3.setObjectName("action_3")
         self.action_3.triggered.connect(self.open_add_sound_window)
@@ -113,8 +77,17 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
 
+        self.image_label = QtWidgets.QLabel(self.main_window)
+        path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/lab3/image2.jpg"
+        pixmap = QPixmap(path)
+        self.image_label.setPixmap(pixmap)
+        self.gridLayout.addWidget(self.image_label,1, 0, 1, 1)
+        # self.main_window.resize(pixmap.width(), pixmap.height())
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -128,4 +101,3 @@ class Ui_MainWindow(object):
         self.action_6.setText(_translate("MainWindow", "Статистики"))
         self.action_7.setText(_translate("MainWindow", "Фильтр"))
         self.action_8.setText(_translate("MainWindow", "Деконволюция"))
-

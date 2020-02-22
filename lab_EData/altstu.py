@@ -13,6 +13,7 @@ from scipy.ndimage.filters import gaussian_filter
 path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/grace.jpg"
 p_img = Image.open(path)
 
+
 def insertText():
     global file_name
     file_name = fd.askopenfilename(filetypes=(("JPG files", "*.jpg"),
@@ -33,6 +34,7 @@ def rebuild(panel):
     panel.configure(image=img3)
     panel.image = img3
 
+
 def shum():
     global p_img
     draw = ImageDraw.Draw(p_img)
@@ -40,15 +42,12 @@ def shum():
     number_of_dots = scale1.get()
 
     chb = var1.get() # 1 включен режим чб 0 выключен
-    color_list = []
     if chb == 1:
         color_list = ['black', 'white']
     else:
         color_list = ['blue', 'red', 'black', 'white', 'green', 'gray']
 
-
-
-    for n in range(number_of_dots):
+    for n in range (number_of_dots):
         dotx = random.randrange(1, 1000, 1)
         doty = random.randrange(1, 665, 1)
         draw.line((dotx, doty, dotx+1, doty+1), fill=random.choice(color_list),width=1)
