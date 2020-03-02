@@ -1,21 +1,8 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'forms/qt_forms/statistics_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.14.1
-#
-# WARNING! All changes made in this file will be lost!
-
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 
 class Ui_statistics(object):
-    # Закрыть окно
-    def close_window(self):
-        self.statistics_window.close()
-
-    def setupUi(self, MainWindow):
+    def __init__(self, MainWindow):
         self.statistics_window = MainWindow
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 539)
@@ -95,6 +82,7 @@ class Ui_statistics(object):
         self.gridLayout.addWidget(self.pushButton_7, 12, 1, 1, 1)
         self.comboBox_2 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItems(["1", "2", "3", "4"])
         self.gridLayout.addWidget(self.comboBox_2, 1, 1, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_2.setObjectName("label_2")
@@ -128,6 +116,9 @@ class Ui_statistics(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def close_window(self):
+        self.statistics_window.close()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

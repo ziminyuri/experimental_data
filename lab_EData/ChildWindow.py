@@ -1,5 +1,5 @@
-from tkinter import *
 import tkinter.ttk as ttk
+from tkinter import *
 from tkinter import messagebox
 
 from model import Model
@@ -257,4 +257,3 @@ class ChildWindow(Toplevel):
 
     def click_button_close(self):
         self.destroy()
-

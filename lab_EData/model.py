@@ -1,6 +1,7 @@
-from trend import Trend
-from sound import Sound
 import numpy as np
+
+from sound import Sound
+from trend import Trend
 
 
 def sum_trend(trend_1, trend_2):

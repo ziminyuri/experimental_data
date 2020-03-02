@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>mainwindow</class>
+ <widget class="QMainWindow" name="mainwindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,7 +13,107 @@
   <property name="windowTitle">
    <string>Обработка и анализ данных</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>781</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_for_model_1">
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_for_model_4">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_model_1">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_for_model_2">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_for_model_5">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_for_model_3">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_for_model_6">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_model_2">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_model_3">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_model_4">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_model_5">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_model_6">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -27,57 +127,64 @@
     <property name="title">
      <string>Файл</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
+    <addaction name="action_add_graph"/>
+    <addaction name="action_open_image"/>
+    <addaction name="action_open_sound"/>
     <addaction name="separator"/>
-    <addaction name="action_5"/>
+    <addaction name="action_close"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>Обработка</string>
     </property>
-    <addaction name="action_6"/>
-    <addaction name="action_7"/>
-    <addaction name="action_8"/>
+    <addaction name="action_statistics"/>
+    <addaction name="action_filter"/>
+    <addaction name="action_deconvolution"/>
+    <addaction name="separator"/>
+    <addaction name="action_processing_image"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="action_add_graph">
    <property name="text">
     <string>Добавить график</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="action_open_image">
    <property name="text">
     <string>Открыть изображение</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="action_open_sound">
    <property name="text">
     <string>Открыть звуковой файл</string>
    </property>
   </action>
-  <action name="action_5">
+  <action name="action_close">
    <property name="text">
     <string>Выход</string>
    </property>
   </action>
-  <action name="action_6">
+  <action name="action_statistics">
    <property name="text">
     <string>Статистики</string>
    </property>
   </action>
-  <action name="action_7">
+  <action name="action_filter">
    <property name="text">
     <string>Фильтр</string>
    </property>
   </action>
-  <action name="action_8">
+  <action name="action_deconvolution">
    <property name="text">
     <string>Деконволюция</string>
+   </property>
+  </action>
+  <action name="action_processing_image">
+   <property name="text">
+    <string>Изображения...</string>
    </property>
   </action>
  </widget>

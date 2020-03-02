@@ -1,11 +1,9 @@
 from tkinter import *
+
+from PyQt5 import QtWidgets
+
+from forms.py_forms.mainwindow1 import Ui_mainwindow
 from MainWindow import MainWindow
-
-
-import sys
-from PyQt5 import QtCore, QtGui, QtWidgets
-from forms.py_forms.mainwindow import Ui_MainWindow
-
 
 
 def main():
@@ -20,12 +18,9 @@ def main():
 
 def pyqt5():
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-
+    main_window = QtWidgets.QMainWindow()
+    ui = Ui_mainwindow(main_window)
+    main_window.show()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':

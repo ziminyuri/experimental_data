@@ -1,10 +1,11 @@
-import math
 import copy
+import math
 from random import random
-import numpy as np
-from model import Model
 
-from numpy.fft import rfft, rfftfreq, fft
+import numpy as np
+from numpy.fft import fft, rfft, rfftfreq
+
+from model import Model
 
 
 # Деление двух спектров (действительных и комплексных чисел)

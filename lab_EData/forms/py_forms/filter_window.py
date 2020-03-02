@@ -1,21 +1,8 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'forms/qt_forms/filter_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.14.1
-#
-# WARNING! All changes made in this file will be lost!
-
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 
 class Ui_filter_window(object):
-    # Закрыть окно
-    def close_window(self):
-        self.filter_window.close()
-
-    def setupUi(self, MainWindow):
+    def __init__(self, MainWindow):
         self.filter_window = MainWindow
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(535, 326)
@@ -56,12 +43,14 @@ class Ui_filter_window(object):
         self.gridLayout.addWidget(self.label_5, 0, 1, 1, 1)
         self.comboBox_2 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItems(["1", "2", "3", "4"])
         self.gridLayout.addWidget(self.comboBox_2, 1, 1, 1, 1)
         self.label_6 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 2, 1, 1, 1)
         self.comboBox_3 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_3.setObjectName("comboBox_3")
+        self.comboBox_3.addItems(["Низких частот", "Высоких частот", "Полосовой", "Режекторный"])
         self.gridLayout.addWidget(self.comboBox_3, 3, 1, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton.setObjectName("pushButton")
@@ -80,6 +69,9 @@ class Ui_filter_window(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def close_window(self):
+        self.filter_window.close()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

@@ -9,14 +9,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 # Окно: Добавить новый график
 class Ui_add_graph(object):
-
-    # Закрыть окно
-    def close_window(self):
-        self.add_grpah_window.close()
-
-    def setupUi(self, add_graph):
+    def __init__(self, add_graph):
         self.add_grpah_window = add_graph
         add_graph.setObjectName("add_graph")
         add_graph.resize(613, 437)
@@ -53,6 +49,7 @@ class Ui_add_graph(object):
         self.gridLayout.addWidget(self.label_2, 2, 1, 1, 1)
         self.comboBox = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItems(["1", "2", "3", "4"])
         self.gridLayout.addWidget(self.comboBox, 1, 1, 1, 1)
         self.label_5 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_5.setObjectName("label_5")
@@ -80,6 +77,13 @@ class Ui_add_graph(object):
         self.gridLayout.addWidget(self.label_3, 6, 1, 1, 1)
         self.comboBox_2 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItems(["y(x)=kx+b", "y(x)=-kx+b", "y(x) = beta * exp^(alpha * i)",
+                                "y(x) = beta * exp^(alpha * -i)", "Встроенный рандом", "Кастомный рандом",
+                                "Значения за областью", "Адитивная модель №1", "Адитивная модель №2",
+                                "Мультипликативная модель №1", "Мультипликативная модель №2", "Кусочная функция",
+                                "Гармоническое процесс", "Полигармоническое процесс", "Рандом + сдвиг",
+                                "Рандом + спайки", "ГП + trend", "ГП + спайки", "ГП + спайки + рандом + trend",
+                                "Загрузить из файла", "ГП + exp", "Экзамен"])
         self.gridLayout.addWidget(self.comboBox_2, 3, 1, 1, 1)
         self.lineEdit_5 = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lineEdit_5.setObjectName("lineEdit_5")
@@ -127,3 +131,5 @@ class Ui_add_graph(object):
         self.label_8.setText(_translate("add_graph", "b"))
         self.pushButton.setText(_translate("add_graph", "Добавить"))
 
+    def close_window(self):
+        self.add_grpah_window.close()
