@@ -1,4 +1,6 @@
 import math
+import numpy as np
+import matplotlib.pyplot as plt
 
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
@@ -11,6 +13,9 @@ class MyImage:
         self.path = None
         self.image = None
         self.place_to_show = main_window.label_model_1
+
+        self.bar_chart_y = np.zeros(255)
+        self.bar_chart_x = np.arange(0, 255)
 
     def open(self) -> None:
         self.path, _ = QtWidgets.QFileDialog.getOpenFileName(self.main_window,
@@ -95,3 +100,26 @@ class MyImage:
 
         pil_img.save("temp.jpg")
         self.update()
+
+    def bar_chart(self):
+        self.bar_chart_y = np.zeros(255)
+        self.image.save("temp.jpg")
+        pil_img = Image.open("temp.jpg")
+        width = pil_img.size[0]
+        height = pil_img.size[1]
+        pix = pil_img.load()
+        for i in range(width):
+            for j in range(height):
+                r = pix[i, j][0]
+                g = pix[i, j][1]
+                b = pix[i, j][2]
+
+                pixel_value = int((r + g + b) / 3)
+                bar_chart_y_value = self.bar_chart_y[pixel_value] + 1
+                self.bar_chart_y[pixel_value] = bar_chart_y_value
+
+        plt.plot(self.bar_chart_x, self.bar_chart_y)
+        plt.show()
+
+
+
