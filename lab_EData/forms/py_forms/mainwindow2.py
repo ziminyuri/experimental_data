@@ -4,7 +4,7 @@ from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
 from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
-from forms.py_forms.image_processing import image_processing_window
+from forms.py_forms.image_processing1 import image_processing_window
 from Image import MyImage
 
 
@@ -13,7 +13,7 @@ class Ui_mainwindow(object):
         self.main_window = main_window
         self.main_window.setObjectName("mainwindow")
         self.main_window.resize(800, 600)
-        self.main_window.setStyleSheet("background-color: #607D8B")
+        self.main_window.setStyleSheet("background-color: #263238")
 
         self.centralwidget = QtWidgets.QWidget(self.main_window)
         self.centralwidget.setObjectName("centralwidget")
