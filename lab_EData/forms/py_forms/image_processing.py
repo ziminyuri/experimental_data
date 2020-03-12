@@ -39,14 +39,17 @@ class image_processing_window(object):
         self.label = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(580, 380, 112, 32))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.triggered.connect(self.processing)
+        self.pushButton.clicked.connect(self.processing)
+
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(720, 380, 112, 32))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_2.triggered.connect(self.close_window)
+        self.pushButton_2.clicked.connect(self.close_window)
+
         main_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(main_window)
         self.statusbar.setObjectName("statusbar")

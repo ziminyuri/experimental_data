@@ -2,7 +2,7 @@ from tkinter import *
 
 from PyQt5 import QtWidgets
 
-from forms.py_forms.mainwindow1 import Ui_mainwindow
+from forms.py_forms.mainwindow2 import Ui_mainwindow
 from MainWindow import MainWindow
 
 
@@ -23,6 +23,7 @@ def pyqt5():
     main_window.show()
     sys.exit(app.exec_())
 
+
 if __name__ == '__main__':
-    # main()
+    #main()
     pyqt5()
