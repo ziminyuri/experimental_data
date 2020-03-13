@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import pyqtgraph as pg
 
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
@@ -101,7 +102,7 @@ class MyImage:
         pil_img.save("temp.jpg")
         self.update()
 
-    def bar_chart(self):
+    def bar_chart(self, graphWidget):
         self.bar_chart_y = np.zeros(255)
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
@@ -118,8 +119,9 @@ class MyImage:
                 bar_chart_y_value = self.bar_chart_y[pixel_value] + 1
                 self.bar_chart_y[pixel_value] = bar_chart_y_value
 
-        plt.plot(self.bar_chart_x, self.bar_chart_y)
-        plt.show()
+        graphWidget.plot(self.bar_chart_x, self.bar_chart_y, pen='#AB47BC')
+
+
 
     """
     @staticmethod

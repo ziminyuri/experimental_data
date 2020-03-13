@@ -6,6 +6,7 @@ from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from forms.py_forms.image_processing1 import image_processing_window
 from Image import MyImage
+import pyqtgraph as pg
 
 
 class Ui_mainwindow(object):
@@ -44,9 +45,12 @@ class Ui_mainwindow(object):
         self.label_for_model_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_for_model_2.setObjectName("label_for_model_2")
         self.gridLayout.addWidget(self.label_for_model_2, 2, 0, 1, 1)
-        self.label_model_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_model_3.setObjectName("label_model_3")
-        self.gridLayout.addWidget(self.label_model_3, 1, 1, 1, 1)
+
+        self.graphWidget = pg.PlotWidget()
+        self.graphWidget.hide()
+        self.graphWidget.setBackground('#37474F')
+        self.gridLayout.addWidget(self.graphWidget, 1, 1, 1, 1)
+
         self.label_model_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_model_6.setObjectName("label_model_6")
         self.gridLayout.addWidget(self.label_model_6, 3, 2, 1, 1)
@@ -152,7 +156,7 @@ class Ui_mainwindow(object):
 
     def open_processing_image_window(self):
         self.processing_image_window = QtWidgets.QMainWindow()
-        self.processing_image_ui = image_processing_window(self.processing_image_window, self.image)
+        self.processing_image_ui = image_processing_window(self, self.graphWidget)
         self.processing_image_window.show()
 
 
@@ -166,7 +170,7 @@ class Ui_mainwindow(object):
         self.label_model_1.setText(_translate("mainwindow", ""))
         self.label_model_4.setText(_translate("mainwindow", ""))
         self.label_for_model_2.setText(_translate("mainwindow", ""))
-        self.label_model_3.setText(_translate("mainwindow", ""))
+        # self.label_model_3.setText(_translate("mainwindow", ""))
         self.label_model_6.setText(_translate("mainwindow", ""))
         self.label_model_5.setText(_translate("mainwindow", ""))
         self.label_for_model_4.setText(_translate("mainwindow", ""))
@@ -181,13 +185,3 @@ class Ui_mainwindow(object):
         self.action_filter.setText(_translate("mainwindow", "Фильтр"))
         self.action_deconvolution.setText(_translate("mainwindow", "Деконволюция"))
         self.action_processing_image.setText(_translate("mainwindow", "Изображения..."))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    mainwindow = QtWidgets.QMainWindow()
-    ui = Ui_mainwindow()
-    ui.setupUi(mainwindow)
-    mainwindow.show()
-    sys.exit(app.exec_())

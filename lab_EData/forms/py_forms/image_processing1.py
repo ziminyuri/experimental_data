@@ -3,13 +3,16 @@ from Image import MyImage as Image
 
 
 class image_processing_window(object):
-    def __init__(self,  main_window: object, image_for_processing: object):
-        self.image = image_for_processing
-        main_window.setObjectName("MainWindow")
-        main_window.resize(828, 478)
-        main_window.setStyleSheet("background-color: #263238")
+    def __init__(self,  main_window: object, graphWidget):
+        self.image = main_window.image
+        self.processing_image_window = main_window.processing_image_window
+        self.processing_image_window.setObjectName("MainWindow")
+        self.processing_image_window.resize(828, 478)
+        self.processing_image_window.setStyleSheet("background-color: #263238")
+        self.main_window = main_window
+        self.graphWidget = graphWidget
 
-        self.centralwidget = QtWidgets.QWidget(main_window)
+        self.centralwidget = QtWidgets.QWidget(self.processing_image_window)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -122,13 +125,13 @@ class image_processing_window(object):
         self.gridLayout.addWidget(self.line_5, 2, 2, 1, 2)
 
         self.verticalLayout.addLayout(self.gridLayout)
-        main_window.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(main_window)
+        self.processing_image_window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(self.processing_image_window)
         self.statusbar.setObjectName("statusbar")
-        main_window.setStatusBar(self.statusbar)
+        self.processing_image_window.setStatusBar(self.statusbar)
 
-        self.retranslateUi(main_window)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
+        self.retranslateUi(self.processing_image_window)
+        QtCore.QMetaObject.connectSlotsByName(self.processing_image_window)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -180,7 +183,9 @@ class image_processing_window(object):
 
         # Гисторграмма
         if self.radioButton_6.isChecked():
-            self.image.bar_chart()
+            self.image.bar_chart(self.graphWidget)
+            self.graphWidget.show()
+            self.close_window()
 
     def close_window(self) -> None:
-        pass
+        self.processing_image_window.close()
