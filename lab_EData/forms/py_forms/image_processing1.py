@@ -29,14 +29,14 @@ class image_processing_window(object):
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
         self.line_3.setStyleSheet("color: #EEEEEE")
-        self.gridLayout.addWidget(self.line_3, 10, 0, 1, 2)
+        self.gridLayout.addWidget(self.line_3, 10, 0, 1, 4)
 
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.processing)
         self.pushButton.setStyleSheet("color: #EEEEEE;"
                                       "background-color: #546E7A;")
-        self.gridLayout.addWidget(self.pushButton, 12, 2, 1, 1)
+        self.gridLayout.addWidget(self.pushButton, 14, 2, 1, 1)
 
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
@@ -91,7 +91,12 @@ class image_processing_window(object):
         self.pushButton_2.clicked.connect(self.close_window)
         self.pushButton_2.setStyleSheet("color: #EEEEEE; "
                                         "background-color: #546E7A")
-        self.gridLayout.addWidget(self.pushButton_2, 12, 3, 1, 1)
+        self.gridLayout.addWidget(self.pushButton_2, 14, 3, 1, 1)
+
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setObjectName("checkBox")
+        self.checkBox.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox, 11, 2, 1, 2)
 
         self.radioButton_4 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_4.setObjectName("radioButton_4")
@@ -145,9 +150,10 @@ class image_processing_window(object):
         self.radioButton_3.setText(_translate("MainWindow", "Негатив"))
         self.radioButton_2.setText(_translate("MainWindow", "Билинейное"))
         self.label.setText(_translate("MainWindow", "Сглаживание"))
-        self.label_3.setText(_translate("MainWindow", "`Позиция вывода графика"))
+        self.label_3.setText(_translate("MainWindow", "Позиция вывода графика"))
         self.radioButton_6.setText(_translate("MainWindow", "Гистограмма"))
-        self.radioButton_7.setText(_translate("MainWindow", "Второй график)"))
+        self.radioButton_7.setText(_translate("MainWindow", "Кумулятивная функция распределения"))
+        self.checkBox.setText(_translate("MainWindow", "Нормализовать"))
 
     def processing(self) -> None:
 
@@ -161,7 +167,7 @@ class image_processing_window(object):
                 pass
 
         # Билинейное
-        if self.radioButton_2.isChecked():
+        elif self.radioButton_2.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
                 self.image.smoothing("bilinear", smoothing_factor)
@@ -170,22 +176,34 @@ class image_processing_window(object):
                 pass
 
         # Негатив
-        if self.radioButton_3.isChecked():
+        elif self.radioButton_3.isChecked():
             self.image.image_processing("negative")
 
         # Гамма коррекция
-        if self.radioButton_4.isChecked():
+        elif self.radioButton_4.isChecked():
             self.image.image_processing("gamma")
 
         # Логорифмическое
-        if self.radioButton_5.isChecked():
+        elif self.radioButton_5.isChecked():
             self.image.image_processing("logarithmic")
 
         # Гисторграмма
-        if self.radioButton_6.isChecked():
+        elif self.radioButton_6.isChecked():
             self.image.bar_chart(self.graphWidget)
             self.graphWidget.show()
             self.close_window()
+
+        # Кумулятивная функция распределения
+        elif self.radioButton_7.isChecked():
+            if self.checkBox.isChecked():
+                self.image.cdf_function(self.graphWidget, normalisation=True)
+            else:
+                self.image.cdf_function(self.graphWidget, normalisation=False)
+            self.graphWidget.show()
+
+            self.image.image_processing("cdf")
+
+        self.close_window()
 
     def close_window(self) -> None:
         self.processing_image_window.close()

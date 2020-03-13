@@ -18,6 +18,9 @@ class MyImage:
         self.bar_chart_y = np.zeros(255)
         self.bar_chart_x = np.arange(0, 255)
 
+        self.cdf_x = self.bar_chart_x.copy()
+        self.cdf_y = np.zeros(255)
+
     def open(self) -> None:
         self.path, _ = QtWidgets.QFileDialog.getOpenFileName(self.main_window,
                                                              "Open Image", ".", "Image Files (*.png *.jpg *.bmp)")
@@ -66,6 +69,13 @@ class MyImage:
 
         return new_red, new_green, new_blue
 
+    def cdf(self, red: int, green: int, blue: int):
+        red = int(self.cdf_y[red])
+        green = int(self.cdf_y[green])
+        blue = int(self.cdf_y[blue])
+
+        return red, green, blue
+
     def update(self) -> None:
         self.image = QPixmap("temp.jpg")
         self.place_to_show.setPixmap(self.image)
@@ -79,6 +89,7 @@ class MyImage:
         pix = pil_img.load()
         for i in range(width):
             for j in range(height):
+                print(pix[i, j])
                 r = pix[i, j][0]
                 g = pix[i, j][1]
                 b = pix[i, j][2]
@@ -92,6 +103,9 @@ class MyImage:
                 elif type_processing == "logarithmic":
                     red, green, blue = self.logarithmic(r, g, b)
 
+                elif type_processing == "cdf":
+                    red, green, blue = self.cdf(r, g, b, i, j)
+
                 else:
                     red = 0
                     green = 0
@@ -102,7 +116,7 @@ class MyImage:
         pil_img.save("temp.jpg")
         self.update()
 
-    def bar_chart(self, graphWidget):
+    def bar_chart(self, graphWidget, plot: bool = True) -> None:
         self.bar_chart_y = np.zeros(255)
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
@@ -119,31 +133,28 @@ class MyImage:
                 bar_chart_y_value = self.bar_chart_y[pixel_value] + 1
                 self.bar_chart_y[pixel_value] = bar_chart_y_value
 
-        graphWidget.plot(self.bar_chart_x, self.bar_chart_y, pen='#AB47BC')
+        if plot:
+            pen = pg.mkPen(color='#AB47BC', width=5)
+            graphWidget.plot(self.bar_chart_x, self.bar_chart_y, pen=pen)
 
+    # Кумулятивная функция распределения
+    def cdf_function(self, graphWidget, plot: bool = True, normalisation: bool = False) -> None:
+        self.bar_chart(graphWidget, False)
 
+        self.cdf_y[0] = self.bar_chart_y[0]
+        for i in range(1, self.bar_chart_x.size):
+            self.cdf_y[i] = self.bar_chart_y[i] + self.cdf_y[i - 1]
 
-    """
-    @staticmethod
-    def bar_chart_pyqt() -> None:
-        global p_img
-        width = p_img.size[0]
-        height = p_img.size[1]
-        rgb_im = p_img.convert('RGB')
-        pix = rgb_im.load()
+        if normalisation is False:
+            if plot:
+                pen = pg.mkPen(color='#AB47BC', width=5)
+                graphWidget.plot(self.cdf_x, self.cdf_y, pen=pen)
 
-        for i in range(width):
-            for j in range(height):
-                r = pix[i, j][0]
-                g = pix[i, j][1]
-                b = pix[i, j][2]
+        else:
+            cdf_max: int = np.amax(self.cdf_y)
+            for i in range(0, self.cdf_x.size):
+                self.cdf_y[i] = int(self.cdf_y[i] / cdf_max * 255)
 
-                average_value: int = int((r + g + b) / 3)
-                bar_chart_value = bar_chart_y[average_value] + 1
-                bar_chart_y[average_value] = bar_chart_value
-
-        plt.plot(bar_chart_x, bar_chart_y)
-        plt.show()
-"""
-
-
+            if plot:
+                pen = pg.mkPen(color='#AB47BC', width=5)
+                graphWidget.plot(self.cdf_x, self.cdf_y, pen=pen)
