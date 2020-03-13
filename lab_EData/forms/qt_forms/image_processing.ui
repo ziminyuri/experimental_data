@@ -24,20 +24,6 @@
         </property>
        </widget>
       </item>
-      <item row="10" column="0" colspan="2">
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="2">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Применить</string>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0" colspan="2">
        <widget class="Line" name="line">
         <property name="orientation">
@@ -86,6 +72,13 @@
       <item row="12" column="0">
        <widget class="QComboBox" name="comboBox"/>
       </item>
+      <item row="2" column="2" colspan="2">
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="radioButton">
         <property name="text">
@@ -93,17 +86,17 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="3">
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Закрыть</string>
-        </property>
-       </widget>
-      </item>
       <item row="8" column="0">
        <widget class="QRadioButton" name="radioButton_4">
         <property name="text">
          <string>Гамма коррекция</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0" colspan="4">
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
@@ -128,6 +121,13 @@
         </property>
        </widget>
       </item>
+      <item row="11" column="2" colspan="2">
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>Нормализовать</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -135,10 +135,17 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="2">
-       <widget class="Line" name="line_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="14" column="2">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Применить</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="3">
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="text">
+         <string>Закрыть</string>
         </property>
        </widget>
       </item>
