@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import pyqtgraph as pg
 
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
@@ -101,7 +102,7 @@ class MyImage:
         pil_img.save("temp.jpg")
         self.update()
 
-    def bar_chart(self):
+    def bar_chart(self, graphWidget):
         self.bar_chart_y = np.zeros(255)
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
@@ -118,8 +119,31 @@ class MyImage:
                 bar_chart_y_value = self.bar_chart_y[pixel_value] + 1
                 self.bar_chart_y[pixel_value] = bar_chart_y_value
 
-        plt.plot(self.bar_chart_x, self.bar_chart_y)
-        plt.show()
+        graphWidget.plot(self.bar_chart_x, self.bar_chart_y, pen='#AB47BC')
 
+
+
+    """
+    @staticmethod
+    def bar_chart_pyqt() -> None:
+        global p_img
+        width = p_img.size[0]
+        height = p_img.size[1]
+        rgb_im = p_img.convert('RGB')
+        pix = rgb_im.load()
+
+        for i in range(width):
+            for j in range(height):
+                r = pix[i, j][0]
+                g = pix[i, j][1]
+                b = pix[i, j][2]
+
+                average_value: int = int((r + g + b) / 3)
+                bar_chart_value = bar_chart_y[average_value] + 1
+                bar_chart_y[average_value] = bar_chart_value
+
+        plt.plot(bar_chart_x, bar_chart_y)
+        plt.show()
+"""
 
 

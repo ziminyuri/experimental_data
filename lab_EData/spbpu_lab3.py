@@ -10,6 +10,9 @@ from PIL import Image, ImageDraw, ImageTk
 path = "/Users/zimin/Documents/Github/experimental_data/lab_EData/input files/lab3/image3.jpg"
 p_img = Image.open(path)
 
+bar_chart_x = np.arange(0, 255)
+bar_chart_y = np.zeros(255)
+
 
 def insertText() -> None:
     global file_name
@@ -124,9 +127,6 @@ def bar_chart() -> None:
     rgb_im = p_img.convert('RGB')
     pix = rgb_im.load()
 
-    bar_chart_y = np.zeros(256)
-    bar_chart_x = np.arange(0, 256)
-
     for i in range(width):
         for j in range(height):
             r = pix[i, j][0]
@@ -140,6 +140,17 @@ def bar_chart() -> None:
     plt.plot(bar_chart_x, bar_chart_y)
     plt.show()
 
+
+def histogram_equalization() -> None:
+    histogram_equalization_x = bar_chart_x
+    histogram_equalization_y = np.zeros(255)
+
+    histogram_equalization_y[0] = bar_chart_y[0]
+    for i in range(1, len(bar_chart_y)):
+        histogram_equalization_y[i] = histogram_equalization_y[i-1] + bar_chart_y[i]
+
+    plt.plot(histogram_equalization_x, histogram_equalization_y)
+    plt.show()
 
 def smoothing() -> None:
     global p_img
@@ -162,6 +173,7 @@ def smoothing() -> None:
     img2 = ImageTk.PhotoImage(p_img)
     panel.configure(image=img2)
     panel.image = img2
+
 
 root = tk.Tk()
 root.title("Графика / Лабораторная №7")

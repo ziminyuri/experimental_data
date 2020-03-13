@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
@@ -6,90 +6,105 @@ from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from forms.py_forms.image_processing1 import image_processing_window
 from Image import MyImage
+import pyqtgraph as pg
 
 
 class Ui_mainwindow(object):
     def __init__(self, main_window):
         self.main_window = main_window
-        main_window.setObjectName("mainwindow")
-        main_window.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(main_window)
+        self.main_window.setObjectName("mainwindow")
+        self.main_window.resize(800, 600)
+        self.main_window.setStyleSheet("background-color: #263238")
+
+        self.centralwidget = QtWidgets.QWidget(self.main_window)
         self.centralwidget.setObjectName("centralwidget")
-        self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 781, 531))
-        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
-        self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setObjectName("verticalLayout")
+
+        self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        self.label_for_model_1 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_for_model_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_for_model_3.setObjectName("label_for_model_3")
+        self.gridLayout.addWidget(self.label_for_model_3, 0, 1, 1, 1)
+        self.label_for_model_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_for_model_5.setObjectName("label_for_model_5")
+        self.gridLayout.addWidget(self.label_for_model_5, 0, 2, 1, 1)
+        self.label_for_model_1 = QtWidgets.QLabel(self.centralwidget)
         self.label_for_model_1.setAutoFillBackground(False)
         self.label_for_model_1.setObjectName("label_for_model_1")
         self.gridLayout.addWidget(self.label_for_model_1, 0, 0, 1, 1)
-        self.label_for_model_4 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_for_model_4.setObjectName("label_for_model_4")
-        self.gridLayout.addWidget(self.label_for_model_4, 2, 1, 1, 1)
-        self.label_model_1 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_model_1.setObjectName("label_model_1")
-        self.gridLayout.addWidget(self.label_model_1, 1, 0, 1, 1)
-        self.label_for_model_2 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_for_model_2.setObjectName("label_for_model_2")
-        self.gridLayout.addWidget(self.label_for_model_2, 2, 0, 1, 1)
-        self.label_for_model_5 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_for_model_5.setObjectName("label_for_model_5")
-        self.gridLayout.addWidget(self.label_for_model_5, 0, 2, 1, 1)
-        self.label_for_model_3 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_for_model_3.setObjectName("label_for_model_3")
-        self.gridLayout.addWidget(self.label_for_model_3, 0, 1, 1, 1)
-        self.label_for_model_6 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_for_model_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_for_model_6.setObjectName("label_for_model_6")
         self.gridLayout.addWidget(self.label_for_model_6, 2, 2, 1, 1)
-        self.label_model_2 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_model_2.setObjectName("label_model_2")
-        self.gridLayout.addWidget(self.label_model_2, 3, 0, 1, 1)
-        self.label_model_3 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_model_3.setObjectName("label_model_3")
-        self.gridLayout.addWidget(self.label_model_3, 1, 1, 1, 1)
-        self.label_model_4 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_model_1 = QtWidgets.QLabel(self.centralwidget)
+        self.label_model_1.setObjectName("label_model_1")
+        self.gridLayout.addWidget(self.label_model_1, 1, 0, 1, 1)
+        self.label_model_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_model_4.setObjectName("label_model_4")
         self.gridLayout.addWidget(self.label_model_4, 3, 1, 1, 1)
-        self.label_model_5 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_model_5.setObjectName("label_model_5")
-        self.gridLayout.addWidget(self.label_model_5, 1, 2, 1, 1)
-        self.label_model_6 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_for_model_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_for_model_2.setObjectName("label_for_model_2")
+        self.gridLayout.addWidget(self.label_for_model_2, 2, 0, 1, 1)
+
+        self.graphWidget = pg.PlotWidget()
+        self.graphWidget.hide()
+        self.graphWidget.setBackground('#37474F')
+        self.gridLayout.addWidget(self.graphWidget, 1, 1, 1, 1)
+
+        self.label_model_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_model_6.setObjectName("label_model_6")
         self.gridLayout.addWidget(self.label_model_6, 3, 2, 1, 1)
-        main_window.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(main_window)
+        self.label_model_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_model_5.setObjectName("label_model_5")
+        self.gridLayout.addWidget(self.label_model_5, 1, 2, 1, 1)
+        self.label_for_model_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_for_model_4.setObjectName("label_for_model_4")
+        self.gridLayout.addWidget(self.label_for_model_4, 2, 1, 1, 1)
+        self.label_model_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_model_2.setObjectName("label_model_2")
+        self.gridLayout.addWidget(self.label_model_2, 3, 0, 1, 1)
+        self.verticalLayout.addLayout(self.gridLayout)
+        self.main_window.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(self.main_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")
         self.menu_2 = QtWidgets.QMenu(self.menubar)
         self.menu_2.setObjectName("menu_2")
-        main_window.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(main_window)
+        self.main_window.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(self.main_window)
         self.statusbar.setObjectName("statusbar")
-        main_window.setStatusBar(self.statusbar)
-        self.action_add_graph = QtWidgets.QAction(main_window)
+        self.main_window.setStatusBar(self.statusbar)
+
+        self.action_add_graph = QtWidgets.QAction(self.main_window)
         self.action_add_graph.setObjectName("action_add_graph")
         self.action_add_graph.triggered.connect(self.open_add_graph_window)
-        self.action_open_image = QtWidgets.QAction(main_window)
+
+        self.action_open_image = QtWidgets.QAction(self.main_window)
         self.action_open_image.setObjectName("action_open_image")
         self.action_open_image.triggered.connect(self.open_image_window)
-        self.action_open_sound = QtWidgets.QAction(main_window)
+
+        self.action_open_sound = QtWidgets.QAction(self.main_window)
         self.action_open_sound.setObjectName("action_open_sound")
         self.action_open_sound.triggered.connect(self.open_add_sound_window)
-        self.action_close = QtWidgets.QAction(main_window)
+
+        self.action_close = QtWidgets.QAction(self.main_window)
         self.action_close.setObjectName("action_close")
-        self.action_statistics = QtWidgets.QAction(main_window)
+
+        self.action_statistics = QtWidgets.QAction(self.main_window)
         self.action_statistics.setObjectName("action_statistics")
-        self.action_filter = QtWidgets.QAction(main_window)
+
+        self.action_filter = QtWidgets.QAction(self.main_window)
         self.action_filter.setObjectName("action_filter")
-        self.action_deconvolution = QtWidgets.QAction(main_window)
+
+        self.action_deconvolution = QtWidgets.QAction(self.main_window)
         self.action_deconvolution.setObjectName("action_deconvolution")
-        self.action_processing_image = QtWidgets.QAction(main_window)
+
+        self.action_processing_image = QtWidgets.QAction(self.main_window)
         self.action_processing_image.setObjectName("action_processing_image")
         self.action_processing_image.triggered.connect(self.open_processing_image_window)
+
         self.menu.addAction(self.action_add_graph)
         self.menu.addAction(self.action_open_image)
         self.menu.addAction(self.action_open_sound)
@@ -103,8 +118,8 @@ class Ui_mainwindow(object):
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
 
-        self.retranslateUi(main_window)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
     def open_add_graph_window(self):
         self.add_graph_window = QtWidgets.QMainWindow()
@@ -141,24 +156,25 @@ class Ui_mainwindow(object):
 
     def open_processing_image_window(self):
         self.processing_image_window = QtWidgets.QMainWindow()
-        self.processing_image_ui = image_processing_window(self.processing_image_window, self.image)
+        self.processing_image_ui = image_processing_window(self, self.graphWidget)
         self.processing_image_window.show()
 
-    def retranslateUi(self, mainwindow):
+
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        mainwindow.setWindowTitle(_translate("mainwindow", "Обработка и анализ данных"))
-        self.label_for_model_1.setText(_translate("mainwindow", ""))
-        self.label_for_model_4.setText(_translate("mainwindow", ""))
-        self.label_model_1.setText(_translate("mainwindow", ""))
-        self.label_for_model_2.setText(_translate("mainwindow", ""))
-        self.label_for_model_5.setText(_translate("mainwindow", ""))
+        self.main_window.setWindowTitle(_translate("mainwindow", "Обработка и анализ данных"))
         self.label_for_model_3.setText(_translate("mainwindow", ""))
+        self.label_for_model_5.setText(_translate("mainwindow", ""))
+        self.label_for_model_1.setText(_translate("mainwindow", ""))
         self.label_for_model_6.setText(_translate("mainwindow", ""))
-        self.label_model_2.setText(_translate("mainwindow", ""))
-        self.label_model_3.setText(_translate("mainwindow", ""))
+        self.label_model_1.setText(_translate("mainwindow", ""))
         self.label_model_4.setText(_translate("mainwindow", ""))
-        self.label_model_5.setText(_translate("mainwindow", ""))
+        self.label_for_model_2.setText(_translate("mainwindow", ""))
+        # self.label_model_3.setText(_translate("mainwindow", ""))
         self.label_model_6.setText(_translate("mainwindow", ""))
+        self.label_model_5.setText(_translate("mainwindow", ""))
+        self.label_for_model_4.setText(_translate("mainwindow", ""))
+        self.label_model_2.setText(_translate("mainwindow", ""))
         self.menu.setTitle(_translate("mainwindow", "Файл"))
         self.menu_2.setTitle(_translate("mainwindow", "Обработка"))
         self.action_add_graph.setText(_translate("mainwindow", "Добавить график"))
