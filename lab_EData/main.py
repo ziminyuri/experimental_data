@@ -2,7 +2,7 @@ from tkinter import *
 
 from PyQt5 import QtWidgets
 
-from forms.py_forms.mainwindow2 import Ui_mainwindow
+from forms.py_forms.mainwindow import Ui_mainwindow
 from MainWindow import MainWindow
 
 

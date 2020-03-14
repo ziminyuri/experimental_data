@@ -13,7 +13,13 @@ class MyImage:
         self.main_window = main_window.main_window
         self.path = None
         self.image = None
-        self.place_to_show = main_window.label_model_1
+
+        self.place_to_show_1 = main_window.label_model_1
+        self.place_to_show_2 = main_window.label_model_2
+        self.place_to_show_3 = main_window.label_model_3
+        self.place_to_show_4 = main_window.label_model_4
+        self.place_to_show_5 = main_window.label_model_5
+        self.place_to_show_6 = main_window.label_model_6
 
         self.bar_chart_y = np.zeros(255)
         self.bar_chart_x = np.arange(0, 255)
@@ -26,7 +32,7 @@ class MyImage:
                                                              "Open Image", ".", "Image Files (*.png *.jpg *.bmp)")
         if self.path:
             self.image = QPixmap(self.path)
-            self.place_to_show.setPixmap(self.image)
+            self.place_to_show_1.setPixmap(self.image)
 
     @staticmethod
     def negative(red: int, green: int, blue: int):
@@ -76,9 +82,27 @@ class MyImage:
 
         return red, green, blue
 
-    def update(self) -> None:
+    def update(self, place_to_show: int = 1) -> None:
         self.image = QPixmap("temp.jpg")
-        self.place_to_show.setPixmap(self.image)
+
+        if place_to_show == 1:
+            self.place_to_show_1.setPixmap(self.image)
+
+        elif place_to_show == 2:
+            self.place_to_show_2.setPixmap(self.image)
+
+        elif place_to_show == 3:
+            self.place_to_show_3.setPixmap(self.image)
+
+        elif place_to_show == 4:
+            self.place_to_show_4.setPixmap(self.image)
+
+        elif place_to_show == 5:
+            self.place_to_show_5.setPixmap(self.image)
+
+        elif place_to_show == 6:
+            self.place_to_show_6.setPixmap(self.image)
+
 
     def image_processing(self, type_processing: str) -> None:
         self.image.save("temp.jpg")
@@ -104,7 +128,7 @@ class MyImage:
                     red, green, blue = self.logarithmic(r, g, b)
 
                 elif type_processing == "cdf":
-                    red, green, blue = self.cdf(r, g, b, i, j)
+                    red, green, blue = self.cdf(r, g, b)
 
                 else:
                     red = 0

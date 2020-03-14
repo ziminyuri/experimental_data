@@ -12,6 +12,8 @@ class image_processing_window(object):
         self.main_window = main_window
         self.graphWidget = graphWidget
 
+        self.is_image = False
+
         self.centralwidget = QtWidgets.QWidget(self.processing_image_window)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -77,7 +79,7 @@ class image_processing_window(object):
 
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItems(["1", "2", "3", "4"])
+        self.comboBox.addItems(["1", "2", "3", "4", "5", "6"])
         self.comboBox.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.comboBox, 12, 0, 1, 1)
 
@@ -129,6 +131,10 @@ class image_processing_window(object):
         self.line_5.setObjectName("line_5")
         self.gridLayout.addWidget(self.line_5, 2, 2, 1, 2)
 
+        self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_2.setObjectName("checkBox_2")
+        self.gridLayout.addWidget(self.checkBox_2, 15, 3, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.processing_image_window)
@@ -150,18 +156,22 @@ class image_processing_window(object):
         self.radioButton_3.setText(_translate("MainWindow", "Негатив"))
         self.radioButton_2.setText(_translate("MainWindow", "Билинейное"))
         self.label.setText(_translate("MainWindow", "Сглаживание"))
-        self.label_3.setText(_translate("MainWindow", "Позиция вывода графика"))
+        self.label_3.setText(_translate("MainWindow", "Позиция вывода после обработки"))
         self.radioButton_6.setText(_translate("MainWindow", "Гистограмма"))
         self.radioButton_7.setText(_translate("MainWindow", "Кумулятивная функция распределения"))
         self.checkBox.setText(_translate("MainWindow", "Нормализовать"))
+        self.checkBox_2.setText(_translate("MainWindow", "Показать обработанное изображение"))
 
     def processing(self) -> None:
+
+        place_to_show: int = int(self.comboBox.currentText())
 
         # Ближайший сосед
         if self.radioButton.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
                 self.image.smoothing("nearest", smoothing_factor)
+                self.is_image = True
 
             except:
                 pass
@@ -171,6 +181,7 @@ class image_processing_window(object):
             try:
                 smoothing_factor = float(self.lineEdit.text())
                 self.image.smoothing("bilinear", smoothing_factor)
+                self.is_image = True
 
             except:
                 pass
@@ -178,14 +189,17 @@ class image_processing_window(object):
         # Негатив
         elif self.radioButton_3.isChecked():
             self.image.image_processing("negative")
+            self.is_image = True
 
         # Гамма коррекция
         elif self.radioButton_4.isChecked():
             self.image.image_processing("gamma")
+            self.is_image = True
 
         # Логорифмическое
         elif self.radioButton_5.isChecked():
             self.image.image_processing("logarithmic")
+            self.is_image = True
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():
