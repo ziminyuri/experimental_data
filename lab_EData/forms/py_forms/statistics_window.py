@@ -132,7 +132,9 @@ class Ui_statistics(object):
         self.radioButton_2.setText(_translate("MainWindow", "Среднее значение"))
         self.radioButton_5.setText(_translate("MainWindow", "Стандартное отклонение"))
         self.label_3.setText(_translate("MainWindow", "delta t"))
-        self.radioButton_11.setText(_translate("MainWindow", "Среднее абсолютное отклонение"))
+        self.radioButton_11.setText(
+            _translate("MainWindow", "Среднее абсолютное отклонение")
+        )
         self.radioButton.setText(_translate("MainWindow", "Стационарность: СЗ"))
         self.pushButton_5.setText(_translate("MainWindow", "Преобразование Фурье"))
         self.radioButton_3.setText(_translate("MainWindow", "Дисперссия"))
@@ -142,7 +144,9 @@ class Ui_statistics(object):
         self.radioButton_7.setText(_translate("MainWindow", "Коэфициент асимметрии"))
         self.radioButton_4.setText(_translate("MainWindow", "Дисперсия х10"))
         self.pushButton_2.setText(_translate("MainWindow", "Гистограмма"))
-        self.pushButton_7.setText(_translate("MainWindow", "Быстрое преобразование Фурье"))
+        self.pushButton_7.setText(
+            _translate("MainWindow", "Быстрое преобразование Фурье")
+        )
         self.label_2.setText(_translate("MainWindow", "Место для вывода анализа"))
         self.radioButton_6.setText(_translate("MainWindow", "Асимметрия"))
         self.pushButton_9.setText(_translate("MainWindow", "Антисдвиг"))
@@ -151,4 +155,3 @@ class Ui_statistics(object):
         self.pushButton_12.setText(_translate("MainWindow", "Антитренд + антиспайк"))
         self.pushButton.setText(_translate("MainWindow", "Вычислить"))
         self.pushButton_8.setText(_translate("MainWindow", "Закрыть"))
-

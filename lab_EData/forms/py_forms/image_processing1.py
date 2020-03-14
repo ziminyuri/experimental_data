@@ -3,14 +3,16 @@ from Image import MyImage as Image
 
 
 class image_processing_window(object):
-    def __init__(self,  main_window: object, graphWidget):
+    def __init__(self, main_window: object, graphWidget):
         self.image = main_window.image
         self.processing_image_window = main_window.processing_image_window
         self.processing_image_window.setObjectName("MainWindow")
-        self.processing_image_window.resize(828, 478)
+        self.processing_image_window.resize(804, 441)
         self.processing_image_window.setStyleSheet("background-color: #263238")
         self.main_window = main_window
         self.graphWidget = graphWidget
+
+        self.is_image = False
 
         self.centralwidget = QtWidgets.QWidget(self.processing_image_window)
         self.centralwidget.setObjectName("centralwidget")
@@ -34,9 +36,8 @@ class image_processing_window(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.processing)
-        self.pushButton.setStyleSheet("color: #EEEEEE;"
-                                      "background-color: #546E7A;")
-        self.gridLayout.addWidget(self.pushButton, 14, 2, 1, 1)
+        self.pushButton.setStyleSheet("color: #EEEEEE; background-color: #546E7A;")
+        self.gridLayout.addWidget(self.pushButton, 22, 2, 1, 1)
 
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
@@ -62,7 +63,14 @@ class image_processing_window(object):
 
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit.setStyleSheet("background-color: #546E7A")
         self.gridLayout.addWidget(self.lineEdit, 4, 0, 1, 1)
+
+        self.line_6 = QtWidgets.QFrame(self.centralwidget)
+        self.line_6.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_6.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_6.setObjectName("line_6")
+        self.gridLayout.addWidget(self.line_6, 14, 1, 4, 1)
 
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
@@ -77,9 +85,20 @@ class image_processing_window(object):
 
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItems(["1", "2", "3", "4"])
-        self.comboBox.setStyleSheet("color: #EEEEEE")
-        self.gridLayout.addWidget(self.comboBox, 12, 0, 1, 1)
+        self.comboBox.addItems(["1", "2", "3", "4", "5", "6"])
+        self.comboBox.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
+        self.gridLayout.addWidget(self.comboBox, 16, 2, 1, 1)
+
+        self.comboBox_3 = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_3.setObjectName("comboBox_3")
+        self.comboBox_3.addItems(["1", "2", "3", "4", "5", "6"])
+        self.comboBox_3.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
+        self.gridLayout.addWidget(self.comboBox_3, 16, 4, 1, 1)
+
+        self.checkBox_3 = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_3.setObjectName("checkBox_3")
+        self.checkBox_3.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox_3, 14, 4, 1, 1)
 
         self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton.setObjectName("radioButton")
@@ -89,14 +108,13 @@ class image_processing_window(object):
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.close_window)
-        self.pushButton_2.setStyleSheet("color: #EEEEEE; "
-                                        "background-color: #546E7A")
-        self.gridLayout.addWidget(self.pushButton_2, 14, 3, 1, 1)
+        self.pushButton_2.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
+        self.gridLayout.addWidget(self.pushButton_2, 22, 4, 1, 1)
 
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox.setObjectName("checkBox")
         self.checkBox.setStyleSheet("color: #EEEEEE")
-        self.gridLayout.addWidget(self.checkBox, 11, 2, 1, 2)
+        self.gridLayout.addWidget(self.checkBox, 17, 4, 1, 1)
 
         self.radioButton_4 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_4.setObjectName("radioButton_4")
@@ -118,6 +136,21 @@ class image_processing_window(object):
         self.radioButton_2.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.radioButton_2, 2, 0, 1, 1)
 
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setObjectName("label_4")
+        self.label_4.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.label_4, 14, 0, 1, 1)
+
+        self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.setStyleSheet("background-color: #546E7A")
+        self.gridLayout.addWidget(self.comboBox_2, 15, 0, 1, 1)
+
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setObjectName("label_3")
+        self.label_3.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.label_3, 15, 2, 1, 1)
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setObjectName("label_2")
         self.label_2.setStyleSheet("color: #EEEEEE")
@@ -128,6 +161,17 @@ class image_processing_window(object):
         self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_5.setObjectName("line_5")
         self.gridLayout.addWidget(self.line_5, 2, 2, 1, 2)
+
+        self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_2.setObjectName("checkBox_2")
+        self.checkBox_2.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox_2, 14, 2, 1, 1)
+
+        self.line_7 = QtWidgets.QFrame(self.centralwidget)
+        self.line_7.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_7.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_7.setObjectName("line_7")
+        self.gridLayout.addWidget(self.line_7, 14, 3, 4, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
@@ -149,19 +193,29 @@ class image_processing_window(object):
         self.pushButton_2.setText(_translate("MainWindow", "Закрыть"))
         self.radioButton_3.setText(_translate("MainWindow", "Негатив"))
         self.radioButton_2.setText(_translate("MainWindow", "Билинейное"))
+        self.label_4.setText(_translate("MainWindow", "Данные для обработки"))
         self.label.setText(_translate("MainWindow", "Сглаживание"))
-        self.label_3.setText(_translate("MainWindow", "Позиция вывода графика"))
+        self.label_3.setText(_translate("MainWindow", "Позиция вывода после обработки"))
         self.radioButton_6.setText(_translate("MainWindow", "Гистограмма"))
-        self.radioButton_7.setText(_translate("MainWindow", "Кумулятивная функция распределения"))
+        self.radioButton_7.setText(
+            _translate("MainWindow", "Кумулятивная функция распределения")
+        )
         self.checkBox.setText(_translate("MainWindow", "Нормализовать"))
+        self.checkBox_2.setText(
+            _translate("MainWindow", "Показать обработанное изображение")
+        )
+        self.checkBox_3.setText(_translate("MainWindow", "Показать график"))
 
     def processing(self) -> None:
+
+        place_to_show: int = int(self.comboBox.currentText())
 
         # Ближайший сосед
         if self.radioButton.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
                 self.image.smoothing("nearest", smoothing_factor)
+                self.is_image = True
 
             except:
                 pass
@@ -171,6 +225,7 @@ class image_processing_window(object):
             try:
                 smoothing_factor = float(self.lineEdit.text())
                 self.image.smoothing("bilinear", smoothing_factor)
+                self.is_image = True
 
             except:
                 pass
@@ -178,14 +233,17 @@ class image_processing_window(object):
         # Негатив
         elif self.radioButton_3.isChecked():
             self.image.image_processing("negative")
+            self.is_image = True
 
         # Гамма коррекция
         elif self.radioButton_4.isChecked():
             self.image.image_processing("gamma")
+            self.is_image = True
 
         # Логорифмическое
         elif self.radioButton_5.isChecked():
             self.image.image_processing("logarithmic")
+            self.is_image = True
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():

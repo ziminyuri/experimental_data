@@ -77,13 +77,32 @@ class Ui_add_graph(object):
         self.gridLayout.addWidget(self.label_3, 6, 1, 1, 1)
         self.comboBox_2 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.addItems(["y(x)=kx+b", "y(x)=-kx+b", "y(x) = beta * exp^(alpha * i)",
-                                "y(x) = beta * exp^(alpha * -i)", "Встроенный рандом", "Кастомный рандом",
-                                "Значения за областью", "Адитивная модель №1", "Адитивная модель №2",
-                                "Мультипликативная модель №1", "Мультипликативная модель №2", "Кусочная функция",
-                                "Гармоническое процесс", "Полигармоническое процесс", "Рандом + сдвиг",
-                                "Рандом + спайки", "ГП + trend", "ГП + спайки", "ГП + спайки + рандом + trend",
-                                "Загрузить из файла", "ГП + exp", "Экзамен"])
+        self.comboBox_2.addItems(
+            [
+                "y(x)=kx+b",
+                "y(x)=-kx+b",
+                "y(x) = beta * exp^(alpha * i)",
+                "y(x) = beta * exp^(alpha * -i)",
+                "Встроенный рандом",
+                "Кастомный рандом",
+                "Значения за областью",
+                "Адитивная модель №1",
+                "Адитивная модель №2",
+                "Мультипликативная модель №1",
+                "Мультипликативная модель №2",
+                "Кусочная функция",
+                "Гармоническое процесс",
+                "Полигармоническое процесс",
+                "Рандом + сдвиг",
+                "Рандом + спайки",
+                "ГП + trend",
+                "ГП + спайки",
+                "ГП + спайки + рандом + trend",
+                "Загрузить из файла",
+                "ГП + exp",
+                "Экзамен",
+            ]
+        )
         self.gridLayout.addWidget(self.comboBox_2, 3, 1, 1, 1)
         self.lineEdit_5 = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lineEdit_5.setObjectName("lineEdit_5")

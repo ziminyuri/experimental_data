@@ -2,7 +2,7 @@ from tkinter import *
 
 from PyQt5 import QtWidgets
 
-from forms.py_forms.mainwindow2 import Ui_mainwindow
+from forms.py_forms.mainwindow import Ui_mainwindow
 from MainWindow import MainWindow
 
 
@@ -11,7 +11,7 @@ def main():
     app = MainWindow(root)
     app.pack()
     root.title("Лабораторная №1 / Методы обработки эксперементальных данных")
-    root.geometry('1400x820')
+    root.geometry("1400x820")
     root.resizable(False, False)
     root.mainloop()
 
@@ -24,6 +24,6 @@ def pyqt5():
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
-    #main()
+if __name__ == "__main__":
+    # main()
     pyqt5()

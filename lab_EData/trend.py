@@ -18,13 +18,15 @@ class Trend:
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
 
         self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
-        self.argument = 0       # Константа на сколько поднять/опустить точки на аномальном участке
+        self.argument = (
+            0  # Константа на сколько поднять/опустить точки на аномальном участке
+        )
 
         # Гармоничекое процесс
         self.a_0 = 100  # А0
-        self.f_0 = 11   # 11; 110; 250; 510
+        self.f_0 = 11  # 11; 110; 250; 510
         self.delta_t = 0.001
-        self.c = 0      # Константа
+        self.c = 0  # Константа
 
         self.piecewise_function = int(self.n / 3)
 
@@ -57,7 +59,6 @@ class Trend:
             self.y[i] = max
             i += gap
 
-
     # Гененрируем кастомный рандом
     def generating_custom_random(self):
         temp_y = []
@@ -74,7 +75,7 @@ class Trend:
                 new_value_for_even = new_value_for_even % 2
 
                 if new_value_for_even == 1:
-                    new_value = - new_value
+                    new_value = -new_value
 
                 temp_y.append(new_value)
 
@@ -147,7 +148,7 @@ class Trend:
 
         y_list = []
         while data:
-            temp_tuple = struct.unpack('<f', data)
+            temp_tuple = struct.unpack("<f", data)
             temp_value = temp_tuple[0]
             y_list.append(temp_value)
             data = f.read(4)
@@ -164,7 +165,7 @@ class Trend:
 
         y_list = []
         while data:
-            temp_tuple = struct.unpack('<f', data)
+            temp_tuple = struct.unpack("<f", data)
             temp_value = temp_tuple[0]
             y_list.append(temp_value)
             data = f.read(4)
@@ -188,7 +189,6 @@ class Trend:
         m = 32
         self.dt = 0.001
         fc = 60
-
 
         hpf = high_potter_filter(m, self.dt, fc)
 
