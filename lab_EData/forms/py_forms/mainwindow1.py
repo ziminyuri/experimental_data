@@ -121,7 +121,9 @@ class Ui_mainwindow(object):
         self.menu_2.setTitle(_translate("mainwindow", "Обработка"))
         self.action_add_graph.setText(_translate("mainwindow", "Добавить график"))
         self.action_open_image.setText(_translate("mainwindow", "Открыть изображение"))
-        self.action_open_sound.setText(_translate("mainwindow", "Открыть звуковой файл"))
+        self.action_open_sound.setText(
+            _translate("mainwindow", "Открыть звуковой файл")
+        )
         self.action_close.setText(_translate("mainwindow", "Выход"))
         self.action_statistics.setText(_translate("mainwindow", "Статистики"))
         self.action_filter.setText(_translate("mainwindow", "Фильтр"))
@@ -131,6 +133,7 @@ class Ui_mainwindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     mainwindow = QtWidgets.QMainWindow()
     ui = Ui_mainwindow()

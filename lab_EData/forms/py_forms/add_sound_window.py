@@ -68,4 +68,3 @@ class Ui_add_sound(object):
         self.label_3.setText(_translate("MainWindow", "Константа"))
         self.pushButton.setText(_translate("MainWindow", "Выполнить"))
         self.pushButton_2.setText(_translate("MainWindow", "Закрыть"))
-

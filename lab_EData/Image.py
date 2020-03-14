@@ -28,8 +28,9 @@ class MyImage:
         self.cdf_y = np.zeros(255)
 
     def open(self) -> None:
-        self.path, _ = QtWidgets.QFileDialog.getOpenFileName(self.main_window,
-                                                             "Open Image", ".", "Image Files (*.png *.jpg *.bmp)")
+        self.path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self.main_window, "Open Image", ".", "Image Files (*.png *.jpg *.bmp)"
+        )
         if self.path:
             self.image = QPixmap(self.path)
             self.place_to_show_1.setPixmap(self.image)
@@ -103,7 +104,6 @@ class MyImage:
         elif place_to_show == 6:
             self.place_to_show_6.setPixmap(self.image)
 
-
     def image_processing(self, type_processing: str) -> None:
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
@@ -158,11 +158,13 @@ class MyImage:
                 self.bar_chart_y[pixel_value] = bar_chart_y_value
 
         if plot:
-            pen = pg.mkPen(color='#AB47BC', width=5)
+            pen = pg.mkPen(color="#AB47BC", width=5)
             graphWidget.plot(self.bar_chart_x, self.bar_chart_y, pen=pen)
 
     # Кумулятивная функция распределения
-    def cdf_function(self, graphWidget, plot: bool = True, normalisation: bool = False) -> None:
+    def cdf_function(
+        self, graphWidget, plot: bool = True, normalisation: bool = False
+    ) -> None:
         self.bar_chart(graphWidget, False)
 
         self.cdf_y[0] = self.bar_chart_y[0]
@@ -171,7 +173,7 @@ class MyImage:
 
         if normalisation is False:
             if plot:
-                pen = pg.mkPen(color='#AB47BC', width=5)
+                pen = pg.mkPen(color="#AB47BC", width=5)
                 graphWidget.plot(self.cdf_x, self.cdf_y, pen=pen)
 
         else:
@@ -180,5 +182,5 @@ class MyImage:
                 self.cdf_y[i] = int(self.cdf_y[i] / cdf_max * 255)
 
             if plot:
-                pen = pg.mkPen(color='#AB47BC', width=5)
+                pen = pg.mkPen(color="#AB47BC", width=5)
                 graphWidget.plot(self.cdf_x, self.cdf_y, pen=pen)

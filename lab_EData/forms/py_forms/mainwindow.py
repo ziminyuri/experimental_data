@@ -60,7 +60,7 @@ class Ui_mainwindow(object):
 
         self.graphWidget = pg.PlotWidget()
         self.graphWidget.hide()
-        self.graphWidget.setBackground('#37474F')
+        self.graphWidget.setBackground("#37474F")
         self.gridLayout.addWidget(self.graphWidget, 1, 1, 1, 1)
 
         self.label_model_6 = QtWidgets.QLabel(self.centralwidget)
@@ -118,7 +118,9 @@ class Ui_mainwindow(object):
 
         self.action_processing_image = QtWidgets.QAction(self.main_window)
         self.action_processing_image.setObjectName("action_processing_image")
-        self.action_processing_image.triggered.connect(self.open_processing_image_window)
+        self.action_processing_image.triggered.connect(
+            self.open_processing_image_window
+        )
 
         self.menu.addAction(self.action_add_graph)
         self.menu.addAction(self.action_open_image)
@@ -174,10 +176,11 @@ class Ui_mainwindow(object):
         self.processing_image_ui = image_processing_window(self, self.graphWidget)
         self.processing_image_window.show()
 
-
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.main_window.setWindowTitle(_translate("mainwindow", "Обработка и анализ данных"))
+        self.main_window.setWindowTitle(
+            _translate("mainwindow", "Обработка и анализ данных")
+        )
 
         self.label_for_model_1.setText(_translate("mainwindow", ""))
         self.label_for_model_2.setText(_translate("mainwindow", ""))
@@ -193,13 +196,13 @@ class Ui_mainwindow(object):
         self.label_model_5.setText(_translate("mainwindow", ""))
         self.label_model_6.setText(_translate("mainwindow", ""))
 
-
-
         self.menu.setTitle(_translate("mainwindow", "Файл"))
         self.menu_2.setTitle(_translate("mainwindow", "Обработка"))
         self.action_add_graph.setText(_translate("mainwindow", "Добавить график"))
         self.action_open_image.setText(_translate("mainwindow", "Открыть изображение"))
-        self.action_open_sound.setText(_translate("mainwindow", "Открыть звуковой файл"))
+        self.action_open_sound.setText(
+            _translate("mainwindow", "Открыть звуковой файл")
+        )
         self.action_close.setText(_translate("mainwindow", "Выход"))
         self.action_statistics.setText(_translate("mainwindow", "Статистики"))
         self.action_filter.setText(_translate("mainwindow", "Фильтр"))

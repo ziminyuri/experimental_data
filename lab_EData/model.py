@@ -50,24 +50,28 @@ class Model:
     def __init__(self, option):
         self.n = 1000  # Количество точек по оси Х
         self.display_n = self.n
-        self.flag_checking_display_n = 0    # Флаг использования dislpay_n при отрисовки графика
+        self.flag_checking_display_n = (
+            0  # Флаг использования dislpay_n при отрисовки графика
+        )
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
-        self.flag_checking_display_x = 0 # Флаг использования половины self.x
+        self.flag_checking_display_x = 0  # Флаг использования половины self.x
 
         self.option = option  # Тип функции
-        self.graph = 0        # Номер места где расположен график
+        self.graph = 0  # Номер места где расположен график
         self.flag_normalisation = 1  # Флаг, что необходима нормализация
 
         self.s_max = 100  # Максимальное значение функции
-        self.s_min = - self.s_max  # Минимальное значение ф-ии
+        self.s_min = -self.s_max  # Минимальное значение ф-ии
 
         self.axis_max = 100
         self.axis_min = -100
 
         self.axis_y_delta = 10  # Небходимо для самого графика, например:у_min= -(delta+ self.axisy_graph_max)
-        self.argument = 0  # Константа на сколько поднять/опустить точки на аномальном участке
+        self.argument = (
+            0  # Константа на сколько поднять/опустить точки на аномальном участке
+        )
 
         # Гармоничекое процесс
         self.c = 0  # Константа
@@ -92,7 +96,7 @@ class Model:
         x_min = np.amin(self.y)
         c = x_max - x_min
 
-        self.y = ((((self.y - x_min) / c) - 0.5) * 2 * self.s_max)
+        self.y = (((self.y - x_min) / c) - 0.5) * 2 * self.s_max
 
     def shift(self, trend):
         trend.y = trend.y + self.argument
@@ -377,7 +381,7 @@ class Model:
             self.y = trend.y
             self.x = trend.x
             self.s_max = 100
-            self.s_min = - self.s_max
+            self.s_min = -self.s_max
 
         # Реализация фильтров
         # Низких частот
@@ -479,13 +483,11 @@ class Model:
 
             print(self.y)
             self.s_max = 100
-            self.s_min = - self.s_max
-
-
+            self.s_min = -self.s_max
 
     # Метод получения модели после фильтрации
     def filtration(self, model_for_filtration, choice_filter):
-        trend_filter = Trend() #Тренд фильтра
+        trend_filter = Trend()  # Тренд фильтра
 
         # Фильтр низких частот
         if choice_filter == 1:

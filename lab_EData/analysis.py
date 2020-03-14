@@ -12,14 +12,15 @@ from model import Model
 def spectral_division(analysis_model_1, analysis_model_2):
     pass
 
+
 class Analysis:
     def __init__(self, model):
 
         self.model = model  # Модель, которую анализиурем
 
-        self.all_average_value = []     # Все средние значения
-        self.average_value = 0          # Среднее значения тренда
-        self.dispersion = 0    # Дисперсия
+        self.all_average_value = []  # Все средние значения
+        self.average_value = 0  # Среднее значения тренда
+        self.dispersion = 0  # Дисперсия
         self.standard_deviation = 0  # Стандартное отклонение
         self.asymmetry = 0  # Асимметрия
         self.asymmetry_coefficient = 0  # Коэффициент асимметрии
@@ -68,7 +69,10 @@ class Analysis:
         flag_stationarity = True
         for i in range(self.all_average_value.__len__() - 1):
 
-            if math.fabs(self.all_average_value[i] - self.all_average_value[i + 1]) > delta_min_max:
+            if (
+                math.fabs(self.all_average_value[i] - self.all_average_value[i + 1])
+                > delta_min_max
+            ):
                 flag_stationarity = False
 
         return flag_stationarity
@@ -92,7 +96,9 @@ class Analysis:
 
         dispersion = 0
         for i in range(self.model.n):
-            dispersion += (trend_list[i] - average_value) * (trend_list[i] - average_value)
+            dispersion += (trend_list[i] - average_value) * (
+                trend_list[i] - average_value
+            )
 
         self.dispersion = dispersion / self.model.n
 
@@ -117,7 +123,7 @@ class Analysis:
         sum_of_values = 0
 
         for i in range(self.model.n):
-            temp_value = (self.model.y[i] - self.average_value)
+            temp_value = self.model.y[i] - self.average_value
             temp_value = temp_value * temp_value * temp_value
             sum_of_values = sum_of_values + temp_value
 
@@ -134,7 +140,9 @@ class Analysis:
         if self.asymmetry == 0:
             self.calculation_asymmetry()
 
-        sigma3 = self.standard_deviation * self.standard_deviation * self.standard_deviation
+        sigma3 = (
+            self.standard_deviation * self.standard_deviation * self.standard_deviation
+        )
         self.asymmetry_coefficient = self.asymmetry / sigma3
 
         return self.asymmetry_coefficient
@@ -148,7 +156,7 @@ class Analysis:
         sum_of_values = 0
 
         for i in range(self.model.n):
-            temp_value = (self.model.y[i] - self.average_value)
+            temp_value = self.model.y[i] - self.average_value
             temp_value = temp_value ** 4  # Возведение в степень 4
             sum_of_values = sum_of_values + temp_value
 
@@ -201,7 +209,9 @@ class Analysis:
         sum_of_values = 0
 
         for i in range(self.model.n):
-            sum_of_values = sum_of_values + math.fabs(self.model.y[i] - self.average_value)
+            sum_of_values = sum_of_values + math.fabs(
+                self.model.y[i] - self.average_value
+            )
 
         mean_absolute_deviation = sum_of_values / self.model.n
 
@@ -277,11 +287,11 @@ class Analysis:
         sum_2 = 0
 
         for j in range(analysis_model_n - 1):
-            temp_value_1 = (y_list_1[j] - average_value1)
+            temp_value_1 = y_list_1[j] - average_value1
             temp_value_1 = temp_value_1 ** 2
             sum_1 = sum_1 + temp_value_1
 
-            temp_value_2 = (y_list_2[j] - average_value2)
+            temp_value_2 = y_list_2[j] - average_value2
             temp_value_2 = temp_value_2 ** 2
             sum_2 = sum_2 + temp_value_2
 
@@ -293,7 +303,9 @@ class Analysis:
             numerator = 0
 
             for j in range(analysis_model_n - i - 1):
-                temp_value = (y_list_1[j] - average_value1) * (y_list_2[j + i] - average_value2)
+                temp_value = (y_list_1[j] - average_value1) * (
+                    y_list_2[j + i] - average_value2
+                )
                 numerator = numerator + temp_value
 
             result_y = numerator / denominator
@@ -321,8 +333,8 @@ class Analysis:
         y = []
 
         # Создаем списки для операции деконволюции
-        self.spectrum_real_part_list = []         # Список с действительной частью
-        self.spectrum_imaginary_part_list = []    # Список с мнимой частью
+        self.spectrum_real_part_list = []  # Список с действительной частью
+        self.spectrum_imaginary_part_list = []  # Список с мнимой частью
 
         rem = 0
         imm = 0
@@ -384,8 +396,8 @@ class Analysis:
         spectrum = rfft(self.model.y)
 
         n = self.model.n
-        new_model.x = rfftfreq(n, 1./self.model.rate)
-        new_model.y = np.abs(spectrum/n)
+        new_model.x = rfftfreq(n, 1.0 / self.model.rate)
+        new_model.y = np.abs(spectrum / n)
 
         return new_model
 
@@ -417,8 +429,12 @@ class Analysis:
             imaginary_part = 0
 
             for j in range(number_of_points):
-                real_part += self.model.y[j] * math.cos(2 * math.pi * i * j / number_of_points)
-                imaginary_part += self.model.y[j] * math.sin(2 * math.pi * i * j / number_of_points)
+                real_part += self.model.y[j] * math.cos(
+                    2 * math.pi * i * j / number_of_points
+                )
+                imaginary_part += self.model.y[j] * math.sin(
+                    2 * math.pi * i * j / number_of_points
+                )
 
             real_part /= number_of_points
             imaginary_part /= number_of_points
@@ -433,7 +449,7 @@ class Analysis:
         new_model.x = np.array(result_x)
         new_model.y = np.array(result_y)
 
-        display_n = int( len(new_model.x) / 2)
+        display_n = int(len(new_model.x) / 2)
         new_model.display_x = new_model.x[:display_n]
         new_model.display_y = new_model.y[:display_n]
         new_model.flag_checking_display_x = 1
@@ -456,7 +472,7 @@ class Analysis:
         denominator = 0
         for j in range(analysis_model_n - 1):
             y_i = self.model.y[j]
-            temp_value = (y_i - self.average_value)
+            temp_value = y_i - self.average_value
             temp_value = temp_value ** 2
             denominator = denominator + temp_value
 
@@ -492,7 +508,9 @@ class Analysis:
 
         # Убираем 0 в начале графика который использовали для отображения
         for i in range(10):
-            rand_value = random.uniform(- self.model.s_without_spikes, self.model.s_without_spikes)
+            rand_value = random.uniform(
+                -self.model.s_without_spikes, self.model.s_without_spikes
+            )
             model.y[i] = rand_value + self.model.argument
 
         average_value = np.mean(model.y)
@@ -535,7 +553,7 @@ class Analysis:
         spike_max = self.model.s_without_spikes_max
 
         for i in range(analysis_model_n):
-            #yn = math.fabs(model.y[i])
+            # yn = math.fabs(model.y[i])
             yn = model.y[i]
             if yn < spike_min:
                 if i == 0:

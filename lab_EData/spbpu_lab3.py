@@ -16,8 +16,9 @@ bar_chart_y = np.zeros(255)
 
 def insertText() -> None:
     global file_name
-    file_name = fd.askopenfilename(filetypes=(("JPG files", "*.jpg"),
-                                              ("All files", "*.*")))
+    file_name = fd.askopenfilename(
+        filetypes=(("JPG files", "*.jpg"), ("All files", "*.*"))
+    )
     print(file_name)
     global p_img, path
     path = file_name
@@ -90,7 +91,7 @@ def image_processing(type_processing: str) -> None:
     width = p_img.size[0]
     height = p_img.size[1]
 
-    rgb_im = p_img.convert('RGB')
+    rgb_im = p_img.convert("RGB")
     pix = rgb_im.load()
 
     for i in range(width):
@@ -124,7 +125,7 @@ def bar_chart() -> None:
     global p_img
     width = p_img.size[0]
     height = p_img.size[1]
-    rgb_im = p_img.convert('RGB')
+    rgb_im = p_img.convert("RGB")
     pix = rgb_im.load()
 
     for i in range(width):
@@ -147,10 +148,11 @@ def histogram_equalization() -> None:
 
     histogram_equalization_y[0] = bar_chart_y[0]
     for i in range(1, len(bar_chart_y)):
-        histogram_equalization_y[i] = histogram_equalization_y[i-1] + bar_chart_y[i]
+        histogram_equalization_y[i] = histogram_equalization_y[i - 1] + bar_chart_y[i]
 
     plt.plot(histogram_equalization_x, histogram_equalization_y)
     plt.show()
+
 
 def smoothing() -> None:
     global p_img
@@ -177,33 +179,47 @@ def smoothing() -> None:
 
 root = tk.Tk()
 root.title("Графика / Лабораторная №7")
-root.geometry('1520x820')
+root.geometry("1520x820")
 canvas = Canvas(root, width=1300, height=700)
 canvas.pack(side=LEFT, padx=10, pady=10)
 
 b1 = Button(text="Открыть", command=insertText, width="23", height="2")
 b1.place(x=1010, y=11)
 
-b2 = Button(text="Негатив", command=lambda: image_processing("negative"), width="23", height="2")
+b2 = Button(
+    text="Негатив", command=lambda: image_processing("negative"), width="23", height="2"
+)
 b2.place(x=1010, y=100)
-b3 = Button(text="Гамма-коррекция", command=lambda: image_processing("gamma"), width="23", height="2")
+b3 = Button(
+    text="Гамма-коррекция",
+    command=lambda: image_processing("gamma"),
+    width="23",
+    height="2",
+)
 b3.place(x=1010, y=150)
-b5 = Button(text="Логарифмическая", command=lambda: image_processing("logarithmic"), width="23", height="2")
+b5 = Button(
+    text="Логарифмическая",
+    command=lambda: image_processing("logarithmic"),
+    width="23",
+    height="2",
+)
 b5.place(x=1010, y=200)
 
 b4 = Button(text="Гистограмма", command=lambda: bar_chart(), width="23", height="2")
 b4.place(x=1010, y=300)
 
-b6 = Button(text="Эквализация гистограммы", command=lambda: bar_chart(), width="23", height="2")
+b6 = Button(
+    text="Эквализация гистограммы", command=lambda: bar_chart(), width="23", height="2"
+)
 b6.place(x=1010, y=350)
 
-listbox2=Listbox(root, height=2, width=45, selectmode=SINGLE)
-list2=[u"Ближайший сосед",u"Билинейное"]
+listbox2 = Listbox(root, height=2, width=45, selectmode=SINGLE)
+list2 = [u"Ближайший сосед", u"Билинейное"]
 for i in list2:
-    listbox2.insert(END,i)
+    listbox2.insert(END, i)
 listbox2.place(x=1020, y=510)
 
-label_frame1 = LabelFrame(root, text='Коэфициент масштабирования')
+label_frame1 = LabelFrame(root, text="Коэфициент масштабирования")
 label_frame1.place(x=1180, y=550)
 input2 = Entry(label_frame1, width=25)
 input2.pack()

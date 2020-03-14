@@ -50,7 +50,9 @@ class Ui_filter_window(object):
         self.gridLayout.addWidget(self.label_6, 2, 1, 1, 1)
         self.comboBox_3 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_3.setObjectName("comboBox_3")
-        self.comboBox_3.addItems(["Низких частот", "Высоких частот", "Полосовой", "Режекторный"])
+        self.comboBox_3.addItems(
+            ["Низких частот", "Высоких частот", "Полосовой", "Режекторный"]
+        )
         self.gridLayout.addWidget(self.comboBox_3, 3, 1, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton.setObjectName("pushButton")
@@ -85,4 +87,3 @@ class Ui_filter_window(object):
         self.pushButton.setText(_translate("MainWindow", "Добавить график фильтра"))
         self.pushButton_2.setText(_translate("MainWindow", "Выполнить фильтрацию"))
         self.pushButton_3.setText(_translate("MainWindow", "Закрыть"))
-

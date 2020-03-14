@@ -82,7 +82,7 @@ def bandpass_filter(m, dt, fc_1, fc_2):
 def notch_filter(m, dt, fc_1, fc_2):
     notch_filter_graph = []
 
-    if (fc_2 > fc_1):
+    if fc_2 > fc_1:
         low_potter_filter_1 = filter_potter(m, dt, fc_1)
         low_potter_filter_2 = filter_potter(m, dt, fc_2)
     else:
