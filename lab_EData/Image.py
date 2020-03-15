@@ -104,7 +104,7 @@ class MyImage:
         elif place_to_show == 6:
             self.place_to_show_6.setPixmap(self.image)
 
-    def image_processing(self, type_processing: str) -> None:
+    def image_processing(self, type_processing: str, show_image: bool = False, place_to_show_image: int = 1) -> None:
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
         pil_draw = ImageDraw.Draw(pil_img)
@@ -113,7 +113,6 @@ class MyImage:
         pix = pil_img.load()
         for i in range(width):
             for j in range(height):
-                print(pix[i, j])
                 r = pix[i, j][0]
                 g = pix[i, j][1]
                 b = pix[i, j][2]
@@ -138,7 +137,9 @@ class MyImage:
                 pil_draw.point((i, j), (red, green, blue))
 
         pil_img.save("temp.jpg")
-        self.update()
+
+        if show_image:
+            self.update(place_to_show_image)
 
     def bar_chart(self, graphWidget, plot: bool = True) -> None:
         self.bar_chart_y = np.zeros(255)

@@ -208,13 +208,14 @@ class image_processing_window(object):
 
     def processing(self) -> None:
 
-        place_to_show: int = int(self.comboBox.currentText())
+        place_to_show_image: int = int(self.comboBox.currentText())
+        show_image: bool = self.checkBox_2.isChecked()
 
         # Ближайший сосед
         if self.radioButton.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
-                self.image.smoothing("nearest", smoothing_factor)
+                self.image.smoothing("nearest", smoothing_factor, show_image, place_to_show_image)
                 self.is_image = True
 
             except:
@@ -224,7 +225,7 @@ class image_processing_window(object):
         elif self.radioButton_2.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
-                self.image.smoothing("bilinear", smoothing_factor)
+                self.image.smoothing("bilinear", smoothing_factor, show_image, place_to_show_image)
                 self.is_image = True
 
             except:
@@ -232,17 +233,17 @@ class image_processing_window(object):
 
         # Негатив
         elif self.radioButton_3.isChecked():
-            self.image.image_processing("negative")
+            self.image.image_processing("negative", show_image, place_to_show_image)
             self.is_image = True
 
         # Гамма коррекция
         elif self.radioButton_4.isChecked():
-            self.image.image_processing("gamma")
+            self.image.image_processing("gamma", show_image, place_to_show_image)
             self.is_image = True
 
         # Логорифмическое
         elif self.radioButton_5.isChecked():
-            self.image.image_processing("logarithmic")
+            self.image.image_processing("logarithmic", show_image, place_to_show_image)
             self.is_image = True
 
         # Гисторграмма
