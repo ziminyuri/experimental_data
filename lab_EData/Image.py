@@ -1,6 +1,5 @@
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 import pyqtgraph as pg
 
 from PIL import Image, ImageDraw
@@ -34,6 +33,50 @@ class MyImage:
         if self.path:
             self.image = QPixmap(self.path)
             self.place_to_show_1.setPixmap(self.image)
+
+    def update(self, place_to_show: int = 1) -> None:
+        self.image = QPixmap("temp.jpg")
+
+        if place_to_show == 1:
+            self.place_to_show_1.setPixmap(self.image)
+
+        elif place_to_show == 2:
+            self.place_to_show_2.setPixmap(self.image)
+
+        elif place_to_show == 3:
+            self.place_to_show_3.setPixmap(self.image)
+
+        elif place_to_show == 4:
+            self.place_to_show_4.setPixmap(self.image)
+
+        elif place_to_show == 5:
+            self.place_to_show_5.setPixmap(self.image)
+
+        elif place_to_show == 6:
+            self.place_to_show_6.setPixmap(self.image)
+
+    def smoothing(self, type_smoothing: str,  factor: float, show_image: bool = False, place_to_show_image: int = 1)\
+            -> None:
+        self.image.save("temp.jpg")
+        pil_img = Image.open("temp.jpg")
+        width = pil_img.size[0]
+        height = pil_img.size[1]
+
+        new_width = int(width * factor)
+        new_height = int(height * factor)
+
+        if type_smoothing == "nearest":
+            p = pil_img.resize((new_width, new_height), Image.NEAREST)
+            pil_img = p
+
+        elif type_smoothing == "bilinear":
+            p = pil_img.resize((new_width, new_height), Image.BILINEAR)
+            pil_img = p
+
+        pil_img.save("temp.jpg")
+
+        if show_image:
+            self.update(place_to_show_image)
 
     @staticmethod
     def negative(red: int, green: int, blue: int):
@@ -83,28 +126,7 @@ class MyImage:
 
         return red, green, blue
 
-    def update(self, place_to_show: int = 1) -> None:
-        self.image = QPixmap("temp.jpg")
-
-        if place_to_show == 1:
-            self.place_to_show_1.setPixmap(self.image)
-
-        elif place_to_show == 2:
-            self.place_to_show_2.setPixmap(self.image)
-
-        elif place_to_show == 3:
-            self.place_to_show_3.setPixmap(self.image)
-
-        elif place_to_show == 4:
-            self.place_to_show_4.setPixmap(self.image)
-
-        elif place_to_show == 5:
-            self.place_to_show_5.setPixmap(self.image)
-
-        elif place_to_show == 6:
-            self.place_to_show_6.setPixmap(self.image)
-
-    def image_processing(self, type_processing: str) -> None:
+    def image_processing(self, type_processing: str, show_image: bool = False, place_to_show_image: int = 1) -> None:
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
         pil_draw = ImageDraw.Draw(pil_img)
@@ -113,7 +135,6 @@ class MyImage:
         pix = pil_img.load()
         for i in range(width):
             for j in range(height):
-                print(pix[i, j])
                 r = pix[i, j][0]
                 g = pix[i, j][1]
                 b = pix[i, j][2]
@@ -138,7 +159,9 @@ class MyImage:
                 pil_draw.point((i, j), (red, green, blue))
 
         pil_img.save("temp.jpg")
-        self.update()
+
+        if show_image:
+            self.update(place_to_show_image)
 
     def bar_chart(self, graphWidget, plot: bool = True) -> None:
         self.bar_chart_y = np.zeros(255)
