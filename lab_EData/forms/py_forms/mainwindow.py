@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
@@ -7,7 +7,6 @@ from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from forms.py_forms.image_processing1 import image_processing_window
 from Image import MyImage
 import pyqtgraph as pg
-from model_1 import Model
 
 
 class Ui_mainwindow(object):
@@ -255,6 +254,8 @@ class Ui_mainwindow(object):
         self.add_graph_window.show()
 
     def open_image_window(self) -> None:
+        self.graphWidget_1.hide()
+        self.label_model_1.show()
         self.image.open()
 
     def open_add_sound_window(self) -> None:
@@ -280,27 +281,44 @@ class Ui_mainwindow(object):
         pen = pg.mkPen(color="#AB47BC", width=5)
 
         if place == 1:
-            self.graphWidget_1.plot(graph.x, graph.y, pen=pen)
+            self.graphWidget_1.clear()
+            self.graphWidget_1.addLegend()
+            self.graphWidget_1.plot(graph.x, graph.y, pen=pen, name=graph.option)
             self.label_model_1.hide()
             self.graphWidget_1.show()
+
         elif place == 2:
-            self.graphWidget_2.plot(graph.x, graph.y, pen=pen)
+            self.graphWidget_2.clear()
+            self.graphWidget_2.addLegend()
+            self.graphWidget_2.plot(graph.x, graph.y, pen=pen, name=graph.option)
             self.label_model_2.hide()
             self.graphWidget_2.show()
+
         elif place == 3:
-            self.graphWidget_3.plot(graph.x, graph.y, pen=pen)
+            self.graphWidget_3.clear()
+            self.graphWidget_3.addLegend()
+            self.graphWidget_3.plot(graph.x, graph.y, pen=pen, name=graph.option)
             self.label_model_3.hide()
             self.graphWidget_3.show()
+
         elif place == 4:
-            self.graphWidget_4.plot(graph.x, graph.y, pen=pen)
+            self.graphWidget_4.clear()
+            self.graphWidget_4.addLegend()
+            self.graphWidget_4.plot(graph.x, graph.y, pen=pen, name=graph.option)
             self.label_model_4.hide()
             self.graphWidget_4.show()
+
         elif place == 5:
-            self.graphWidget_5.plot(graph.x, graph.y, pen=pen)
+            self.graphWidget_5.clear()
+            self.graphWidget_5.addLegend()
+            self.graphWidget_5.plot(graph.x, graph.y, pen=pen, name=graph.option)
             self.label_model_5.hide()
             self.graphWidget_5.show()
+
         elif place == 6:
-            self.graphWidget_6.plot(graph.x, graph.y, pen=pen)
+            self.graphWidget_6.clear()
+            self.graphWidget_6.addLegend()
+            self.graphWidget_6.plot(graph.x, graph.y, pen=pen, name=graph.option)
             self.label_model_6.hide()
             self.graphWidget_6.show()
 
