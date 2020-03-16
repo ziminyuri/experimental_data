@@ -7,13 +7,14 @@ from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from forms.py_forms.image_processing1 import image_processing_window
 from Image import MyImage
 import pyqtgraph as pg
+from model_1 import Model
 
 
 class Ui_mainwindow(object):
     def __init__(self, main_window):
         self.main_window = main_window
         self.main_window.setObjectName("mainwindow")
-        self.main_window.resize(800, 600)
+        self.main_window.resize(1500, 900)
         self.main_window.setStyleSheet("background-color: #263238")
 
         self.centralwidget = QtWidgets.QWidget(self.main_window)
@@ -57,6 +58,12 @@ class Ui_mainwindow(object):
 
         self.label_model_1 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         self.label_model_1.setObjectName("label_model_1")
+
+        self.graphWidget_1 = pg.PlotWidget(self.scrollAreaWidgetContents)
+        self.graphWidget_1.hide()
+        self.graphWidget_1.setBackground("#37474F")
+        self.horizontalLayout.addWidget(self.graphWidget_1)
+
         self.horizontalLayout.addWidget(self.label_model_1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
@@ -71,7 +78,11 @@ class Ui_mainwindow(object):
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.label_model_4 = QtWidgets.QLabel(self.scrollAreaWidgetContents_6)
         self.label_model_4.setObjectName("label_model_4")
+        self.graphWidget_4 = pg.PlotWidget(self.scrollAreaWidgetContents)
+        self.graphWidget_4.hide()
+        self.graphWidget_4.setBackground("#37474F")
         self.gridLayout_6.addWidget(self.label_model_4, 0, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.graphWidget_4, 0, 0, 1, 1)
         self.scrollArea_5.setWidget(self.scrollAreaWidgetContents_6)
         self.gridLayout.addWidget(self.scrollArea_5, 3, 1, 1, 1)
 
@@ -88,16 +99,16 @@ class Ui_mainwindow(object):
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_3.setObjectName("gridLayout_3")
+
         self.label_model_3 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
         self.label_model_3.setObjectName("label_model_3")
+        self.graphWidget_3 = pg.PlotWidget(self.scrollAreaWidgetContents)
+        self.graphWidget_3.hide()
+        self.graphWidget_3.setBackground("#37474F")
+        self.gridLayout_3.addWidget(self.graphWidget_3, 0, 0, 1, 1)
         self.gridLayout_3.addWidget(self.label_model_3, 0, 0, 1, 1)
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
         self.gridLayout.addWidget(self.scrollArea_2, 1, 1, 1, 1)
-
-        self.graphWidget = pg.PlotWidget()
-        self.graphWidget.hide()
-        self.graphWidget.setBackground("#37474F")
-        self.gridLayout.addWidget(self.graphWidget, 1, 1, 1, 1)
 
         self.scrollArea_6 = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea_6.setWidgetResizable(True)
@@ -109,7 +120,11 @@ class Ui_mainwindow(object):
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.label_model_6 = QtWidgets.QLabel(self.scrollAreaWidgetContents_7)
         self.label_model_6.setObjectName("label_model_6")
+        self.graphWidget_6 = pg.PlotWidget(self.scrollAreaWidgetContents)
+        self.graphWidget_6.hide()
+        self.graphWidget_6.setBackground("#37474F")
         self.gridLayout_7.addWidget(self.label_model_6, 0, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.graphWidget_6, 0, 0, 1, 1)
         self.scrollArea_6.setWidget(self.scrollAreaWidgetContents_7)
         self.gridLayout.addWidget(self.scrollArea_6, 3, 2, 1, 1)
 
@@ -123,7 +138,11 @@ class Ui_mainwindow(object):
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.label_model_5 = QtWidgets.QLabel(self.scrollAreaWidgetContents_4)
         self.label_model_5.setObjectName("label_model_5")
+        self.graphWidget_5 = pg.PlotWidget(self.scrollAreaWidgetContents)
+        self.graphWidget_5.hide()
+        self.graphWidget_5.setBackground("#37474F")
         self.gridLayout_2.addWidget(self.label_model_5, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.graphWidget_5, 0, 0, 1, 1)
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_4)
         self.gridLayout.addWidget(self.scrollArea_3, 1, 2, 1, 1)
 
@@ -131,10 +150,10 @@ class Ui_mainwindow(object):
         self.label_for_model_4.setObjectName("label_for_model_4")
         self.label_for_model_4.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.label_for_model_4, 2, 1, 1, 1)
-
         self.scrollArea_4 = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollArea_4.setObjectName("scrollArea_4")
+
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 254, 236))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
@@ -142,7 +161,12 @@ class Ui_mainwindow(object):
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.label_model_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_5)
         self.label_model_2.setObjectName("label_model_2")
+
+        self.graphWidget_2 = pg.PlotWidget(self.scrollAreaWidgetContents_5)
+        self.graphWidget_2.hide()
+        self.graphWidget_2.setBackground("#37474F")
         self.gridLayout_5.addWidget(self.label_model_2, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.graphWidget_2, 0, 0, 1, 1)
         self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout.addWidget(self.scrollArea_4, 3, 0, 1, 1)
 
@@ -159,6 +183,27 @@ class Ui_mainwindow(object):
         self.statusbar = QtWidgets.QStatusBar(self.main_window)
         self.statusbar.setObjectName("statusbar")
         self.main_window.setStatusBar(self.statusbar)
+
+        self.image = MyImage(self)
+
+        # Инициализируем окна
+        self.add_graph_window = QtWidgets.QMainWindow()
+        self.add_graph_ui = Ui_add_graph(self)
+
+        self.add_sound_window = QtWidgets.QMainWindow()
+        self.add_sound_ui = Ui_add_sound()
+
+        self.statistics_window = QtWidgets.QMainWindow()
+        self.statistics_ui = Ui_statistics(self.statistics_window)
+
+        self.filter_window = QtWidgets.QMainWindow()
+        self.filter_ui = Ui_filter_window(self.filter_window)
+
+        self.deconvolution_window = QtWidgets.QMainWindow()
+        self.deconvolution_ui = Ui_deconvolution_window()
+
+        self.processing_image_window = QtWidgets.QMainWindow()
+        self.processing_image_ui = image_processing_window(self, self.graphWidget_1)
 
         self.action_add_graph = QtWidgets.QAction(self.main_window)
         self.action_add_graph.setObjectName("action_add_graph")
@@ -206,43 +251,58 @@ class Ui_mainwindow(object):
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
-    def open_add_graph_window(self):
-        self.add_graph_window = QtWidgets.QMainWindow()
-        self.add_graph_ui = Ui_add_graph(self.add_graph_window)
+    def open_add_graph_window(self) -> None:
         self.add_graph_window.show()
 
     def open_image_window(self) -> None:
-        self.image = MyImage(self)
         self.image.open()
 
-    def open_add_sound_window(self):
-        self.add_sound_window = QtWidgets.QMainWindow()
-        self.add_sound_ui = Ui_add_sound()
+    def open_add_sound_window(self) -> None:
         self.add_sound_ui.setupUi(self.add_sound_window)
         self.add_sound_window.show()
 
-    def open_statistics_window(self):
-        self.statistics_window = QtWidgets.QMainWindow()
-        self.statistics_ui = Ui_statistics()
+    def open_statistics_window(self) -> None:
         self.statistics_ui.setupUi(self.statistics_window)
         self.statistics_window.show()
 
-    def open_filter_window(self):
-        self.filter_window = QtWidgets.QMainWindow()
-        self.filter_ui = Ui_filter_window()
+    def open_filter_window(self) -> None:
         self.filter_ui.setupUi(self.filter_window)
         self.filter_window.show()
 
-    def open_deconvolution_window(self):
-        self.deconvolution_window = QtWidgets.QMainWindow()
-        self.deconvolution_ui = Ui_deconvolution_window()
+    def open_deconvolution_window(self) -> None:
         self.deconvolution_ui.setupUi(self.deconvolution_window)
         self.deconvolution_window.show()
 
-    def open_processing_image_window(self):
-        self.processing_image_window = QtWidgets.QMainWindow()
-        self.processing_image_ui = image_processing_window(self, self.graphWidget)
+    def open_processing_image_window(self) -> None:
         self.processing_image_window.show()
+
+    def show_graph(self, graph, place: int) -> None:
+        pen = pg.mkPen(color="#AB47BC", width=5)
+
+        if place == 1:
+            self.graphWidget_1.plot(graph.x, graph.y, pen=pen)
+            self.label_model_1.hide()
+            self.graphWidget_1.show()
+        elif place == 2:
+            self.graphWidget_2.plot(graph.x, graph.y, pen=pen)
+            self.label_model_2.hide()
+            self.graphWidget_2.show()
+        elif place == 3:
+            self.graphWidget_3.plot(graph.x, graph.y, pen=pen)
+            self.label_model_3.hide()
+            self.graphWidget_3.show()
+        elif place == 4:
+            self.graphWidget_4.plot(graph.x, graph.y, pen=pen)
+            self.label_model_4.hide()
+            self.graphWidget_4.show()
+        elif place == 5:
+            self.graphWidget_5.plot(graph.x, graph.y, pen=pen)
+            self.label_model_5.hide()
+            self.graphWidget_5.show()
+        elif place == 6:
+            self.graphWidget_6.plot(graph.x, graph.y, pen=pen)
+            self.label_model_6.hide()
+            self.graphWidget_6.show()
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate

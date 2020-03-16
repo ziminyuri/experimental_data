@@ -248,7 +248,8 @@ class image_processing_window(object):
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():
-            self.image.bar_chart(self.graphWidget)
+            show_plot: bool = self.checkBox_3.isChecked()
+            self.image.bar_chart(self.graphWidget, show_plot)
             self.graphWidget.show()
             self.close_window()
 
