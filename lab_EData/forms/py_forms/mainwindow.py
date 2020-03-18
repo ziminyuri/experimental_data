@@ -4,7 +4,7 @@ from forms.py_forms.add_sound_window import Ui_add_sound
 from forms.py_forms.statistics_window import Ui_statistics
 from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
-from forms.py_forms.image_processing1 import image_processing_window
+from forms.py_forms.image_processing import image_processing_window
 from Image import MyImage
 import pyqtgraph as pg
 

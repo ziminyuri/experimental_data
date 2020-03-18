@@ -6,6 +6,8 @@ from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 
+from model_1 import Model
+
 
 class MyImage:
     def __init__(self, main_window):
@@ -21,10 +23,10 @@ class MyImage:
         self.place_to_show_6 = main_window.label_model_6
 
         self.bar_chart_y = np.zeros(255)
-        self.bar_chart_x = np.arange(0, 255)
+        self.bar_chart_x = np.arange(0, 256)
 
         self.cdf_x = self.bar_chart_x.copy()
-        self.cdf_y = np.zeros(255)
+        self.cdf_y = np.zeros(256)
 
     def open(self) -> None:
         self.path, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -55,7 +57,7 @@ class MyImage:
         elif place_to_show == 6:
             self.place_to_show_6.setPixmap(self.image)
 
-    def smoothing(self, type_smoothing: str,  factor: float, show_image: bool = False, place_to_show_image: int = 1)\
+    def smoothing(self, type_smoothing: str, factor: float, show_image: bool = False, place_to_show_image: int = 1) \
             -> None:
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
@@ -163,8 +165,8 @@ class MyImage:
         if show_image:
             self.update(place_to_show_image)
 
-    def bar_chart(self, graphWidget, plot: bool = True) -> None:
-        self.bar_chart_y = np.zeros(255)
+    def bar_chart(self) -> object:
+        self.bar_chart_y = np.zeros(256)
         self.image.save("temp.jpg")
         pil_img = Image.open("temp.jpg")
         width = pil_img.size[0]
@@ -180,30 +182,27 @@ class MyImage:
                 bar_chart_y_value = self.bar_chart_y[pixel_value] + 1
                 self.bar_chart_y[pixel_value] = bar_chart_y_value
 
-        if plot:
-            pen = pg.mkPen(color="#AB47BC", width=5)
-            graphWidget.plot(self.bar_chart_x, self.bar_chart_y, pen=pen)
+        model = Model("Гистограма изображения")
+        model.y = self.bar_chart_y
+        model.x = self.bar_chart_x
+
+        return model
 
     # Кумулятивная функция распределения
-    def cdf_function(
-        self, graphWidget, plot: bool = True, normalisation: bool = False
-    ) -> None:
-        self.bar_chart(graphWidget, False)
+    def cdf_function(self, normalisation: bool = False) -> object:
+        self.bar_chart()
 
         self.cdf_y[0] = self.bar_chart_y[0]
         for i in range(1, self.bar_chart_x.size):
             self.cdf_y[i] = self.bar_chart_y[i] + self.cdf_y[i - 1]
 
-        if normalisation is False:
-            if plot:
-                pen = pg.mkPen(color="#AB47BC", width=5)
-                graphWidget.plot(self.cdf_x, self.cdf_y, pen=pen)
-
-        else:
+        if normalisation is True:
             cdf_max: int = np.amax(self.cdf_y)
             for i in range(0, self.cdf_x.size):
                 self.cdf_y[i] = int(self.cdf_y[i] / cdf_max * 255)
 
-            if plot:
-                pen = pg.mkPen(color="#AB47BC", width=5)
-                graphWidget.plot(self.cdf_x, self.cdf_y, pen=pen)
+        model = Model("Кумулятивная функция распределения")
+        model.y = self.cdf_y
+        model.x = self.cdf_x
+
+        return model

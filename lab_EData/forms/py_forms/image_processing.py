@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Image import MyImage as Image
+from model_1 import Model
 
 
 class image_processing_window(object):
@@ -89,16 +90,16 @@ class image_processing_window(object):
         self.comboBox.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
         self.gridLayout.addWidget(self.comboBox, 16, 2, 1, 1)
 
-        self.comboBox_3 = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox_3.setObjectName("comboBox_3")
-        self.comboBox_3.addItems(["1", "2", "3", "4", "5", "6"])
-        self.comboBox_3.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
-        self.gridLayout.addWidget(self.comboBox_3, 16, 4, 1, 1)
+        self.comboBox_place_to_show_plot = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_place_to_show_plot.setObjectName("comboBox_place_to_show_plot")
+        self.comboBox_place_to_show_plot.addItems(["1", "2", "3", "4", "5", "6"])
+        self.comboBox_place_to_show_plot.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
+        self.gridLayout.addWidget(self.comboBox_place_to_show_plot, 16, 4, 1, 1)
 
-        self.checkBox_3 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_3.setObjectName("checkBox_3")
-        self.checkBox_3.setStyleSheet("color: #EEEEEE")
-        self.gridLayout.addWidget(self.checkBox_3, 14, 4, 1, 1)
+        self.checkBox_show_plot = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_show_plot.setObjectName("checkBox_3")
+        self.checkBox_show_plot.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox_show_plot, 14, 4, 1, 1)
 
         self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton.setObjectName("radioButton")
@@ -111,10 +112,10 @@ class image_processing_window(object):
         self.pushButton_2.setStyleSheet("color: #EEEEEE; background-color: #546E7A")
         self.gridLayout.addWidget(self.pushButton_2, 22, 4, 1, 1)
 
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox.setStyleSheet("color: #EEEEEE")
-        self.gridLayout.addWidget(self.checkBox, 17, 4, 1, 1)
+        self.checkBox_normalisation = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_normalisation.setObjectName("checkBox")
+        self.checkBox_normalisation.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox_normalisation, 17, 4, 1, 1)
 
         self.radioButton_4 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_4.setObjectName("radioButton_4")
@@ -200,11 +201,11 @@ class image_processing_window(object):
         self.radioButton_7.setText(
             _translate("MainWindow", "Кумулятивная функция распределения")
         )
-        self.checkBox.setText(_translate("MainWindow", "Нормализовать"))
+        self.checkBox_normalisation.setText(_translate("MainWindow", "Нормализовать"))
         self.checkBox_2.setText(
             _translate("MainWindow", "Показать обработанное изображение")
         )
-        self.checkBox_3.setText(_translate("MainWindow", "Показать график"))
+        self.checkBox_show_plot.setText(_translate("MainWindow", "Показать график"))
 
     def processing(self) -> None:
 
@@ -248,20 +249,27 @@ class image_processing_window(object):
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():
-            show_plot: bool = self.checkBox_3.isChecked()
-            self.image.bar_chart(self.graphWidget, show_plot)
-            self.graphWidget.show()
+            show_plot: bool = self.checkBox_show_plot.isChecked()
+            place_to_show_plot: int = int(self.comboBox_place_to_show_plot.currentText())
+            model = self.image.bar_chart()
+
+            if show_plot:
+                self.main_window.show_graph(model, place_to_show_plot)
+
             self.close_window()
 
         # Кумулятивная функция распределения
         elif self.radioButton_7.isChecked():
-            if self.checkBox.isChecked():
-                self.image.cdf_function(self.graphWidget, normalisation=True)
-            else:
-                self.image.cdf_function(self.graphWidget, normalisation=False)
-            self.graphWidget.show()
+            normalisation = self.checkBox_normalisation.isChecked()
+            show_plot: bool = self.checkBox_show_plot.isChecked()
+            place_to_show_plot: int = int(self.comboBox_place_to_show_plot.currentText())
 
-            self.image.image_processing("cdf")
+            model = self.image.cdf_function(normalisation)
+
+            if show_plot:
+                self.main_window.show_graph(model, place_to_show_plot)
+
+            self.image.image_processing("cdf", show_image, place_to_show_image)
 
         self.close_window()
 
