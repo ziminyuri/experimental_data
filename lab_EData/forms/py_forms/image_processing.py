@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 from Image import MyImage as Image
 from model_1 import Model
 
@@ -174,6 +175,11 @@ class image_processing_window(object):
         self.line_7.setObjectName("line_7")
         self.gridLayout.addWidget(self.line_7, 14, 3, 4, 1)
 
+        self.radioButton_8 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_8.setObjectName("radioButton_8")
+        self.radioButton_8.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.radioButton_8, 4, 2, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.processing_image_window)
@@ -206,6 +212,7 @@ class image_processing_window(object):
             _translate("MainWindow", "Показать обработанное изображение")
         )
         self.checkBox_show_plot.setText(_translate("MainWindow", "Показать график"))
+        self.radioButton_8.setText(_translate("MainWindow", "Спектр"))
 
     def processing(self) -> None:
 
@@ -270,6 +277,10 @@ class image_processing_window(object):
                 self.main_window.show_graph(model, place_to_show_plot)
 
             self.image.image_processing("cdf", show_image, place_to_show_image)
+
+        # Спектр фурье изображения
+        elif self.radioButton_8.isChecked():
+            self.image.fft()
 
         self.close_window()
 

@@ -1,12 +1,15 @@
 import math
+import array
+import os
+import cv2
 import numpy as np
-import pyqtgraph as pg
-
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 
 from model_1 import Model
+
+import matplotlib.pyplot as plt
 
 
 class MyImage:
@@ -30,11 +33,45 @@ class MyImage:
 
     def open(self) -> None:
         self.path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self.main_window, "Open Image", ".", "Image Files (*.png *.jpg *.bmp)"
+            self.main_window, "Open Image", ".", "Image Files (*.png *.jpg *.bmp *.xcr)"
         )
-        if self.path:
+        flag_xcr: int = self.path.find('xcr')
+
+        if self.path and flag_xcr == -1:
             self.image = QPixmap(self.path)
             self.place_to_show_1.setPixmap(self.image)
+
+        elif self.path and flag_xcr != -1:
+            count: int = int(os.stat(self.path).st_size / 2)
+            with open(self.path, 'rb') as fp:
+                binary16 = array.array("h")
+                binary16.fromfile(fp, count)
+
+            binary_array: np.ndarray = np.array(binary16.tolist())
+            binary_array_max: int = np.amax(binary_array)
+
+            width: int = 400
+            height: int = 300
+            img = Image.new('RGB', (width, height), color='red')
+            pil_draw = ImageDraw.Draw(img)
+
+            pixels = width * height
+            binary_img = np.zeros(pixels).reshape(height,width)
+            pixel: int = 0
+            for i in range(height):
+                for j in range(width):
+                    binary_img[i][j] = binary_array[pixel] / binary_array_max * 255
+                    red: int = int(binary_img[i][j])
+                    green: int = red
+                    blue: int = red
+                    pil_draw.point((j, i), (red, green, blue))
+                    pixel += 1
+
+            img.save("temp.jpg")
+
+
+
+
 
     def update(self, place_to_show: int = 1) -> None:
         self.image = QPixmap("temp.jpg")
@@ -206,3 +243,9 @@ class MyImage:
         model.x = self.cdf_x
 
         return model
+
+    def fft(self):
+        pass
+
+
+

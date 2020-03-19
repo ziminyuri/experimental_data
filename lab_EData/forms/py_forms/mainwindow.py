@@ -1,12 +1,13 @@
+import pyqtgraph as pg
 from PyQt5 import QtCore, QtWidgets
+
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
-from forms.py_forms.statistics_window import Ui_statistics
-from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
+from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.image_processing import image_processing_window
+from forms.py_forms.statistics_window import Ui_statistics
 from Image import MyImage
-import pyqtgraph as pg
 
 
 class Ui_mainwindow(object):
@@ -206,17 +207,21 @@ class Ui_mainwindow(object):
 
         self.action_add_graph = QtWidgets.QAction(self.main_window)
         self.action_add_graph.setObjectName("action_add_graph")
+        self.action_add_graph.setShortcut('Ctrl+N')
         self.action_add_graph.triggered.connect(self.open_add_graph_window)
 
         self.action_open_image = QtWidgets.QAction(self.main_window)
         self.action_open_image.setObjectName("action_open_image")
+        self.action_open_image.setShortcut('Ctrl+I')
         self.action_open_image.triggered.connect(self.open_image_window)
 
         self.action_open_sound = QtWidgets.QAction(self.main_window)
         self.action_open_sound.setObjectName("action_open_sound")
+        self.action_open_sound.setShortcut('Ctrl+S')
         self.action_open_sound.triggered.connect(self.open_add_sound_window)
 
         self.action_close = QtWidgets.QAction(self.main_window)
+        self.action_close.setShortcut('Ctrl+Q')
         self.action_close.setObjectName("action_close")
 
         self.action_statistics = QtWidgets.QAction(self.main_window)
@@ -230,6 +235,7 @@ class Ui_mainwindow(object):
 
         self.action_processing_image = QtWidgets.QAction(self.main_window)
         self.action_processing_image.setObjectName("action_processing_image")
+        self.action_processing_image.setShortcut('Ctrl+P')
         self.action_processing_image.triggered.connect(
             self.open_processing_image_window
         )

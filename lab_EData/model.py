@@ -514,5 +514,3 @@ class Model:
         trend = convolution(trend_model, trend_filter)
         self.x = trend.x
         self.y = trend.y
-
-

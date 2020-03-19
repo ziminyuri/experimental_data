@@ -211,6 +211,13 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="2">
+       <widget class="QRadioButton" name="radioButton_8">
+        <property name="text">
+         <string>Спектр</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
