@@ -197,7 +197,7 @@ class Ui_mainwindow(object):
         self.statistics_ui = Ui_statistics(self.statistics_window)
 
         self.filter_window = QtWidgets.QMainWindow()
-        self.filter_ui = Ui_filter_window(self.filter_window)
+        self.filter_ui = Ui_filter_window(self)
 
         self.deconvolution_window = QtWidgets.QMainWindow()
         self.deconvolution_ui = Ui_deconvolution_window()
@@ -229,6 +229,8 @@ class Ui_mainwindow(object):
 
         self.action_filter = QtWidgets.QAction(self.main_window)
         self.action_filter.setObjectName("action_filter")
+        self.action_filter.setShortcut('Ctrl+F')
+        self.action_filter.triggered.connect(self.open_filter_window)
 
         self.action_deconvolution = QtWidgets.QAction(self.main_window)
         self.action_deconvolution.setObjectName("action_deconvolution")
@@ -273,7 +275,6 @@ class Ui_mainwindow(object):
         self.statistics_window.show()
 
     def open_filter_window(self) -> None:
-        self.filter_ui.setupUi(self.filter_window)
         self.filter_window.show()
 
     def open_deconvolution_window(self) -> None:
