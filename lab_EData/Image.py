@@ -1,15 +1,12 @@
 import math
 import array
 import os
-import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
-
 from model_1 import Model
-
-import matplotlib.pyplot as plt
+import pyqtgraph as pg
 
 
 class MyImage:
@@ -17,6 +14,7 @@ class MyImage:
         self.main_window = main_window.main_window
         self.path = None
         self.image = None
+        self.image_path_default: str = "temp.jpg"
 
         self.place_to_show_1 = main_window.label_model_1
         self.place_to_show_2 = main_window.label_model_2
@@ -25,11 +23,11 @@ class MyImage:
         self.place_to_show_5 = main_window.label_model_5
         self.place_to_show_6 = main_window.label_model_6
 
-        self.bar_chart_y = np.zeros(255)
-        self.bar_chart_x = np.arange(0, 256)
+        self.bar_chart_y: np.ndarray = np.zeros(255)
+        self.bar_chart_x: np.ndarray = np.arange(0, 256)
 
-        self.cdf_x = self.bar_chart_x.copy()
-        self.cdf_y = np.zeros(256)
+        self.cdf_x: np.ndarray = self.bar_chart_x.copy()
+        self.cdf_y: np.ndarray = np.zeros(256)
 
     def open(self) -> None:
         self.path, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -67,14 +65,10 @@ class MyImage:
                     pil_draw.point((j, i), (red, green, blue))
                     pixel += 1
 
-            img.save("temp.jpg")
-
-
-
-
+            img.save(self.image_path_default)
 
     def update(self, place_to_show: int = 1) -> None:
-        self.image = QPixmap("temp.jpg")
+        self.image = QPixmap(self.image_path_default)
 
         if place_to_show == 1:
             self.place_to_show_1.setPixmap(self.image)
@@ -96,8 +90,8 @@ class MyImage:
 
     def smoothing(self, type_smoothing: str, factor: float, show_image: bool = False, place_to_show_image: int = 1) \
             -> None:
-        self.image.save("temp.jpg")
-        pil_img = Image.open("temp.jpg")
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
         width = pil_img.size[0]
         height = pil_img.size[1]
 
@@ -112,7 +106,7 @@ class MyImage:
             p = pil_img.resize((new_width, new_height), Image.BILINEAR)
             pil_img = p
 
-        pil_img.save("temp.jpg")
+        pil_img.save(self.image_path_default)
 
         if show_image:
             self.update(place_to_show_image)
@@ -166,8 +160,8 @@ class MyImage:
         return red, green, blue
 
     def image_processing(self, type_processing: str, show_image: bool = False, place_to_show_image: int = 1) -> None:
-        self.image.save("temp.jpg")
-        pil_img = Image.open("temp.jpg")
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
         pil_draw = ImageDraw.Draw(pil_img)
         width = pil_img.size[0]
         height = pil_img.size[1]
@@ -197,17 +191,17 @@ class MyImage:
 
                 pil_draw.point((i, j), (red, green, blue))
 
-        pil_img.save("temp.jpg")
+        pil_img.save(self.image_path_default)
 
         if show_image:
             self.update(place_to_show_image)
 
     def bar_chart(self) -> object:
-        self.bar_chart_y = np.zeros(256)
-        self.image.save("temp.jpg")
-        pil_img = Image.open("temp.jpg")
-        width = pil_img.size[0]
-        height = pil_img.size[1]
+        self.bar_chart_y: np.ndarray = np.zeros(256)
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
+        width: int = pil_img.size[0]
+        height: int = pil_img.size[1]
         pix = pil_img.load()
         for i in range(width):
             for j in range(height):
@@ -215,8 +209,8 @@ class MyImage:
                 g = pix[i, j][1]
                 b = pix[i, j][2]
 
-                pixel_value = int((r + g + b) / 3)
-                bar_chart_y_value = self.bar_chart_y[pixel_value] + 1
+                pixel_value: int = int((r + g + b) / 3)
+                bar_chart_y_value: int = self.bar_chart_y[pixel_value] + 1
                 self.bar_chart_y[pixel_value] = bar_chart_y_value
 
         model = Model("Гистограма изображения")
@@ -244,8 +238,43 @@ class MyImage:
 
         return model
 
-    def fft(self):
-        pass
+    # Cпектр Фурье изображения
+    def fft(self, graphWidget, show_plot):
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
+        width = pil_img.size[0]
+        height = pil_img.size[1]
+        pix = pil_img.load()
+        matrix = np.zeros((width, height))
+        pen = pg.mkPen(color="#AB47BC", width=5)
+        legend: str = 'Спектр Фурье изображения'
+
+        if show_plot:
+            graphWidget.show()
+            graphWidget.addLegend()
+
+        for i in range(width):
+            for j in range(height):
+                red = pix[i, j][0]
+                matrix[i][j] = red
+
+            new_image = np.gradient(matrix[i - 1, :])
+            new_image_1 = np.gradient(matrix[i, :])
+            Rxy = np.correlate(new_image, new_image_1, mode='full')
+
+            fft = np.fft.rfft(Rxy)
+            axis_shift = np.linspace(0, 255, len(fft))
+
+            if i == 0:
+                graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen, name=legend)
+            else:
+                graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen)
+
+
+
+
+
+
 
 
 

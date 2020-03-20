@@ -216,8 +216,11 @@ class image_processing_window(object):
 
     def processing(self) -> None:
 
-        place_to_show_image: int = int(self.comboBox.currentText())
         show_image: bool = self.checkBox_2.isChecked()
+        show_plot: bool = self.checkBox_show_plot.isChecked()
+
+        place_to_show_image: int = int(self.comboBox.currentText())
+        place_to_show_plot: int = int(self.comboBox_place_to_show_plot.currentText())
 
         # Ближайший сосед
         if self.radioButton.isChecked():
@@ -256,8 +259,6 @@ class image_processing_window(object):
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():
-            show_plot: bool = self.checkBox_show_plot.isChecked()
-            place_to_show_plot: int = int(self.comboBox_place_to_show_plot.currentText())
             model = self.image.bar_chart()
 
             if show_plot:
@@ -268,9 +269,6 @@ class image_processing_window(object):
         # Кумулятивная функция распределения
         elif self.radioButton_7.isChecked():
             normalisation = self.checkBox_normalisation.isChecked()
-            show_plot: bool = self.checkBox_show_plot.isChecked()
-            place_to_show_plot: int = int(self.comboBox_place_to_show_plot.currentText())
-
             model = self.image.cdf_function(normalisation)
 
             if show_plot:
@@ -280,7 +278,23 @@ class image_processing_window(object):
 
         # Спектр фурье изображения
         elif self.radioButton_8.isChecked():
-            self.image.fft()
+            if place_to_show_plot == 1:
+                self.image.fft(self.main_window.graphWidget_1, show_plot)
+
+            elif place_to_show_plot == 2:
+                self.image.fft(self.main_window.graphWidget_2, show_plot)
+
+            elif place_to_show_plot == 3:
+                self.image.fft(self.main_window.graphWidget_3, show_plot)
+
+            elif place_to_show_plot == 4:
+                self.image.fft(self.main_window.graphWidget_4, show_plot)
+
+            elif place_to_show_plot == 5:
+                self.image.fft(self.main_window.graphWidget_5, show_plot)
+
+            elif place_to_show_plot == 6:
+                self.image.fft(self.main_window.graphWidget_6, show_plot)
 
         self.close_window()
 
