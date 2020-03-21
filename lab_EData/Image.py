@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 from model_1 import Model
 import pyqtgraph as pg
+from model_1 import convolution_img
 
 
 class MyImage:
@@ -269,6 +270,40 @@ class MyImage:
                 graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen, name=legend)
             else:
                 graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen)
+
+    def filtration(self, my_filter: object):
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
+        pil_draw = ImageDraw.Draw(pil_img)
+        width = pil_img.size[0]
+        height = pil_img.size[1]
+        pix = pil_img.load()
+        matrix = np.zeros((width, height))
+
+        for i in range(width):
+            for j in range(height):
+                red = pix[i, j][0]
+                matrix[i][j] = red
+
+            convolution_row = convolution_img(matrix[i], my_filter.y)
+            matrix[i] = convolution_row
+
+        for i in range(width):
+            for j in range(height):
+                red = int(matrix[i][j])
+                green = int(matrix[i][j])
+                blue = int(matrix[i][j])
+
+                pil_draw.point((i, j), (red, green, blue))
+
+        pil_img.save("filtration.jpg")
+
+
+
+
+
+
+
 
 
 

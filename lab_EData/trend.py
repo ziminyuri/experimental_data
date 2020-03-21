@@ -31,9 +31,10 @@ class Trend:
         self.piecewise_function = int(self.n / 3)
 
         # Фильтр
-        self.m = 32
-        self.fc_1 = 60
-        self.fc_2 = 80
+        self.m = 64
+        self.fc_1 = 100
+        self.fc_2 = 240
+        self.dt = 0.001
 
     # Генерируем рандомно спайки
     def generating_random_spikes(self, min, max):

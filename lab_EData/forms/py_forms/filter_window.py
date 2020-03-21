@@ -1,11 +1,12 @@
 from PyQt5 import QtCore, QtWidgets
 
+from model_1 import Model
 from trend import Trend
 
 
 class Ui_filter_window(object):
     def __init__(self,  main_window):
-        self.main_window = main_window.main_window
+        self.main_window = main_window
         self.filter_window = main_window.filter_window
         self.image = main_window.image
         self.filter_window.setObjectName("MainWindow")
@@ -73,6 +74,7 @@ class Ui_filter_window(object):
         self.gridLayout.addWidget(self.label_6, 0, 2, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(self.add_filter_graph)
         self.gridLayout.addWidget(self.pushButton, 2, 2, 1, 1)
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
@@ -137,8 +139,20 @@ class Ui_filter_window(object):
             filter_trend.fc_2 = 240
             filter_trend.generating_trend_bandpass_filter()
 
-            # image_after_filtration = self.image.filtration(filter_trend)
+            image_after_filtration = self.image.filtration(filter_trend)
             place_to_show_image: int = int(self.comboBox_2.currentText())
 
-            if place_to_show_image == 1:
+        self.close_window()
+
+    def add_filter_graph(self):
+        place_to_show: int = int(self.comboBox_2.currentText())
+        name_of_graph: str = self.comboBox_3.currentText()
+        model = Model(name_of_graph)
+        model.calculation()
+        self.main_window.show_graph(model, place_to_show)
+        self.close_window()
+
+    def close_window(self):
+        self.filter_window.close()
+
 

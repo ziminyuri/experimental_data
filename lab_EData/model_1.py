@@ -46,6 +46,27 @@ def convolution(trend_1, trend_2):
     return trend
 
 
+def convolution_img(img: np.ndarray, my_filter: np.ndarray) -> np.ndarray:
+    n: int = len(img)
+    m: int = len(my_filter)
+
+    y: list = []
+    for i in range(n):
+        y_k: int = 0
+        for j in range(m):
+            coefficient_x: int = i - j
+            if coefficient_x >= 0:
+                y_m = img[coefficient_x] * my_filter[j]
+            else:
+                y_m = 0
+            y_k += y_m
+
+        y.append(y_k)
+
+    img_after_filtration = np.array(y)
+    return img_after_filtration
+
+
 class Model:
     def __init__(self, option):
         self.n = 1000  # Количество точек по оси Х
@@ -374,7 +395,7 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Фильтр высоких частот':
+        if self.option == 'Высоких частот':
             trend = Trend()
             trend.generating_trend_high_potter()
 
@@ -384,7 +405,7 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Полосовой фильтр':
+        if self.option == 'Полосовой':
             trend = Trend()
             trend.generating_trend_bandpass_filter()
 
@@ -394,7 +415,7 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Режекторный фильтр':
+        if self.option == 'Режекторный':
             trend = Trend()
             trend.generating_trend_notch_filter()
 
