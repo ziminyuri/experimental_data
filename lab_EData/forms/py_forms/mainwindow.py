@@ -226,6 +226,8 @@ class Ui_mainwindow(object):
 
         self.action_statistics = QtWidgets.QAction(self.main_window)
         self.action_statistics.setObjectName("action_statistics")
+        self.action_statistics.setShortcut('Ctrl+L')
+        self.action_statistics.triggered.connect(self.open_statistics_window)
 
         self.action_filter = QtWidgets.QAction(self.main_window)
         self.action_filter.setObjectName("action_filter")
@@ -271,7 +273,6 @@ class Ui_mainwindow(object):
         self.add_sound_window.show()
 
     def open_statistics_window(self) -> None:
-        self.statistics_ui.setupUi(self.statistics_window)
         self.statistics_window.show()
 
     def open_filter_window(self) -> None:

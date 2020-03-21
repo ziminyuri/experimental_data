@@ -180,6 +180,32 @@ class image_processing_window(object):
         self.radioButton_8.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.radioButton_8, 4, 2, 1, 1)
 
+        self.line_8 = QtWidgets.QFrame(self.centralwidget)
+        self.line_8.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_8.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_8.setObjectName("line_8")
+        self.gridLayout.addWidget(self.line_8, 4, 3, 7, 1)
+
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setObjectName("label_6")
+        self.label_6.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.label_6, 4, 4, 1, 1)
+
+        self.checkBox_4 = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_4.setObjectName("checkBox_4")
+        self.checkBox_4.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox_4, 5, 4, 1, 1)
+
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.lineEdit_2.setStyleSheet("background-color: #546E7A")
+        self.gridLayout.addWidget(self.lineEdit_2, 6, 4, 1, 1)
+
+        self.checkBox_5 = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_5.setObjectName("checkBox_5")
+        self.checkBox_5.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.checkBox_5, 7, 4, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.processing_image_window)
@@ -213,6 +239,9 @@ class image_processing_window(object):
         )
         self.checkBox_show_plot.setText(_translate("MainWindow", "Показать график"))
         self.radioButton_8.setText(_translate("MainWindow", "Спектр"))
+        self.label_6.setText(_translate("MainWindow", "Шум"))
+        self.checkBox_4.setText(_translate("MainWindow", "Гаусса"))
+        self.checkBox_5.setText(_translate("MainWindow", "Соль и перец"))
 
     def processing(self) -> None:
 
@@ -295,6 +324,22 @@ class image_processing_window(object):
 
             elif place_to_show_plot == 6:
                 self.image.fft(self.main_window.graphWidget_6, show_plot)
+
+        # Шум: Соль и Перец
+        if self.checkBox_5.isChecked():
+            try:
+                factor = float(self.lineEdit_2.text())
+                self.image.noise("sold_peper", show_image, place_to_show_image, factor)
+            except:
+                self.image.noise("gaussian", show_image, place_to_show_image)
+
+        # Гаусса
+        if self.checkBox_4.isChecked():
+            try:
+                factor = float(self.lineEdit_2.text())
+                self.image.noise("gaussian", show_image, place_to_show_image, factor)
+            except:
+                self.image.noise("gaussian", show_image, place_to_show_image)
 
         self.close_window()
 

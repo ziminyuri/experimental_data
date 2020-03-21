@@ -31,9 +31,9 @@ class Trend:
         self.piecewise_function = int(self.n / 3)
 
         # Фильтр
-        self.m = 64
-        self.fc_1 = 100
-        self.fc_2 = 240
+        self.m = 32
+        self.fc_1 = 120
+        self.fc_2 = 140
         self.dt = 0.001
 
     # Генерируем рандомно спайки
@@ -214,10 +214,10 @@ class Trend:
 
     # Генерируем тренд фильтра режекторного
     def generating_trend_notch_filter(self):
-        m = 32
+        m = 64
         self.dt = 0.001
         fc_1 = 100
-        fc_2 = 300
+        fc_2 = 140
 
         bsf = notch_filter(m, self.dt, fc_1, fc_2)
 

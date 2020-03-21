@@ -1,5 +1,8 @@
 from PyQt5 import QtCore, QtWidgets
 
+from analysis import Analysis
+# from main import IMG, GRAPH
+
 
 class Ui_statistics(object):
     def __init__(self, MainWindow):
@@ -64,6 +67,8 @@ class Ui_statistics(object):
         self.gridLayout.addWidget(self.radioButton_9, 10, 0, 1, 1)
         self.comboBox = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox.setObjectName("comboBox")
+        comboBox_values: list = ['1', '2', '3', '4', '5', '6']
+        self.comboBox.addItems(comboBox_values)
         self.gridLayout.addWidget(self.comboBox, 1, 0, 1, 1)
         self.pushButton_3 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton_3.setObjectName("pushButton_3")
@@ -155,3 +160,14 @@ class Ui_statistics(object):
         self.pushButton_12.setText(_translate("MainWindow", "Антитренд + антиспайк"))
         self.pushButton.setText(_translate("MainWindow", "Вычислить"))
         self.pushButton_8.setText(_translate("MainWindow", "Закрыть"))
+
+    def fast_fourier_transform(self):
+        analysis_model = self.get_model()
+        analysis = Analysis(analysis_model)
+        model = analysis.spectrum()
+
+        place_of_graph = self.c2.get()
+        self.set_graph(model, place_of_graph)
+
+        self.draw_graph(model)
+        window.destroy()

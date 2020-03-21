@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 
 from model_1 import Model
 from trend import Trend
-
+# from main import get_GRAPH, get_IMG
 
 class Ui_filter_window(object):
     def __init__(self,  main_window):
@@ -133,11 +133,11 @@ class Ui_filter_window(object):
     def filtration(self):
         if self.radioButton_image.isChecked():
             filter_trend = Trend()
-            filter_trend.m = 64
-            filter_trend.dt = 0.001
-            filter_trend.fc_1 = 100
-            filter_trend.fc_2 = 240
-            filter_trend.generating_trend_bandpass_filter()
+            # filter_trend.m = 64
+            # filter_trend.dt = 0.001
+            # filter_trend.fc_1 = 65
+            # filter_trend.fc_2 = 110
+            filter_trend.generating_trend_notch_filter()
 
             image_after_filtration = self.image.filtration(filter_trend)
             place_to_show_image: int = int(self.comboBox_2.currentText())
@@ -149,6 +149,8 @@ class Ui_filter_window(object):
         name_of_graph: str = self.comboBox_3.currentText()
         model = Model(name_of_graph)
         model.calculation()
+        #list_of_graph = get_GRAPH()
+        #list_of_graph[place_to_show] = model
         self.main_window.show_graph(model, place_to_show)
         self.close_window()
 

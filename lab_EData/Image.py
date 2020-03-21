@@ -1,6 +1,8 @@
 import math
 import array
 import os
+import random
+
 import numpy as np
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
@@ -8,6 +10,10 @@ from PyQt5.QtGui import QPixmap
 from model_1 import Model
 import pyqtgraph as pg
 from model_1 import convolution_img
+import cv2
+from skimage.util import random_noise
+
+import matplotlib.pyplot as plt
 
 
 class MyImage:
@@ -247,7 +253,7 @@ class MyImage:
         height = pil_img.size[1]
         pix = pil_img.load()
         matrix = np.zeros((width, height))
-        pen = pg.mkPen(color="#AB47BC", width=5)
+        pen = pg.mkPen(color="#AB47BC", width=1)
         legend: str = 'Спектр Фурье изображения'
 
         if show_plot:
@@ -288,6 +294,13 @@ class MyImage:
             convolution_row = convolution_img(matrix[i], my_filter.y)
             matrix[i] = convolution_row
 
+        normalisation = True
+        if normalisation is True:
+            pix_max: int = np.amax(matrix)
+            for i in range(width):
+                for j in range(height):
+                    matrix[i][j] = int(matrix[i][j] / pix_max * 255)
+
         for i in range(width):
             for j in range(height):
                 red = int(matrix[i][j])
@@ -298,7 +311,30 @@ class MyImage:
 
         pil_img.save("filtration.jpg")
 
+    def noise(self, type_of_noise, show_image, place_to_show_image, factor=0.01):
+        if type_of_noise == "sold_peper":
+            self.image.save(self.image_path_default)
+            pil_img = Image.open(self.image_path_default)
+            pil_draw = ImageDraw.Draw(pil_img)
+            width = pil_img.size[0]
+            height = pil_img.size[1]
+            percentage_noise = int(width * height * factor)
+            color_list = ['black', 'white']
+            for i in range (percentage_noise):
+                dotx = random.randrange(1, width, 1)
+                doty = random.randrange(1, height, 1)
+                pil_draw.line((dotx, doty, dotx + 1, doty + 1), fill=random.choice(color_list), width=1)
 
+            pil_img.save(self.image_path_default)
+
+        elif type_of_noise == "gaussian":
+            self.image.save(self.image_path_default)
+            image = cv2.imread(self.image_path_default)
+            gauss = random_noise(image, mode='gaussian', seed=None, clip=True, var=factor)
+            plt.imsave(self.image_path_default, gauss)
+
+        if show_image:
+            self.update(place_to_show_image)
 
 
 
