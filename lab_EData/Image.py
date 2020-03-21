@@ -53,26 +53,23 @@ class MyImage:
                 binary16.fromfile(fp, count)
 
             binary_array: np.ndarray = np.array(binary16.tolist())
-            binary_array_max: int = np.amax(binary_array)
+            binary_array_min = np.amin(binary_array)
 
             width: int = 400
             height: int = 300
             img = Image.new('RGB', (width, height), color='red')
             pil_draw = ImageDraw.Draw(img)
 
-            pixels = width * height
-            binary_img = np.zeros(pixels).reshape(height,width)
             pixel: int = 0
             for i in range(height):
                 for j in range(width):
-                    binary_img[i][j] = binary_array[pixel] / binary_array_max * 255
-                    red: int = int(binary_img[i][j])
-                    green: int = red
-                    blue: int = red
-                    pil_draw.point((j, i), (red, green, blue))
+
+                    pixel_value = int(binary_array[pixel] - binary_array_min)
+                    pil_draw.point((j, i), (pixel_value, pixel_value, pixel_value))
                     pixel += 1
 
             img.save(self.image_path_default)
+            self.update(1)
 
     def update(self, place_to_show: int = 1) -> None:
         self.image = QPixmap(self.image_path_default)
@@ -319,11 +316,21 @@ class MyImage:
             width = pil_img.size[0]
             height = pil_img.size[1]
             percentage_noise = int(width * height * factor)
-            color_list = ['black', 'white']
             for i in range (percentage_noise):
-                dotx = random.randrange(1, width, 1)
-                doty = random.randrange(1, height, 1)
-                pil_draw.line((dotx, doty, dotx + 1, doty + 1), fill=random.choice(color_list), width=1)
+                x = random.randrange(1, width, 1)
+                y = random.randrange(1, height, 1)
+                choice = random.randint(1, 2)
+                if choice == 1:
+                    red = 0
+                    green = 0
+                    blue = 0
+
+                else:
+                    red = 255
+                    green = 255
+                    blue = 255
+
+                pil_draw.point((x, y), (red, green, blue))
 
             pil_img.save(self.image_path_default)
 

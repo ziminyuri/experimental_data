@@ -331,7 +331,7 @@ class image_processing_window(object):
                 factor = float(self.lineEdit_2.text())
                 self.image.noise("sold_peper", show_image, place_to_show_image, factor)
             except:
-                self.image.noise("gaussian", show_image, place_to_show_image)
+                self.image.noise("sold_peper", show_image, place_to_show_image)
 
         # Гаусса
         if self.checkBox_4.isChecked():
