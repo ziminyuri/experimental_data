@@ -209,6 +209,18 @@ class image_processing_window(object):
         self.checkBox_5.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.checkBox_5, 7, 4, 1, 1)
 
+        self.radioButton_9 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_9.setObjectName("radioButton_9")
+        self.gridLayout.addWidget(self.radioButton_9, 5, 2, 1, 1)
+
+        self.radioButton_10 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_10.setObjectName("radioButton_10")
+        self.gridLayout.addWidget(self.radioButton_10, 6, 2, 1, 1)
+
+        self.radioButton_11 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_11.setObjectName("radioButton_11")
+        self.gridLayout.addWidget(self.radioButton_11, 7, 2, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.processing_image_window)
@@ -245,6 +257,9 @@ class image_processing_window(object):
         self.label_6.setText(_translate("MainWindow", "Шум"))
         self.checkBox_4.setText(_translate("MainWindow", "Гаусса"))
         self.checkBox_5.setText(_translate("MainWindow", "Соль и перец"))
+        self.radioButton_9.setText(_translate("MainWindow", "Производная нулевой строки"))
+        self.radioButton_10.setText(_translate("MainWindow", "Автокорреляция строки"))
+        self.radioButton_11.setText(_translate("MainWindow", "Спектр автокореляции"))
 
     def processing(self) -> None:
 
@@ -308,7 +323,7 @@ class image_processing_window(object):
 
             self.image.image_processing("cdf", show_image, place_to_show_image)
 
-        # Спектр фурье изображения
+        # График первой строки
         elif self.radioButton_8.isChecked():
             if place_to_show_plot == 1:
                 self.image.zero_row(self.main_window.graphWidget_1, show_plot)
@@ -328,7 +343,14 @@ class image_processing_window(object):
             elif place_to_show_plot == 6:
                 self.image.zero_row(self.main_window.graphWidget_6, show_plot)
 
+        # Производная строки
+        elif self.radioButton_9.isChecked():
+            model = self.image.derivative(self.main_window.graphWidget_1, show_plot)
 
+            if show_plot:
+                self.main_window.show_graph(model, place_to_show_plot)
+
+            POSITION_FOR_ANALYSIS[place_to_show_plot] = model
 
         # Шум: Соль и Перец
         if self.checkBox_5.isChecked():

@@ -327,7 +327,7 @@ class Analysis:
     # Преобразование Фурье (Спектр) - Custom
     def calculation_fourier_transform(self):
 
-        new_model = Model(18)  # Модель графика фурье
+        new_model = Model("Спектр")  # Модель графика фурье
         analyses = self.model
         x = []
         y = []
@@ -414,7 +414,7 @@ class Analysis:
 
     # Спектр фильтров
     def spectrum(self):
-        new_model = Model(18)  # Модель графика фурье
+        new_model = Model("Спектр фильтра")  # Модель графика фурье
         number_of_points = int(len(self.model.y))
         delta_freq_1 = 1 / (2 * self.model.dt)
         delta_freq_2 = int(number_of_points / 2)
@@ -459,7 +459,7 @@ class Analysis:
     # Автокорреляция
     def calculation_autocorrelation(self):
 
-        model = Model(15)  # Модель графика автокорреляции
+        model = Model("Автокорреляция")
         analysis_model_n = self.model.n
 
         if self.average_value == 0:

@@ -286,49 +286,55 @@ class Ui_mainwindow(object):
         self.processing_image_window.show()
 
     def show_graph(self, graph, place: int, normalisation: bool = False) -> None:
-        pen = pg.mkPen(color="#AB47BC", width=5)
+        pen = pg.mkPen(color="#AB47BC", width=1)
+        x = graph.x
+        y = graph.y
+
         if normalisation is True:
             len_graph = len(graph.x)
+            new_n = int(len_graph / 2)
+            x = graph.x[:new_n]
+            y = graph.y[:new_n]
 
         if place == 1:
             self.graphWidget_1.clear()
             self.graphWidget_1.addLegend()
-            self.graphWidget_1.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_1.plot(x, y, pen=pen, name=graph.option)
             self.label_model_1.hide()
             self.graphWidget_1.show()
 
         elif place == 2:
             self.graphWidget_2.clear()
             self.graphWidget_2.addLegend()
-            self.graphWidget_2.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_2.plot(x, y, pen=pen, name=graph.option)
             self.label_model_2.hide()
             self.graphWidget_2.show()
 
         elif place == 3:
             self.graphWidget_3.clear()
             self.graphWidget_3.addLegend()
-            self.graphWidget_3.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_3.plot(x, y, pen=pen, name=graph.option)
             self.label_model_3.hide()
             self.graphWidget_3.show()
 
         elif place == 4:
             self.graphWidget_4.clear()
             self.graphWidget_4.addLegend()
-            self.graphWidget_4.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_4.plot(x, y, pen=pen, name=graph.option)
             self.label_model_4.hide()
             self.graphWidget_4.show()
 
         elif place == 5:
             self.graphWidget_5.clear()
             self.graphWidget_5.addLegend()
-            self.graphWidget_5.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_5.plot(x, y, pen=pen, name=graph.option)
             self.label_model_5.hide()
             self.graphWidget_5.show()
 
         elif place == 6:
             self.graphWidget_6.clear()
             self.graphWidget_6.addLegend()
-            self.graphWidget_6.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_6.plot(x, y, pen=pen, name=graph.option)
             self.label_model_6.hide()
             self.graphWidget_6.show()
 

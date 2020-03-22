@@ -160,14 +160,9 @@ class Ui_filter_window(object):
     def filtration(self):
         if self.radioButton_image.isChecked():
             filter_trend = Trend()
-            filter_trend.m = 64
-            filter_trend.dt = 0.001
-            filter_trend.fc_1 = 65
-            filter_trend.fc_2 = 110
             filter_trend.generating_trend_notch_filter()
-
-            image_after_filtration = self.image.filtration(filter_trend)
             place_to_show_image: int = int(self.comboBox_2.currentText())
+            self.image.filtration(filter_trend, place_to_show_image)
 
         self.close_window()
 

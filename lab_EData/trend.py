@@ -216,8 +216,8 @@ class Trend:
     def generating_trend_notch_filter(self):
         m = 32
         self.dt = 0.001
-        fc_1 = 65
-        fc_2 = 120
+        fc_1 = 250
+        fc_2 = 350
 
         bsf = notch_filter(m, self.dt, fc_1, fc_2)
 

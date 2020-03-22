@@ -62,6 +62,7 @@ class Ui_statistics(object):
         self.gridLayout.addWidget(self.radioButton_3, 4, 0, 1, 1)
         self.pushButton_6 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton_6.setObjectName("pushButton_6")
+        self.pushButton_6.clicked.connect(self.spectrum)
         self.gridLayout.addWidget(self.pushButton_6, 11, 1, 1, 1)
         self.radioButton_9 = QtWidgets.QRadioButton(self.gridLayoutWidget)
         self.radioButton_9.setObjectName("radioButton_9")
@@ -73,6 +74,7 @@ class Ui_statistics(object):
         self.gridLayout.addWidget(self.comboBox, 1, 0, 1, 1)
         self.pushButton_3 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(self.autocorrelation)
         self.gridLayout.addWidget(self.pushButton_3, 4, 1, 1, 1)
         self.radioButton_7 = QtWidgets.QRadioButton(self.gridLayoutWidget)
         self.radioButton_7.setObjectName("radioButton_7")
@@ -176,5 +178,45 @@ class Ui_statistics(object):
 
         place_to_show = int(self.comboBox_2.currentText())
         POSITION_FOR_ANALYSIS[place_to_show] = model
+        self.main_window.show_graph(model, place_to_show, normalisation=True)
+        self.close_window()
+
+    def autocorrelation(self):
+        position_to_analysis = int(self.comboBox.currentText())
+        model_for_analysis = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+
+        analysis = Analysis(model_for_analysis)
+
+        model = analysis.calculation_autocorrelation()
+
+        place_to_show = int(self.comboBox_2.currentText())
+        POSITION_FOR_ANALYSIS[place_to_show] = model
+
+        self.main_window.show_graph(model, place_to_show, normalisation=False)
+        self.close_window()
+
+    def spectrum(self):
+        position_to_analysis = int(self.comboBox.currentText())
+        model_for_analysis = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+
+        analysis = Analysis(model_for_analysis)
+        delta_t = 0.001
+
+        # if self.input_delta_t.get():
+          #   delta_t = float(self.input_delta_t.get())
+        # else:
+          #  delta_t = 0.001
+
+        analysis.set_delta_t(delta_t)
+        model = analysis.calculation_fourier_transform()
+
+        n = model.n
+        model.display_n = int(n / 2)
+        model.x = model.x[:model.display_n]
+        model.y = model.y[:model.display_n]
+
+        place_to_show = int(self.comboBox_2.currentText())
+        POSITION_FOR_ANALYSIS[place_to_show] = model
+
         self.main_window.show_graph(model, place_to_show, normalisation=True)
         self.close_window()

@@ -15,6 +15,8 @@ import cv2
 import matplotlib.pyplot as plt
 from setting import *
 
+from skimage import io
+
 
 class MyImage:
     def __init__(self, main_window):
@@ -71,6 +73,26 @@ class MyImage:
             img.save(PATH_IMG_TEMP_1)
             add_IMG(1)
             self.update(1)
+
+    @staticmethod
+    def save(pillow_img, place_to_show:int = 1) -> None:
+        if place_to_show == 1:
+            pillow_img.save(PATH_IMG_TEMP_1)
+
+        elif place_to_show == 2:
+            pillow_img.save(PATH_IMG_TEMP_2)
+
+        elif place_to_show == 3:
+            pillow_img.save(PATH_IMG_TEMP_3)
+
+        elif place_to_show == 4:
+            pillow_img.save(PATH_IMG_TEMP_4)
+
+        elif place_to_show == 5:
+            pillow_img.save(PATH_IMG_TEMP_5)
+
+        elif place_to_show == 6:
+            pillow_img.save(PATH_IMG_TEMP_6)
 
     def update(self, place_to_show: int = 1) -> None:
 
@@ -268,6 +290,35 @@ class MyImage:
         y = np.array(matrix)
         graphWidget.plot(x=x, y=y, pen=pen)
 
+    def derivative(self, graphWidget, show_plot):
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
+        width = pil_img.size[0]
+        pix = pil_img.load()
+        matrix = []
+        # pen = pg.mkPen(color="#AB47BC", width=1)
+
+        # if show_plot:
+         #   graphWidget.show()
+
+        for i in range(width):
+            red = pix[i, 0][0]
+            matrix.append(red)
+
+        y = np.gradient(matrix)
+        n = len(matrix)
+        x = np.arange(n)
+
+
+        model = Model("Производная первой строки")
+        model.y = y
+        model.x = x
+        model.n = n
+
+        return model
+
+        # graphWidget.plot(x=x, y=y, pen=pen)
+
     # Cпектр Фурье изображения
     def fft(self, graphWidget, show_plot):
 
@@ -328,7 +379,7 @@ class MyImage:
                 graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen)
   """
 
-    def filtration(self, my_filter: object):
+    def filtration(self, my_filter: object, place_to_show: int = 1):
         self.image.save(self.image_path_default)
         pil_img = Image.open(self.image_path_default)
         pil_draw = ImageDraw.Draw(pil_img)
@@ -340,10 +391,18 @@ class MyImage:
         for i in range(width):
             for j in range(height):
                 red = pix[i, j][0]
+                # green = pix[i, j][1]
+                # blue = pix[i, j][2]
                 matrix[i][j] = red
 
-            convolution_row = convolution_img(matrix[i], my_filter.y)
-            matrix[i] = convolution_row
+        transpose_matrix = np.transpose(matrix)
+        m = []
+        for row in transpose_matrix:
+            convolution_row = convolution_img(row, my_filter.y)
+            m.append(convolution_row)
+
+        s = np.array(m)
+        matrix = np.transpose(s)
 
         normalisation = False
         if normalisation is True:
@@ -360,7 +419,10 @@ class MyImage:
 
                 pil_draw.point((i, j), (red, green, blue))
 
-        pil_img.save("filtration1.jpg")
+        self.save(pil_img, place_to_show)
+        self.update(place_to_show)
+        # pil_img.save(self.image_path_default)
+
 
     def noise(self, type_of_noise, show_image, place_to_show_image, factor=0.01):
         if type_of_noise == "sold_peper":
