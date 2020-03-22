@@ -2,6 +2,7 @@ import math
 import array
 import os
 import random
+import copy
 
 import numpy as np
 from PIL import Image, ImageDraw
@@ -423,7 +424,6 @@ class MyImage:
         self.update(place_to_show)
         # pil_img.save(self.image_path_default)
 
-
     def noise(self, type_of_noise, show_image, place_to_show_image, factor=0.01):
         if type_of_noise == "sold_peper":
             self.image.save(self.image_path_default)
@@ -448,29 +448,36 @@ class MyImage:
 
                 pil_draw.point((x, y), (red, green, blue))
 
-            pil_img.save(self.image_path_default)
-
-        elif type_of_noise == "gaussian":
-            self.image.save(self.image_path_default)
-            image = cv2.imread(self.image_path_default)
-            # gauss = random_noise(image, mode='gaussian', seed=None, clip=True, var=factor)
-            row, col, ch = image.shape
-            mean = 0
-            var = 0.1
-            var = factor
-            sigma = var ** 0.5
-            gauss = np.random.normal(mean, sigma, (row, col, ch))
-            gauss = gauss.reshape(row, col, ch)
-            noisy = image + gauss
-            plt.imsave(self.image_path_default, noisy)
-
-        if show_image:
+            self.save(pil_img, place_to_show_image)
             self.update(place_to_show_image)
 
+        elif type_of_noise == "gaussian":
+            factor = 0.3
+            self.image.save(self.image_path_default)
+            pil_img = Image.open(self.image_path_default)
+            pil_draw = ImageDraw.Draw(pil_img)
+            width = pil_img.size[0]
+            height = pil_img.size[1]
+            mean = 0
+            var = factor * 255
+            sigma = var ** 0.5
+            gauss = np.random.normal(mean, sigma, (width, height))
+            pix = pil_img.load()
+            for i in range(width):
+                for j in range(height):
+                    old_pix = pix[i, j][0]
+                    pixel = old_pix + int(gauss[i][j])
+                    if pixel > 255:
+                        pil_draw.point((i, j), (255, 255, 255))
 
+                    elif pixel < 0:
+                        pil_draw.point((i, j), (0, 0, 0))
 
+                    else:
+                        pil_draw.point((i, j), (pixel, pixel, pixel))
 
-
+            self.save(pil_img, place_to_show_image)
+            self.update(place_to_show_image)
 
 
 
