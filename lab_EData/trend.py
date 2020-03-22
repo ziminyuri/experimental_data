@@ -30,6 +30,12 @@ class Trend:
 
         self.piecewise_function = int(self.n / 3)
 
+        # Фильтр
+        self.m = 32
+        self.fc_1 = 120
+        self.fc_2 = 140
+        self.dt = 0.001
+
     # Генерируем рандомно спайки
     def generating_random_spikes(self, min, max):
         self.argument = max * 2
@@ -199,14 +205,9 @@ class Trend:
 
     # Генерируем тренд фильтра полосового
     def generating_trend_bandpass_filter(self):
-        m = 32
-        self.dt = 0.001
-        fc_1 = 60
-        fc_2 = 80
+        bpf = bandpass_filter(self.m, self.dt, self.fc_1, self.fc_2)
 
-        bpf = bandpass_filter(m, self.dt, fc_1, fc_2)
-
-        self.n = m
+        self.n = self.m
         self.x = np.arange(0, self.n * 2 + 1)
         self.y = bpf
         self.display_n = self.n * 2 + 1
@@ -215,8 +216,8 @@ class Trend:
     def generating_trend_notch_filter(self):
         m = 32
         self.dt = 0.001
-        fc_1 = 100
-        fc_2 = 300
+        fc_1 = 250
+        fc_2 = 350
 
         bsf = notch_filter(m, self.dt, fc_1, fc_2)
 

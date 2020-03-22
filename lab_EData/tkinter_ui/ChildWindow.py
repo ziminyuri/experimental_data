@@ -2,7 +2,7 @@ import tkinter.ttk as ttk
 from tkinter import *
 from tkinter import messagebox
 
-from model import Model
+from tkinter_ui.model import Model
 
 
 class ChildWindow(Toplevel):

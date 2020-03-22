@@ -1,12 +1,13 @@
+import pyqtgraph as pg
 from PyQt5 import QtCore, QtWidgets
+
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
-from forms.py_forms.statistics_window import Ui_statistics
-from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.deconvolution_window import Ui_deconvolution_window
-from forms.py_forms.image_processing1 import image_processing_window
+from forms.py_forms.filter_window import Ui_filter_window
+from forms.py_forms.image_processing import image_processing_window
+from forms.py_forms.statistics_window import Ui_statistics
 from Image import MyImage
-import pyqtgraph as pg
 
 
 class Ui_mainwindow(object):
@@ -193,10 +194,8 @@ class Ui_mainwindow(object):
         self.add_sound_ui = Ui_add_sound()
 
         self.statistics_window = QtWidgets.QMainWindow()
-        self.statistics_ui = Ui_statistics(self.statistics_window)
 
         self.filter_window = QtWidgets.QMainWindow()
-        self.filter_ui = Ui_filter_window(self.filter_window)
 
         self.deconvolution_window = QtWidgets.QMainWindow()
         self.deconvolution_ui = Ui_deconvolution_window()
@@ -206,30 +205,39 @@ class Ui_mainwindow(object):
 
         self.action_add_graph = QtWidgets.QAction(self.main_window)
         self.action_add_graph.setObjectName("action_add_graph")
+        self.action_add_graph.setShortcut('Ctrl+N')
         self.action_add_graph.triggered.connect(self.open_add_graph_window)
 
         self.action_open_image = QtWidgets.QAction(self.main_window)
         self.action_open_image.setObjectName("action_open_image")
+        self.action_open_image.setShortcut('Ctrl+I')
         self.action_open_image.triggered.connect(self.open_image_window)
 
         self.action_open_sound = QtWidgets.QAction(self.main_window)
         self.action_open_sound.setObjectName("action_open_sound")
+        self.action_open_sound.setShortcut('Ctrl+S')
         self.action_open_sound.triggered.connect(self.open_add_sound_window)
 
         self.action_close = QtWidgets.QAction(self.main_window)
+        self.action_close.setShortcut('Ctrl+Q')
         self.action_close.setObjectName("action_close")
 
         self.action_statistics = QtWidgets.QAction(self.main_window)
         self.action_statistics.setObjectName("action_statistics")
+        self.action_statistics.setShortcut('Ctrl+L')
+        self.action_statistics.triggered.connect(self.open_statistics_window)
 
         self.action_filter = QtWidgets.QAction(self.main_window)
         self.action_filter.setObjectName("action_filter")
+        self.action_filter.setShortcut('Ctrl+F')
+        self.action_filter.triggered.connect(self.open_filter_window)
 
         self.action_deconvolution = QtWidgets.QAction(self.main_window)
         self.action_deconvolution.setObjectName("action_deconvolution")
 
         self.action_processing_image = QtWidgets.QAction(self.main_window)
         self.action_processing_image.setObjectName("action_processing_image")
+        self.action_processing_image.setShortcut('Ctrl+P')
         self.action_processing_image.triggered.connect(
             self.open_processing_image_window
         )
@@ -263,11 +271,11 @@ class Ui_mainwindow(object):
         self.add_sound_window.show()
 
     def open_statistics_window(self) -> None:
-        self.statistics_ui.setupUi(self.statistics_window)
+        self.statistics_ui = Ui_statistics(self)
         self.statistics_window.show()
 
     def open_filter_window(self) -> None:
-        self.filter_ui.setupUi(self.filter_window)
+        self.filter_ui = Ui_filter_window(self)
         self.filter_window.show()
 
     def open_deconvolution_window(self) -> None:
@@ -277,48 +285,56 @@ class Ui_mainwindow(object):
     def open_processing_image_window(self) -> None:
         self.processing_image_window.show()
 
-    def show_graph(self, graph, place: int) -> None:
-        pen = pg.mkPen(color="#AB47BC", width=5)
+    def show_graph(self, graph, place: int, normalisation: bool = False) -> None:
+        pen = pg.mkPen(color="#AB47BC", width=1)
+        x = graph.x
+        y = graph.y
+
+        if normalisation is True:
+            len_graph = len(graph.x)
+            new_n = int(len_graph / 2)
+            x = graph.x[:new_n]
+            y = graph.y[:new_n]
 
         if place == 1:
             self.graphWidget_1.clear()
             self.graphWidget_1.addLegend()
-            self.graphWidget_1.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_1.plot(x, y, pen=pen, name=graph.option)
             self.label_model_1.hide()
             self.graphWidget_1.show()
 
         elif place == 2:
             self.graphWidget_2.clear()
             self.graphWidget_2.addLegend()
-            self.graphWidget_2.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_2.plot(x, y, pen=pen, name=graph.option)
             self.label_model_2.hide()
             self.graphWidget_2.show()
 
         elif place == 3:
             self.graphWidget_3.clear()
             self.graphWidget_3.addLegend()
-            self.graphWidget_3.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_3.plot(x, y, pen=pen, name=graph.option)
             self.label_model_3.hide()
             self.graphWidget_3.show()
 
         elif place == 4:
             self.graphWidget_4.clear()
             self.graphWidget_4.addLegend()
-            self.graphWidget_4.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_4.plot(x, y, pen=pen, name=graph.option)
             self.label_model_4.hide()
             self.graphWidget_4.show()
 
         elif place == 5:
             self.graphWidget_5.clear()
             self.graphWidget_5.addLegend()
-            self.graphWidget_5.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_5.plot(x, y, pen=pen, name=graph.option)
             self.label_model_5.hide()
             self.graphWidget_5.show()
 
         elif place == 6:
             self.graphWidget_6.clear()
             self.graphWidget_6.addLegend()
-            self.graphWidget_6.plot(graph.x, graph.y, pen=pen, name=graph.option)
+            self.graphWidget_6.plot(x, y, pen=pen, name=graph.option)
             self.label_model_6.hide()
             self.graphWidget_6.show()
 

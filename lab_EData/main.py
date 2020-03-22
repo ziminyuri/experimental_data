@@ -3,7 +3,7 @@ from tkinter import *
 from PyQt5 import QtWidgets
 
 from forms.py_forms.mainwindow import Ui_mainwindow
-from MainWindow import MainWindow
+from tkinter_ui.MainWindow import MainWindow
 
 
 def main():

@@ -211,6 +211,65 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="2">
+       <widget class="QRadioButton" name="radioButton_8">
+        <property name="text">
+         <string>Нулевая строка</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3" rowspan="7">
+       <widget class="Line" name="line_8">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Шум</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4">
+       <widget class="QCheckBox" name="checkBox_4">
+        <property name="text">
+         <string>Гаусса</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="4">
+       <widget class="QLineEdit" name="lineEdit_2"/>
+      </item>
+      <item row="7" column="4">
+       <widget class="QCheckBox" name="checkBox_5">
+        <property name="text">
+         <string>Соль и перец</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QRadioButton" name="radioButton_9">
+        <property name="text">
+         <string>Производная нулевой строки</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QRadioButton" name="radioButton_10">
+        <property name="text">
+         <string>Автокорреляция строки</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="QRadioButton" name="radioButton_11">
+        <property name="text">
+         <string>Спектр автокореляции</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
