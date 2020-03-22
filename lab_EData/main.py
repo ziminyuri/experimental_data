@@ -3,20 +3,7 @@ from tkinter import *
 from PyQt5 import QtWidgets
 
 from forms.py_forms.mainwindow import Ui_mainwindow
-from MainWindow import MainWindow
-
-_GRAPH: list = [None, None, None, None, None, None]
-# _GRAPH: list = [0, 0, 0, 0, 0, 0]
-_IMG: list = [0, 0, 0, 0, 0, 0]
-# _IMG: list = [None, None, None, None, None, None]
-
-
-def get_GRAPH():
-    return _GRAPH
-
-
-def get_IMG():
-    return _IMG
+from tkinter_ui.MainWindow import MainWindow
 
 
 def main():

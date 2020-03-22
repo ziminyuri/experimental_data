@@ -1,8 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from Image import MyImage as Image
-from model_1 import Model
+from model import Model
 
+from setting import *
 
 class image_processing_window(object):
     def __init__(self, main_window: object, graphWidget):
@@ -146,6 +147,8 @@ class image_processing_window(object):
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.setStyleSheet("background-color: #546E7A")
+        combo_list:list = GET_LIST_ANALYSIS()
+        self.comboBox_2.addItems(combo_list)
         self.gridLayout.addWidget(self.comboBox_2, 15, 0, 1, 1)
 
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
@@ -238,7 +241,7 @@ class image_processing_window(object):
             _translate("MainWindow", "Показать обработанное изображение")
         )
         self.checkBox_show_plot.setText(_translate("MainWindow", "Показать график"))
-        self.radioButton_8.setText(_translate("MainWindow", "Спектр"))
+        self.radioButton_8.setText(_translate("MainWindow", "Нулевая строка"))
         self.label_6.setText(_translate("MainWindow", "Шум"))
         self.checkBox_4.setText(_translate("MainWindow", "Гаусса"))
         self.checkBox_5.setText(_translate("MainWindow", "Соль и перец"))
@@ -308,22 +311,24 @@ class image_processing_window(object):
         # Спектр фурье изображения
         elif self.radioButton_8.isChecked():
             if place_to_show_plot == 1:
-                self.image.fft(self.main_window.graphWidget_1, show_plot)
+                self.image.zero_row(self.main_window.graphWidget_1, show_plot)
 
             elif place_to_show_plot == 2:
-                self.image.fft(self.main_window.graphWidget_2, show_plot)
+                self.image.zero_row(self.main_window.graphWidget_2, show_plot)
 
             elif place_to_show_plot == 3:
-                self.image.fft(self.main_window.graphWidget_3, show_plot)
+                self.image.zero_row(self.main_window.graphWidget_3, show_plot)
 
             elif place_to_show_plot == 4:
-                self.image.fft(self.main_window.graphWidget_4, show_plot)
+                self.image.zero_row(self.main_window.graphWidget_4, show_plot)
 
             elif place_to_show_plot == 5:
-                self.image.fft(self.main_window.graphWidget_5, show_plot)
+                self.image.zero_row(self.main_window.graphWidget_5, show_plot)
 
             elif place_to_show_plot == 6:
-                self.image.fft(self.main_window.graphWidget_6, show_plot)
+                self.image.zero_row(self.main_window.graphWidget_6, show_plot)
+
+
 
         # Шум: Соль и Перец
         if self.checkBox_5.isChecked():

@@ -1,8 +1,9 @@
 from PyQt5 import QtCore, QtWidgets
 
-from model_1 import Model
+from model import Model
 from trend import Trend
-# from main import get_GRAPH, get_IMG
+from setting import *
+
 
 class Ui_filter_window(object):
     def __init__(self,  main_window):
@@ -17,94 +18,120 @@ class Ui_filter_window(object):
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(self.close_window)
         self.gridLayout_2.addWidget(self.pushButton_3, 1, 3, 1, 1)
+
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_4.setObjectName("lineEdit_4")
         self.gridLayout.addWidget(self.lineEdit_4, 9, 0, 1, 1)
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+
         self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.gridLayout.addWidget(self.lineEdit_3, 7, 0, 1, 1)
+
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setObjectName("label_7")
         self.gridLayout.addWidget(self.label_7, 8, 0, 1, 1)
+
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName("lineEdit")
         self.gridLayout.addWidget(self.lineEdit, 3, 0, 1, 1)
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
+
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_2.setObjectName("comboBox_2")
         comboBox_values: list = ['1', '2', '3', '4', '5', '6']
         self.comboBox_2.addItems(comboBox_values)
         self.gridLayout.addWidget(self.comboBox_2, 12, 0, 1, 1)
+
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.gridLayout.addWidget(self.line, 10, 0, 1, 1)
+
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItems(comboBox_values)
+        comboBox_list: list = GET_LIST_ANALYSIS()
+        self.comboBox.addItems(comboBox_list)
         self.gridLayout.addWidget(self.comboBox, 1, 0, 1, 1)
+
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 11, 0, 1, 1)
+
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.gridLayout.addWidget(self.lineEdit_2, 5, 0, 1, 1)
+
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 6, 0, 1, 1)
+
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setObjectName("label_3")
         self.gridLayout.addWidget(self.label_3, 4, 0, 1, 1)
+
         self.comboBox_3 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_3.setObjectName("comboBox_3")
         type_values: list = ['Низких частот', 'Высоких частот', 'Полосовой', 'Режекторный']
         self.comboBox_3.addItems(type_values)
         self.gridLayout.addWidget(self.comboBox_3, 1, 2, 1, 1)
+
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 0, 2, 1, 1)
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.add_filter_graph)
         self.gridLayout.addWidget(self.pushButton, 2, 2, 1, 1)
+
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
         self.gridLayout.addWidget(self.line_3, 3, 2, 1, 1)
+
         self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton.setObjectName("radioButton")
         self.gridLayout.addWidget(self.radioButton, 5, 2, 1, 1)
+
         self.radioButton_image = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_image.setObjectName("radioButton_2")
         self.gridLayout.addWidget(self.radioButton_image, 6, 2, 1, 1)
+
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
         self.label_8.setObjectName("label_8")
         self.gridLayout.addWidget(self.label_8, 4, 2, 1, 1)
+
         self.line_4 = QtWidgets.QFrame(self.centralwidget)
         self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_4.setObjectName("line_4")
         self.gridLayout.addWidget(self.line_4, 7, 2, 1, 1)
+
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
         self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
         self.gridLayout.addWidget(self.line_2, 0, 1, 13, 1)
+
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 4)
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(self.filtration)
         self.gridLayout_2.addWidget(self.pushButton_2, 1, 2, 1, 1)
+
         self.filter_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.filter_window)
         self.statusbar.setObjectName("statusbar")
@@ -133,10 +160,10 @@ class Ui_filter_window(object):
     def filtration(self):
         if self.radioButton_image.isChecked():
             filter_trend = Trend()
-            # filter_trend.m = 64
-            # filter_trend.dt = 0.001
-            # filter_trend.fc_1 = 65
-            # filter_trend.fc_2 = 110
+            filter_trend.m = 64
+            filter_trend.dt = 0.001
+            filter_trend.fc_1 = 65
+            filter_trend.fc_2 = 110
             filter_trend.generating_trend_notch_filter()
 
             image_after_filtration = self.image.filtration(filter_trend)
@@ -149,9 +176,10 @@ class Ui_filter_window(object):
         name_of_graph: str = self.comboBox_3.currentText()
         model = Model(name_of_graph)
         model.calculation()
-        #list_of_graph = get_GRAPH()
-        #list_of_graph[place_to_show] = model
+
+        POSITION_FOR_ANALYSIS[place_to_show] = model
         self.main_window.show_graph(model, place_to_show)
+
         self.close_window()
 
     def close_window(self):

@@ -7,13 +7,13 @@ import numpy as np
 from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
-from model_1 import Model
+from model import Model
 import pyqtgraph as pg
-from model_1 import convolution_img
+from model import convolution_img
 import cv2
-from skimage.util import random_noise
 
 import matplotlib.pyplot as plt
+from setting import *
 
 
 class MyImage:
@@ -68,28 +68,34 @@ class MyImage:
                     pil_draw.point((j, i), (pixel_value, pixel_value, pixel_value))
                     pixel += 1
 
-            img.save(self.image_path_default)
+            img.save(PATH_IMG_TEMP_1)
+            add_IMG(1)
             self.update(1)
 
     def update(self, place_to_show: int = 1) -> None:
-        self.image = QPixmap(self.image_path_default)
 
         if place_to_show == 1:
+            self.image = QPixmap(PATH_IMG_TEMP_1)
             self.place_to_show_1.setPixmap(self.image)
 
         elif place_to_show == 2:
+            self.image = QPixmap(PATH_IMG_TEMP_2)
             self.place_to_show_2.setPixmap(self.image)
 
         elif place_to_show == 3:
+            self.image = QPixmap(PATH_IMG_TEMP_3)
             self.place_to_show_3.setPixmap(self.image)
 
         elif place_to_show == 4:
+            self.image = QPixmap(PATH_IMG_TEMP_4)
             self.place_to_show_4.setPixmap(self.image)
 
         elif place_to_show == 5:
+            self.image = QPixmap(PATH_IMG_TEMP_5)
             self.place_to_show_5.setPixmap(self.image)
 
         elif place_to_show == 6:
+            self.image = QPixmap(PATH_IMG_TEMP_6)
             self.place_to_show_6.setPixmap(self.image)
 
     def smoothing(self, type_smoothing: str, factor: float, show_image: bool = False, place_to_show_image: int = 1) \
@@ -242,8 +248,55 @@ class MyImage:
 
         return model
 
+    def zero_row(self, graphWidget, show_plot):
+        self.image.save(self.image_path_default)
+        pil_img = Image.open(self.image_path_default)
+        width = pil_img.size[0]
+        pix = pil_img.load()
+        matrix = []
+        pen = pg.mkPen(color="#AB47BC", width=1)
+
+        if show_plot:
+            graphWidget.show()
+
+        for i in range(width):
+            red = pix[i, 0][0]
+            matrix.append(red)
+
+        n = len(matrix)
+        x = np.arange(n)
+        y = np.array(matrix)
+        graphWidget.plot(x=x, y=y, pen=pen)
+
     # Cпектр Фурье изображения
     def fft(self, graphWidget, show_plot):
+
+
+
+
+        """
+        self.image.save(self.image_path_default)
+        pen = pg.mkPen(color="#AB47BC", width=1)
+        image = io.imread(self.image_path_default)
+        n = int(image.shape[0])
+        m = int(image.shape[1]) * 3
+        for i in range(0, n, 1):
+            a = image[i-1, :]
+            a = np.reshape(a, m)
+            new_image = np.gradient(a)
+            b = image[i, :]
+            b = np.reshape(b, m)
+            new_image_1 = np.gradient(b)
+            Rxy = np.correlate(new_image, new_image_1, mode = "full")
+            new_image_f = np.fft.rfft(Rxy)
+            axis_shift = np.linspace(0, 255, len(new_image_f))
+
+            graphWidget.plot(x=axis_shift, y=abs(new_image_f), pen=pen)
+
+        graphWidget.show()
+        """
+
+        """
         self.image.save(self.image_path_default)
         pil_img = Image.open(self.image_path_default)
         width = pil_img.size[0]
@@ -273,6 +326,7 @@ class MyImage:
                 graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen, name=legend)
             else:
                 graphWidget.plot(x=axis_shift, y=abs(fft), pen=pen)
+  """
 
     def filtration(self, my_filter: object):
         self.image.save(self.image_path_default)
@@ -291,7 +345,7 @@ class MyImage:
             convolution_row = convolution_img(matrix[i], my_filter.y)
             matrix[i] = convolution_row
 
-        normalisation = True
+        normalisation = False
         if normalisation is True:
             pix_max: int = np.amax(matrix)
             for i in range(width):
@@ -306,7 +360,7 @@ class MyImage:
 
                 pil_draw.point((i, j), (red, green, blue))
 
-        pil_img.save("filtration.jpg")
+        pil_img.save("filtration1.jpg")
 
     def noise(self, type_of_noise, show_image, place_to_show_image, factor=0.01):
         if type_of_noise == "sold_peper":
@@ -337,8 +391,16 @@ class MyImage:
         elif type_of_noise == "gaussian":
             self.image.save(self.image_path_default)
             image = cv2.imread(self.image_path_default)
-            gauss = random_noise(image, mode='gaussian', seed=None, clip=True, var=factor)
-            plt.imsave(self.image_path_default, gauss)
+            # gauss = random_noise(image, mode='gaussian', seed=None, clip=True, var=factor)
+            row, col, ch = image.shape
+            mean = 0
+            var = 0.1
+            var = factor
+            sigma = var ** 0.5
+            gauss = np.random.normal(mean, sigma, (row, col, ch))
+            gauss = gauss.reshape(row, col, ch)
+            noisy = image + gauss
+            plt.imsave(self.image_path_default, noisy)
 
         if show_image:
             self.update(place_to_show_image)

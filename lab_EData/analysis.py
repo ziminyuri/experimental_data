@@ -3,7 +3,7 @@ import math
 from random import random
 
 import numpy as np
-from numpy.fft import fft, rfft, rfftfreq
+from numpy.fft import rfft, rfftfreq
 
 from model import Model
 

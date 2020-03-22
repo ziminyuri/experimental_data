@@ -46,27 +46,6 @@ def convolution(trend_1, trend_2):
     return trend
 
 
-def convolution_img(img: np.ndarray, my_filter: np.ndarray) -> np.ndarray:
-    n: int = len(img)
-    m: int = len(my_filter)
-
-    y: list = []
-    for i in range(n):
-        y_k: int = 0
-        for j in range(m):
-            coefficient_x: int = i - j
-            if coefficient_x >= 0:
-                y_m = img[coefficient_x] * my_filter[j]
-            else:
-                y_m = 0
-            y_k += y_m
-
-        y.append(y_k)
-
-    img_after_filtration = np.array(y)
-    return img_after_filtration
-
-
 class Model:
     def __init__(self, option):
         self.n = 1000  # Количество точек по оси Х
@@ -79,7 +58,7 @@ class Model:
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
         self.flag_checking_display_x = 0  # Флаг использования половины self.x
 
-        self.option: str = option  # Тип функции
+        self.option = option  # Тип функции
         self.graph = 0  # Номер места где расположен график
         self.flag_normalisation = 1  # Флаг, что необходима нормализация
 
@@ -129,45 +108,52 @@ class Model:
 
     def calculation(self):
 
-        if self.option == 'y(x)=kx+b':
+        # y(x)=kx+b
+        if self.option == 1:
             trend = Trend()
             trend.generating_trend_line()
 
             self.y = trend.y
 
-        if self.option == 'y(x)=-kx+b':
+        # y(x)=-kx+b
+        if self.option == 2:
             trend = Trend()
             trend.generating_trend_line()
             trend.y = np.flip(trend.y)
 
             self.y = trend.y
 
-        if self.option == 'y(x) = beta * exp^(alpha * i)':
+        # y(x) = beta * exp^(alpha * i)
+        if self.option == 3:
             trend = Trend()
             trend.generating_exhibitor()
 
             self.y = trend.y
 
-        if self.option == 'y(x) = beta * exp^(alpha * -i)':
+        # y(x) = beta * exp^(alpha * -i)
+        if self.option == 4:
             trend = Trend()
             trend.generating_exhibitor()
             trend.y = np.flip(trend.y)
 
             self.y = trend.y
 
-        if self.option == 'Встроенный рандом':
+        # Встроенный рандом
+        if self.option == 5:
             trend = Trend()
             trend.generating_trend_random(self.s_min, self.s_max)
 
             self.y = trend.y
 
-        if self.option == 'Кастомный рандом':
+        # Кастомный рандом
+        if self.option == 6:
             trend = Trend()
             trend.generating_custom_random()
 
             self.y = trend.y
 
-        if self.option == 'Рандом + сдвиг':
+        # Рандом + сдвиг
+        if self.option == 7:
             trend1 = Trend()
             trend1.generating_trend_random(self.s_min, self.s_max)
 
@@ -178,7 +164,8 @@ class Model:
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
 
-        if self.option == 'Значения за областью':
+        # Значения за областью
+        if self.option == 8:
             trend1 = Trend()
             trend1.generating_random_spikes(self.s_min, self.s_max)
 
@@ -187,7 +174,8 @@ class Model:
             # Указали, что не требуется нормализация
             self.flag_normalisation = 0
 
-        if self.option == 'Адитивная модель №1':
+        # Адитивная модель №1
+        if self.option == 9:
             trend1 = Trend()
             trend1.generating_trend_line()
             trend1.y = np.flip(trend1.y)
@@ -199,7 +187,8 @@ class Model:
 
             self.y = trend.y
 
-        if self.option == 'Адитивная модель №2':
+        # Адитивная модель №2
+        if self.option == 10:
             trend1 = Trend()
             trend1.generating_trend_line()
 
@@ -210,7 +199,8 @@ class Model:
 
             self.y = trend.y
 
-        if self.option == 'Мультипликативная модель №1':
+        # Мультипликативная модель №1
+        if self.option == 11:
             trend1 = Trend()
             trend1.generating_trend_line()
             trend1.y = np.flip(trend1.y)
@@ -222,7 +212,8 @@ class Model:
 
             self.y = trend.y
 
-        if self.option == 'Мультипликативная модель №2':
+        # Мультипликативная модель №2
+        if self.option == 12:
             trend1 = Trend()
             trend1.generating_trend_line()
 
@@ -233,13 +224,15 @@ class Model:
 
             self.y = trend.y
 
-        if self.option == 'График кусочной функции':
+        # График кусочной функции
+        if self.option == 13:
             trend = Trend()
             trend.generating_piecewise_function(self.s_min, self.s_max)
 
             self.y = trend.y
 
-        if self.option == 'Гармоническое процесс':
+        # График гармонический процесс
+        if self.option == 17:
             trend = Trend()
             trend.generating_harmonic_process()
 
@@ -252,13 +245,14 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
+        # График полигармонического процесса
         # x(t) = x1(t) + x2(t) = x3(t)
         # xi(t) = Ai * sin(2piFit)
         # A1 = 25       f1 = 11
         # A2 = 35       f2 = 41
         # A3 = 30       f3 = 141
 
-        if self.option == 'Полигармоническое процесс':
+        if self.option == 19:
             trend1 = Trend()
             trend2 = Trend()
             trend3 = Trend()
@@ -280,7 +274,8 @@ class Model:
 
             self.y = trend.y
 
-        if self.option == 'Рандом + спайки':
+        # График Рандом + спайки
+        if self.option == 20:
             trend_1 = Trend()
             trend_1.generating_trend_random(self.s_min, self.s_max)
 
@@ -295,7 +290,8 @@ class Model:
             self.axis_max = np.amax(self.y) * 1.2
             self.axis_min = np.amin(self.y) * 1.2
 
-        if self.option == 'ГП + trend':
+        # График Гармонический процесс + trend
+        if self.option == 25:
             trend_1 = Trend()
             trend_2 = Trend()
 
@@ -305,7 +301,8 @@ class Model:
 
             self.y = trend.y
 
-        if self.option == 'ГП + спайки':
+        # График Гармонический процесс + спайки
+        if self.option == 26:
             trend_1 = Trend()
             trend_2 = Trend()
 
@@ -319,7 +316,8 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
-        if self.option == 'ГП + спайки + рандом + trend':
+        # График ГП(гармонический процесс) + спайки + рандом + trend
+        if self.option == 27:
             trend_1 = Trend()
             trend_2 = Trend()
             trend_3 = Trend()
@@ -339,7 +337,8 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
-        if self.option == 'Загрузить из файла':
+        # График из файла
+        if self.option == 28:
             trend = Trend()
             trend.generating_trend_from_file()
 
@@ -348,8 +347,8 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
-        # кардиограма
-        if self.option == 'ГП + exp':
+        # График ГП + экспонента (кардиограма)
+        if self.option == 29:
             self.n = 200
             self.x = np.arange(0, self.n)
             # self.delta_t = 0.005
@@ -385,7 +384,8 @@ class Model:
             self.s_min = -self.s_max
 
         # Реализация фильтров
-        if self.option == 'Низких частот':
+        # Низких частот
+        if self.option == 30:
             trend = Trend()
             trend.generation_trend_filter_potter()
 
@@ -395,7 +395,8 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Высоких частот':
+        # Фильтр высоких частот
+        if self.option == 31:
             trend = Trend()
             trend.generating_trend_high_potter()
 
@@ -405,7 +406,8 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Полосовой':
+        # Полосовой фильтр
+        if self.option == 32:
             trend = Trend()
             trend.generating_trend_bandpass_filter()
 
@@ -415,7 +417,8 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Режекторный':
+        # Режекторный фильтр
+        if self.option == 33:
             trend = Trend()
             trend.generating_trend_notch_filter()
 
@@ -425,8 +428,9 @@ class Model:
             self.display_n = trend.display_n
             self.dt = trend.dt
 
-        if self.option == 'Звук ma.wav':
-            self.name_of_wav_file = "input files/custom.wav"
+        # Звук ma.wav
+        if self.option == 34:
+            self.name_of_wav_file = "../input files/custom.wav"
             sound_trend = Sound(self.name_of_wav_file)
 
             self.x = sound_trend.x
@@ -436,8 +440,9 @@ class Model:
             self.n = len(self.x)
             self.flag_checking_display_n = 1
 
-        if self.option == 'Звук my_voice.wav':
-            self.name_of_wav_file = "input files/my_voice.wav"
+        # Звук my_voice.wav
+        if self.option == 35:
+            self.name_of_wav_file = "../input files/my_voice.wav"
             sound_trend = Sound(self.name_of_wav_file)
 
             self.x = sound_trend.x
@@ -447,7 +452,8 @@ class Model:
             self.n = len(self.x)
             self.flag_checking_display_n = 1
 
-        if self.option == 'Экзамен':
+        # Экзамен
+        if self.option == 36:
             trend = Trend()
             trend.generating_trend_from_file_exam()
 
@@ -457,7 +463,7 @@ class Model:
             self.normalisation_axis()
 
         # Модель Input: кардиограма, заполненная нулями с 200 до 1000
-        if self.option == 'кардиограма':
+        if self.option == 37:
             self.n = 200
             self.x = np.arange(0, self.n)
             self.s_max = 1

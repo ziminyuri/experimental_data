@@ -194,10 +194,8 @@ class Ui_mainwindow(object):
         self.add_sound_ui = Ui_add_sound()
 
         self.statistics_window = QtWidgets.QMainWindow()
-        self.statistics_ui = Ui_statistics(self.statistics_window)
 
         self.filter_window = QtWidgets.QMainWindow()
-        self.filter_ui = Ui_filter_window(self)
 
         self.deconvolution_window = QtWidgets.QMainWindow()
         self.deconvolution_ui = Ui_deconvolution_window()
@@ -273,9 +271,11 @@ class Ui_mainwindow(object):
         self.add_sound_window.show()
 
     def open_statistics_window(self) -> None:
+        self.statistics_ui = Ui_statistics(self)
         self.statistics_window.show()
 
     def open_filter_window(self) -> None:
+        self.filter_ui = Ui_filter_window(self)
         self.filter_window.show()
 
     def open_deconvolution_window(self) -> None:
@@ -285,8 +285,10 @@ class Ui_mainwindow(object):
     def open_processing_image_window(self) -> None:
         self.processing_image_window.show()
 
-    def show_graph(self, graph, place: int) -> None:
+    def show_graph(self, graph, place: int, normalisation: bool = False) -> None:
         pen = pg.mkPen(color="#AB47BC", width=5)
+        if normalisation is True:
+            len_graph = len(graph.x)
 
         if place == 1:
             self.graphWidget_1.clear()

@@ -1,15 +1,16 @@
 from PyQt5 import QtCore, QtWidgets
 
 from analysis import Analysis
-# from main import IMG, GRAPH
+from setting import *
 
 
 class Ui_statistics(object):
     def __init__(self, MainWindow):
-        self.statistics_window = MainWindow
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 539)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.main_window = MainWindow
+        self.statistics_window = MainWindow.statistics_window
+        self.statistics_window.setObjectName("MainWindow")
+        self.statistics_window.resize(800, 539)
+        self.centralwidget = QtWidgets.QWidget(self.statistics_window)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 771, 456))
@@ -67,7 +68,7 @@ class Ui_statistics(object):
         self.gridLayout.addWidget(self.radioButton_9, 10, 0, 1, 1)
         self.comboBox = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox.setObjectName("comboBox")
-        comboBox_values: list = ['1', '2', '3', '4', '5', '6']
+        comboBox_values: list = GET_LIST_ANALYSIS()
         self.comboBox.addItems(comboBox_values)
         self.gridLayout.addWidget(self.comboBox, 1, 0, 1, 1)
         self.pushButton_3 = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -84,10 +85,11 @@ class Ui_statistics(object):
         self.gridLayout.addWidget(self.pushButton_2, 3, 1, 1, 1)
         self.pushButton_7 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton_7.setObjectName("pushButton_7")
+        self.pushButton_7.clicked.connect(self.fast_fourier_transform)
         self.gridLayout.addWidget(self.pushButton_7, 12, 1, 1, 1)
         self.comboBox_2 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.addItems(["1", "2", "3", "4"])
+        self.comboBox_2.addItems(["1", "2", "3", "4", "5", "6"])
         self.gridLayout.addWidget(self.comboBox_2, 1, 1, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_2.setObjectName("label_2")
@@ -114,20 +116,24 @@ class Ui_statistics(object):
         self.pushButton_8.setGeometry(QtCore.QRect(670, 470, 112, 32))
         self.pushButton_8.setObjectName("pushButton_8")
         self.pushButton_8.clicked.connect(self.close_window)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statistics_window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(self.statistics_window)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        self.statistics_window.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(self.statistics_window)
+        QtCore.QMetaObject.connectSlotsByName(self.statistics_window)
 
     def close_window(self):
         self.statistics_window.close()
 
+    def update(self):
+        comboBox_values: list = GET_LIST_ANALYSIS()
+        self.comboBox.addItems(comboBox_values)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Статистики"))
+        self.statistics_window.setWindowTitle(_translate("MainWindow", "Статистики"))
         self.radioButton_10.setText(_translate("MainWindow", "Стандартный коэфициент"))
         self.label.setText(_translate("MainWindow", "График для анализа"))
         self.radioButton_13.setText(_translate("MainWindow", "Максимальный Х"))
@@ -162,12 +168,13 @@ class Ui_statistics(object):
         self.pushButton_8.setText(_translate("MainWindow", "Закрыть"))
 
     def fast_fourier_transform(self):
-        analysis_model = self.get_model()
-        analysis = Analysis(analysis_model)
+        position_to_analysis = int(self.comboBox.currentText())
+        model_for_analysis = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+
+        analysis = Analysis(model_for_analysis)
         model = analysis.spectrum()
 
-        place_of_graph = self.c2.get()
-        self.set_graph(model, place_of_graph)
-
-        self.draw_graph(model)
-        window.destroy()
+        place_to_show = int(self.comboBox_2.currentText())
+        POSITION_FOR_ANALYSIS[place_to_show] = model
+        self.main_window.show_graph(model, place_to_show, normalisation=True)
+        self.close_window()

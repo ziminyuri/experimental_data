@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from model_1 import Model
+from model import Model
+from setting import *
 
 
 # Окно: Добавить новый график
@@ -178,6 +179,7 @@ class Ui_add_graph(object):
         name_of_graph: str = self.comboBox_2.currentText()
         model = Model(name_of_graph)
         model.calculation()
+        POSITION_FOR_ANALYSIS[place_to_show] = model
         self.main_window.show_graph(model, place_to_show)
         self.close_window()
 

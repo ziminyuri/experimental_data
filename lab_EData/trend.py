@@ -214,10 +214,10 @@ class Trend:
 
     # Генерируем тренд фильтра режекторного
     def generating_trend_notch_filter(self):
-        m = 64
+        m = 32
         self.dt = 0.001
-        fc_1 = 100
-        fc_2 = 140
+        fc_1 = 65
+        fc_2 = 120
 
         bsf = notch_filter(m, self.dt, fc_1, fc_2)
 

@@ -9,9 +9,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 from analysis import Analysis
-from ChildWindow import ChildWindow
+from tkinter_ui.ChildWindow import ChildWindow
 from Image import MyImage as Image
-from model import Model
+from tkinter_ui.model import Model
 
 
 class MainWindow(Frame):
