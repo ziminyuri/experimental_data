@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
-from Image import zero_row, derivative, noise, image_processing
+from Image import zero_row, derivative, noise, image_processing, smoothing
 
 
 class image_processing_window(object):
@@ -273,7 +273,7 @@ class image_processing_window(object):
         if self.radioButton.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
-                # self.image.smoothing("nearest", smoothing_factor, show_image, place_to_show_image)
+                smoothing(img_path, "nearest", smoothing_factor, place_to_show_image)
             except:
                 pass
 
@@ -281,7 +281,7 @@ class image_processing_window(object):
         elif self.radioButton_2.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
-                # self.image.smoothing("bilinear", smoothing_factor, show_image, place_to_show_image)
+                smoothing(img_path, "bilinear", smoothing_factor, place_to_show_image)
             except:
                 pass
 
@@ -291,13 +291,11 @@ class image_processing_window(object):
 
         # Гамма коррекция
         elif self.radioButton_4.isChecked():
-            pass
-            # self.image.image_processing("gamma", show_image, place_to_show_image)
+            image_processing("gamma", img_path, place_to_show_image)
 
         # Логорифмическое
         elif self.radioButton_5.isChecked():
-            pass
-            # self.image.image_processing("logarithmic", show_image, place_to_show_image)
+            image_processing("logarithmic", img_path, place_to_show_image)
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():

@@ -18,8 +18,6 @@ def open_img(main_window) -> None:
     flag_xcr: int = path.find('xcr')
 
     if path and flag_xcr == -1:
-        # image = QPixmap(path)
-        # main_window.label_model_1.setPixmap(image)
         pil_img = Image.open(path)
         save(pil_img)
 
@@ -213,10 +211,10 @@ def logarithmic(red: int, green: int, blue: int):
     return new_red, new_green, new_blue
 
 
-def cdf(self, red: int, green: int, blue: int):
-    red = int(self.cdf_y[red])
-    green = int(self.cdf_y[green])
-    blue = int(self.cdf_y[blue])
+def cdf(red: int, green: int, blue: int):
+    # red = int(self.cdf_y[red])
+    # green = int(self.cdf_y[green])
+    # blue = int(self.cdf_y[blue])
 
     return red, green, blue
 
@@ -229,7 +227,6 @@ def image_processing(type_processing: str, path: str, place_to_show_image: int =
     pix = pil_img.load()
     for i in range(width):
         for j in range(height):
-            print(pix[i, j])
             r = pix[i, j][0]
             g = pix[i, j][1]
             b = pix[i, j][2]
