@@ -79,8 +79,11 @@ def zero_row(path: str) -> object:
     matrix = []
 
     for i in range(width):
-        red = pix[i, 0][0]
-        matrix.append(red)
+        try:
+            pixel = pix[i, 0][0]
+        except:
+            pixel = pix[i, 0]
+        matrix.append(pixel)
 
     model = Model("Нулевая строка")
     model.n = len(matrix)
@@ -97,8 +100,11 @@ def derivative(path: str) -> object:
     matrix = []
 
     for i in range(width):
-        red = pix[i, 0][0]
-        matrix.append(red)
+        try:
+            pixel = pix[i, 0][0]
+        except:
+            pixel = pix[i, 0]
+        matrix.append(pixel)
 
     y = np.gradient(matrix)
     n = len(matrix)
