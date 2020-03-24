@@ -1,22 +1,16 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-
-from Image import MyImage as Image
-from model import Model
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
+from Image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
 
 class image_processing_window(object):
-    def __init__(self, main_window: object, graphWidget):
-        self.image = main_window.image
+    def __init__(self, main_window: object):
+        self.main_window = main_window
         self.processing_image_window = main_window.processing_image_window
         self.processing_image_window.setObjectName("MainWindow")
         self.processing_image_window.resize(804, 441)
         self.processing_image_window.setStyleSheet("background-color: #263238")
-        self.main_window = main_window
-        self.graphWidget = graphWidget
-
-        self.is_image = False
-
         self.centralwidget = QtWidgets.QWidget(self.processing_image_window)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -146,9 +140,9 @@ class image_processing_window(object):
 
         self.comboBox_2 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.setStyleSheet("background-color: #546E7A")
-        combo_list:list = GET_LIST_ANALYSIS()
-        self.comboBox_2.addItems(combo_list)
+        self.comboBox_2.setStyleSheet("background-color: #546E7A; color: #EEEEEE")
+        comboBox_list: list = GET_LIST_ANALYSIS()
+        self.comboBox_2.addItems(comboBox_list)
         self.gridLayout.addWidget(self.comboBox_2, 15, 0, 1, 1)
 
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
@@ -211,14 +205,17 @@ class image_processing_window(object):
 
         self.radioButton_9 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_9.setObjectName("radioButton_9")
+        self.radioButton_9.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.radioButton_9, 5, 2, 1, 1)
 
         self.radioButton_10 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_10.setObjectName("radioButton_10")
+        self.radioButton_10.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.radioButton_10, 6, 2, 1, 1)
 
         self.radioButton_11 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_11.setObjectName("radioButton_11")
+        self.radioButton_11.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.radioButton_11, 7, 2, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -245,13 +242,9 @@ class image_processing_window(object):
         self.label.setText(_translate("MainWindow", "Сглаживание"))
         self.label_3.setText(_translate("MainWindow", "Позиция вывода после обработки"))
         self.radioButton_6.setText(_translate("MainWindow", "Гистограмма"))
-        self.radioButton_7.setText(
-            _translate("MainWindow", "Кумулятивная функция распределения")
-        )
+        self.radioButton_7.setText(_translate("MainWindow", "Кумулятивная функция распределения"))
         self.checkBox_normalisation.setText(_translate("MainWindow", "Нормализовать"))
-        self.checkBox_2.setText(
-            _translate("MainWindow", "Показать обработанное изображение")
-        )
+        self.checkBox_2.setText(_translate("MainWindow", "Показать обработанное изображение"))
         self.checkBox_show_plot.setText(_translate("MainWindow", "Показать график"))
         self.radioButton_8.setText(_translate("MainWindow", "Нулевая строка"))
         self.label_6.setText(_translate("MainWindow", "Шум"))
@@ -269,13 +262,17 @@ class image_processing_window(object):
         place_to_show_image: int = int(self.comboBox.currentText())
         place_to_show_plot: int = int(self.comboBox_place_to_show_plot.currentText())
 
+        try:
+            position_img: int = int(self.comboBox_2.currentText())
+            img_path = POSITION_FOR_ANALYSIS.get(position_img)
+        except:
+            QMessageBox.about(self, "Title", "Message")
+
         # Ближайший сосед
         if self.radioButton.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
-                self.image.smoothing("nearest", smoothing_factor, show_image, place_to_show_image)
-                self.is_image = True
-
+                smoothing(img_path, "nearest", smoothing_factor, place_to_show_image)
             except:
                 pass
 
@@ -283,90 +280,62 @@ class image_processing_window(object):
         elif self.radioButton_2.isChecked():
             try:
                 smoothing_factor = float(self.lineEdit.text())
-                self.image.smoothing("bilinear", smoothing_factor, show_image, place_to_show_image)
-                self.is_image = True
-
+                smoothing(img_path, "bilinear", smoothing_factor, place_to_show_image)
             except:
                 pass
 
         # Негатив
         elif self.radioButton_3.isChecked():
-            self.image.image_processing("negative", show_image, place_to_show_image)
-            self.is_image = True
+            image_processing("negative", img_path, place_to_show_image)
 
         # Гамма коррекция
         elif self.radioButton_4.isChecked():
-            self.image.image_processing("gamma", show_image, place_to_show_image)
-            self.is_image = True
+            image_processing("gamma", img_path, place_to_show_image)
 
         # Логорифмическое
         elif self.radioButton_5.isChecked():
-            self.image.image_processing("logarithmic", show_image, place_to_show_image)
-            self.is_image = True
+            image_processing("logarithmic", img_path, place_to_show_image)
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():
-            model = self.image.bar_chart()
-
-            if show_plot:
-                self.main_window.show_graph(model, place_to_show_plot)
-
-            self.close_window()
+            model = bar_chart(img_path)
 
         # Кумулятивная функция распределения
         elif self.radioButton_7.isChecked():
             normalisation = self.checkBox_normalisation.isChecked()
-            model = self.image.cdf_function(normalisation)
-
-            if show_plot:
-                self.main_window.show_graph(model, place_to_show_plot)
-
-            self.image.image_processing("cdf", show_image, place_to_show_image)
+            model = cdf_function(img_path, normalisation)
+            image_processing("cdf", img_path, place_to_show_image)
 
         # График первой строки
         elif self.radioButton_8.isChecked():
-            if place_to_show_plot == 1:
-                self.image.zero_row(self.main_window.graphWidget_1, show_plot)
-
-            elif place_to_show_plot == 2:
-                self.image.zero_row(self.main_window.graphWidget_2, show_plot)
-
-            elif place_to_show_plot == 3:
-                self.image.zero_row(self.main_window.graphWidget_3, show_plot)
-
-            elif place_to_show_plot == 4:
-                self.image.zero_row(self.main_window.graphWidget_4, show_plot)
-
-            elif place_to_show_plot == 5:
-                self.image.zero_row(self.main_window.graphWidget_5, show_plot)
-
-            elif place_to_show_plot == 6:
-                self.image.zero_row(self.main_window.graphWidget_6, show_plot)
+            model = zero_row(img_path)
 
         # Производная строки
         elif self.radioButton_9.isChecked():
-            model = self.image.derivative(self.main_window.graphWidget_1, show_plot)
-
-            if show_plot:
-                self.main_window.show_graph(model, place_to_show_plot)
-
-            POSITION_FOR_ANALYSIS[place_to_show_plot] = model
+            model = derivative(img_path)
 
         # Шум: Соль и Перец
         if self.checkBox_5.isChecked():
             try:
                 factor = float(self.lineEdit_2.text())
-                self.image.noise("sold_peper", show_image, place_to_show_image, factor)
+                noise("sold_peper", place_to_show_image, img_path, factor)
             except:
-                self.image.noise("sold_peper", show_image, place_to_show_image)
+                noise("sold_peper", place_to_show_image, img_path)
 
         # Гаусса
         if self.checkBox_4.isChecked():
             try:
                 factor = float(self.lineEdit_2.text())
-                self.image.noise("gaussian", show_image, place_to_show_image, factor)
+                noise("gaussian", place_to_show_image, img_path, factor)
             except:
-                self.image.noise("gaussian", show_image, place_to_show_image)
+                noise("gaussian", place_to_show_image, img_path)
+
+        if show_image:
+            self.main_window.show_img(place_to_show_image)
+
+        if show_plot:
+            self.main_window.show_graph(model, place_to_show_plot)
+            POSITION_FOR_ANALYSIS[place_to_show_plot] = model
 
         self.close_window()
 

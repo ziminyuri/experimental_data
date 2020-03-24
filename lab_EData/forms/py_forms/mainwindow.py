@@ -1,5 +1,6 @@
 import pyqtgraph as pg
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import QPixmap
 
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
@@ -7,7 +8,9 @@ from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.image_processing import image_processing_window
 from forms.py_forms.statistics_window import Ui_statistics
-from Image import MyImage
+from Image import open_img
+
+from setting import *
 
 
 class Ui_mainwindow(object):
@@ -184,7 +187,6 @@ class Ui_mainwindow(object):
         self.statusbar.setObjectName("statusbar")
         self.main_window.setStatusBar(self.statusbar)
 
-        self.image = MyImage(self)
 
         # Инициализируем окна
         self.add_graph_window = QtWidgets.QMainWindow()
@@ -201,7 +203,6 @@ class Ui_mainwindow(object):
         self.deconvolution_ui = Ui_deconvolution_window()
 
         self.processing_image_window = QtWidgets.QMainWindow()
-        self.processing_image_ui = image_processing_window(self, self.graphWidget_1)
 
         self.action_add_graph = QtWidgets.QAction(self.main_window)
         self.action_add_graph.setObjectName("action_add_graph")
@@ -264,7 +265,8 @@ class Ui_mainwindow(object):
     def open_image_window(self) -> None:
         self.graphWidget_1.hide()
         self.label_model_1.show()
-        self.image.open()
+        open_img(self)
+        self.show_img(1)
 
     def open_add_sound_window(self) -> None:
         self.add_sound_ui.setupUi(self.add_sound_window)
@@ -283,6 +285,7 @@ class Ui_mainwindow(object):
         self.deconvolution_window.show()
 
     def open_processing_image_window(self) -> None:
+        self.image_processing_ui = image_processing_window(self)
         self.processing_image_window.show()
 
     def show_graph(self, graph, place: int, normalisation: bool = False) -> None:
@@ -337,6 +340,32 @@ class Ui_mainwindow(object):
             self.graphWidget_6.plot(x, y, pen=pen, name=graph.option)
             self.label_model_6.hide()
             self.graphWidget_6.show()
+
+    def show_img(self, place):
+        if place == 1:
+            image = QPixmap(PATH_IMG_TEMP_1)
+            self.label_model_1.setPixmap(image)
+
+        elif place == 2:
+            image = QPixmap(PATH_IMG_TEMP_2)
+            self.label_model_2.setPixmap(image)
+
+        elif place == 3:
+            image = QPixmap(PATH_IMG_TEMP_3)
+            self.label_model_3.setPixmap(image)
+
+        elif place == 4:
+            image = QPixmap(PATH_IMG_TEMP_4)
+            self.label_model_4.setPixmap(image)
+
+        elif place == 5:
+            image = QPixmap(PATH_IMG_TEMP_5)
+            self.label_model_5.setPixmap(image)
+
+        elif place == 6:
+            image = QPixmap(PATH_IMG_TEMP_6)
+            self.label_model_6.setPixmap(image)
+
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate

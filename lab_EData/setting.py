@@ -1,6 +1,3 @@
-GRAPH: list = [None, None, None, None, None, None]
-IMG: list = [False, False, False, False, False, False]
-
 POSITION_FOR_ANALYSIS = dict.fromkeys([1, 2, 3, 4, 5, 6])
 
 PATH_IMG_TEMP_1 = 'temporary/1.jpg'
@@ -19,13 +16,5 @@ def GET_LIST_ANALYSIS() -> list:
             list_analysis.append(str(k))
 
     return list_analysis
-
-
-def add_IMG(number_img: int) -> None:
-    IMG[number_img] = True
-
-
-def del_IMG(number_img: int) -> None:
-    IMG[number_img] = False
 
 
