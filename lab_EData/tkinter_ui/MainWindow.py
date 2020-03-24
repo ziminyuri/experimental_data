@@ -10,7 +10,6 @@ from matplotlib.figure import Figure
 
 from analysis import Analysis
 from tkinter_ui.ChildWindow import ChildWindow
-from Image import MyImage as Image
 from tkinter_ui.model import Model
 
 

@@ -6,7 +6,7 @@ from forms.py_forms.mainwindow import Ui_mainwindow
 from tkinter_ui.MainWindow import MainWindow
 
 
-def main():
+def tkinter_main():
     root = Tk()
     app = MainWindow(root)
     app.pack()
@@ -16,7 +16,7 @@ def main():
     root.mainloop()
 
 
-def pyqt5():
+def main():
     app = QtWidgets.QApplication(sys.argv)
     main_window = QtWidgets.QMainWindow()
     ui = Ui_mainwindow(main_window)
@@ -25,5 +25,5 @@ def pyqt5():
 
 
 if __name__ == "__main__":
-    # main()
-    pyqt5()
+    main()
+    # tkinter_main()
