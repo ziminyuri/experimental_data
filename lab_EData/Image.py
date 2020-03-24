@@ -174,6 +174,10 @@ def negative(red: int, green: int, blue: int):
     return 255 - red, 255 - green, 255 - blue
 
 
+def negative_gray(pixel: int) -> int:
+    return 255 - pixel
+
+
 def gamma_correction(red: int, green: int, blue: int):
     c = 20
     gamma = 0.3
@@ -191,6 +195,17 @@ def gamma_correction(red: int, green: int, blue: int):
         new_blue = 255
 
     return new_red, new_green, new_blue
+
+
+def gamma_correction_gray(pixel: int) -> int:
+    c = 20
+    gamma = 0.3
+    new_pixel = int(c * math.pow(pixel, gamma))
+
+    if new_pixel > 255:
+        new_pixel = 255
+
+    return new_pixel
 
 
 def logarithmic(red: int, green: int, blue: int):
@@ -211,12 +226,28 @@ def logarithmic(red: int, green: int, blue: int):
     return new_red, new_green, new_blue
 
 
-def cdf(red: int, green: int, blue: int):
-    # red = int(self.cdf_y[red])
-    # green = int(self.cdf_y[green])
-    # blue = int(self.cdf_y[blue])
+def logarithmic_gray(pixel: int) -> int:
+    c = 60
+    new_pixel = int(c * math.log10(pixel + 1))
+
+    if new_pixel > 255:
+        new_pixel = 255
+
+    return new_pixel
+
+
+def cdf(red: int, green: int, blue: int, model: object):
+    red = int(model.y[red])
+    green = int(model.y[green])
+    blue = int(model.y[blue])
 
     return red, green, blue
+
+
+def cdf_gray(pixel: int, model: object) -> int:
+    pixel = int(model.y[pixel])
+
+    return pixel
 
 
 def image_processing(type_processing: str, path: str, place_to_show_image: int = 1) -> None:
@@ -225,30 +256,55 @@ def image_processing(type_processing: str, path: str, place_to_show_image: int =
     width = pil_img.size[0]
     height = pil_img.size[1]
     pix = pil_img.load()
+
+    if type_processing == "cdf":
+        model_cdf = cdf_function(path)
+
     for i in range(width):
         for j in range(height):
-            r = pix[i, j][0]
-            g = pix[i, j][1]
-            b = pix[i, j][2]
+            try:
+                r = pix[i, j][0]
+                g = pix[i, j][1]
+                b = pix[i, j][2]
 
-            if type_processing == "negative":
-                red, green, blue = negative(r, g, b)
+                if type_processing == "negative":
+                    red, green, blue = negative(r, g, b)
 
-            elif type_processing == "gamma":
-                red, green, blue = gamma_correction(r, g, b)
+                elif type_processing == "gamma":
+                    red, green, blue = gamma_correction(r, g, b)
 
-            elif type_processing == "logarithmic":
-                red, green, blue = logarithmic(r, g, b)
+                elif type_processing == "logarithmic":
+                    red, green, blue = logarithmic(r, g, b)
 
-            elif type_processing == "cdf":
-                red, green, blue = cdf(r, g, b)
+                elif type_processing == "cdf":
+                    red, green, blue = cdf(r, g, b, model_cdf)
 
-            else:
-                red = 0
-                green = 0
-                blue = 0
+                else:
+                    red = 0
+                    green = 0
+                    blue = 0
 
-            pil_draw.point((i, j), (red, green, blue))
+                pil_draw.point((i, j), (red, green, blue))
+
+            except:
+                pixel = pix[i, j]
+
+                if type_processing == "negative":
+                    pixel = negative_gray(pixel)
+
+                elif type_processing == "gamma":
+                    pixel = gamma_correction_gray(pixel)
+
+                elif type_processing == "logarithmic":
+                    pixel = logarithmic_gray(pixel)
+
+                elif type_processing == "cdf":
+                    pixel = cdf_gray(pixel, model_cdf)
+
+                else:
+                    pixel = 0
+
+                pil_draw.point((i, j), pixel)
 
     save(pil_img, place_to_show_image)
 
@@ -261,11 +317,16 @@ def bar_chart(path) -> object:
     pix = pil_img.load()
     for i in range(width):
         for j in range(height):
-            r = pix[i, j][0]
-            g = pix[i, j][1]
-            b = pix[i, j][2]
 
-            pixel_value: int = int((r + g + b) / 3)
+            try:
+                r = pix[i, j][0]
+                g = pix[i, j][1]
+                b = pix[i, j][2]
+
+                pixel_value: int = int((r + g + b) / 3)
+            except:
+                pixel_value: int = pix[i, j]
+
             bar_chart_y_value: int = bar_chart_y[pixel_value] + 1
             bar_chart_y[pixel_value] = bar_chart_y_value
 
@@ -279,7 +340,7 @@ def bar_chart(path) -> object:
 # Кумулятивная функция распределения
 def cdf_function(path: str, normalisation: bool = False) -> object:
     model_bar_chart = bar_chart(path)
-    cdf_x: np.ndarray = model_bar_chart.x.copy()
+    cdf_x: np.ndarray = np.arange(0, 256)
     cdf_y: np.ndarray = np.zeros(256)
 
     cdf_y[0] = model_bar_chart.y[0]

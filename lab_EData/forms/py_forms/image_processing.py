@@ -2,8 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
-from Image import zero_row, derivative, noise, image_processing, smoothing
-
+from Image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
 
 class image_processing_window(object):
     def __init__(self, main_window: object):
@@ -299,40 +298,21 @@ class image_processing_window(object):
 
         # Гисторграмма
         elif self.radioButton_6.isChecked():
-            # model = self.image.bar_chart()
-
-            # if show_plot:
-              #  self.main_window.show_graph(model, place_to_show_plot)
-
-            self.close_window()
+            model = bar_chart(img_path)
 
         # Кумулятивная функция распределения
         elif self.radioButton_7.isChecked():
             normalisation = self.checkBox_normalisation.isChecked()
-            # model = self.image.cdf_function(normalisation)
-
-            # if show_plot:
-              #  self.main_window.show_graph(model, place_to_show_plot)
-
-            # self.image.image_processing("cdf", show_image, place_to_show_image)
+            model = cdf_function(img_path, normalisation)
+            image_processing("cdf", img_path, place_to_show_image)
 
         # График первой строки
         elif self.radioButton_8.isChecked():
             model = zero_row(img_path)
 
-            if show_plot:
-                self.main_window.show_graph(model, place_to_show_plot)
-
-            POSITION_FOR_ANALYSIS[place_to_show_plot] = model
-
         # Производная строки
         elif self.radioButton_9.isChecked():
             model = derivative(img_path)
-
-            if show_plot:
-                self.main_window.show_graph(model, place_to_show_plot)
-
-            POSITION_FOR_ANALYSIS[place_to_show_plot] = model
 
         # Шум: Соль и Перец
         if self.checkBox_5.isChecked():
@@ -352,6 +332,10 @@ class image_processing_window(object):
 
         if show_image:
             self.main_window.show_img(place_to_show_image)
+
+        if show_plot:
+            self.main_window.show_graph(model, place_to_show_plot)
+            POSITION_FOR_ANALYSIS[place_to_show_plot] = model
 
         self.close_window()
 
