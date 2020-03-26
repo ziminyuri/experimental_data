@@ -8,7 +8,7 @@ from forms.py_forms.deconvolution_window import Ui_deconvolution_window
 from forms.py_forms.filter_window import Ui_filter_window
 from forms.py_forms.image_processing import image_processing_window
 from forms.py_forms.statistics_window import Ui_statistics
-from Image import open_img
+from image import open_img
 
 from setting import *
 
@@ -301,68 +301,110 @@ class Ui_mainwindow(object):
 
         if place == 1:
             self.graphWidget_1.clear()
-            self.graphWidget_1.addLegend()
+            try:
+                self.legend_1.scene().removeItem(self.legend_1)
+            except:
+                pass
+
+            self.legend_1 = self.graphWidget_1.addLegend()
             self.graphWidget_1.plot(x, y, pen=pen, name=graph.option)
             self.label_model_1.hide()
             self.graphWidget_1.show()
 
         elif place == 2:
             self.graphWidget_2.clear()
-            self.graphWidget_2.addLegend()
+            try:
+                self.legend_2.scene().removeItem(self.legend_1)
+            except:
+                pass
+
+            self.legend_2 = self.graphWidget_2.addLegend()
             self.graphWidget_2.plot(x, y, pen=pen, name=graph.option)
             self.label_model_2.hide()
             self.graphWidget_2.show()
 
         elif place == 3:
             self.graphWidget_3.clear()
-            self.graphWidget_3.addLegend()
+            try:
+                self.legend_3.scene().removeItem(self.legend_3)
+            except:
+                pass
+
+            self.legend_3 = self.graphWidget_3.addLegend()
             self.graphWidget_3.plot(x, y, pen=pen, name=graph.option)
             self.label_model_3.hide()
             self.graphWidget_3.show()
 
         elif place == 4:
             self.graphWidget_4.clear()
-            self.graphWidget_4.addLegend()
+            try:
+                self.legend_4.scene().removeItem(self.legend_4)
+            except:
+                pass
+
+            self.legend_4 = self.graphWidget_4.addLegend()
             self.graphWidget_4.plot(x, y, pen=pen, name=graph.option)
             self.label_model_4.hide()
             self.graphWidget_4.show()
 
         elif place == 5:
             self.graphWidget_5.clear()
-            self.graphWidget_5.addLegend()
+            try:
+                self.legend_5.scene().removeItem(self.legend_5)
+            except:
+                pass
+
+            self.legend_5 = self.graphWidget_5.addLegend()
             self.graphWidget_5.plot(x, y, pen=pen, name=graph.option)
             self.label_model_5.hide()
             self.graphWidget_5.show()
 
         elif place == 6:
             self.graphWidget_6.clear()
-            self.graphWidget_6.addLegend()
+            try:
+                self.legend_6.scene().removeItem(self.legend_6)
+            except:
+                pass
+
+            self.legend_6 = self.graphWidget_6.addLegend()
             self.graphWidget_6.plot(x, y, pen=pen, name=graph.option)
             self.label_model_6.hide()
             self.graphWidget_6.show()
 
     def show_img(self, place):
         if place == 1:
+            self.graphWidget_1.hide()
+            self.label_model_1.show()
             image = QPixmap(PATH_IMG_TEMP_1)
             self.label_model_1.setPixmap(image)
 
         elif place == 2:
+            self.graphWidget_2.hide()
+            self.label_model_2.show()
             image = QPixmap(PATH_IMG_TEMP_2)
             self.label_model_2.setPixmap(image)
 
         elif place == 3:
+            self.graphWidget_3.hide()
+            self.label_model_3.show()
             image = QPixmap(PATH_IMG_TEMP_3)
             self.label_model_3.setPixmap(image)
 
         elif place == 4:
+            self.graphWidget_4.hide()
+            self.label_model_4.show()
             image = QPixmap(PATH_IMG_TEMP_4)
             self.label_model_4.setPixmap(image)
 
         elif place == 5:
+            self.graphWidget_5.hide()
+            self.label_model_5.show()
             image = QPixmap(PATH_IMG_TEMP_5)
             self.label_model_5.setPixmap(image)
 
         elif place == 6:
+            self.graphWidget_6.hide()
+            self.label_model_6.show()
             image = QPixmap(PATH_IMG_TEMP_6)
             self.label_model_6.setPixmap(image)
 

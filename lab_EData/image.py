@@ -2,9 +2,10 @@ import math
 import array
 import os
 import random
+import cv2
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 from PyQt5 import QtWidgets
 from model import Model
 from model import convolution_img
@@ -19,7 +20,7 @@ def open_img(main_window) -> None:
 
     if path and flag_xcr == -1:
         pil_img = Image.open(path)
-        save(pil_img)
+        save_img(pil_img)
 
     elif path and flag_xcr != -1:
         count: int = int(os.stat(path).st_size / 2)
@@ -46,7 +47,7 @@ def open_img(main_window) -> None:
         POSITION_FOR_ANALYSIS[1] = PATH_IMG_TEMP_1
 
 
-def save(pillow_img, place_to_show: int = 1) -> None:
+def save_img(pillow_img, place_to_show: int = 1) -> None:
     if place_to_show == 1:
         pillow_img.save(PATH_IMG_TEMP_1)
         POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_1
@@ -79,8 +80,11 @@ def zero_row(path: str) -> object:
     matrix = []
 
     for i in range(width):
-        red = pix[i, 0][0]
-        matrix.append(red)
+        try:
+            pixel = pix[i, 0][0]
+        except:
+            pixel = pix[i, 0]
+        matrix.append(pixel)
 
     model = Model("Нулевая строка")
     model.n = len(matrix)
@@ -97,8 +101,11 @@ def derivative(path: str) -> object:
     matrix = []
 
     for i in range(width):
-        red = pix[i, 0][0]
-        matrix.append(red)
+        try:
+            pixel = pix[i, 0][0]
+        except:
+            pixel = pix[i, 0]
+        matrix.append(pixel)
 
     y = np.gradient(matrix)
     n = len(matrix)
@@ -138,8 +145,9 @@ def noise(type_of_noise, place_to_show_image, path_img: str, factor=0.3) -> None
 
     elif type_of_noise == "gaussian":
         mean = 0
-        var = factor * 255
-        sigma = var ** 0.5
+        # var = factor * 255
+        # sigma = var ** 0.5
+        sigma = factor * 255
         gauss = np.random.normal(mean, sigma, (width, height))
         pix = pil_img.load()
         for i in range(width):
@@ -167,7 +175,7 @@ def noise(type_of_noise, place_to_show_image, path_img: str, factor=0.3) -> None
                     else:
                         pil_draw.point((i, j), pixel)
 
-    save(pil_img, place_to_show_image)
+    save_img(pil_img, place_to_show_image)
 
 
 def negative(red: int, green: int, blue: int):
@@ -306,7 +314,7 @@ def image_processing(type_processing: str, path: str, place_to_show_image: int =
 
                 pil_draw.point((i, j), pixel)
 
-    save(pil_img, place_to_show_image)
+    save_img(pil_img, place_to_show_image)
 
 
 def bar_chart(path) -> object:
@@ -369,7 +377,12 @@ def filtration(path: str, my_filter: object, place_to_show: int = 1):
 
     for i in range(width):
         for j in range(height):
-            red = pix[i, j][0]
+
+            try:
+                red = pix[i, j][0]
+            except:
+                red = pix[i, j]
+
             matrix[i][j] = red
 
     transpose_matrix = np.transpose(matrix)
@@ -390,13 +403,19 @@ def filtration(path: str, my_filter: object, place_to_show: int = 1):
 
     for i in range(width):
         for j in range(height):
-            red = int(matrix[i][j])
-            green = int(matrix[i][j])
-            blue = int(matrix[i][j])
 
-            pil_draw.point((i, j), (red, green, blue))
+            try:
+                red = int(matrix[i][j])
+                green = int(matrix[i][j])
+                blue = int(matrix[i][j])
 
-    save(pil_img, place_to_show)
+                pil_draw.point((i, j), (red, green, blue))
+
+            except:
+                pixel = int(matrix[i][j])
+                pil_draw.point((i, j), pixel)
+
+    save_img(pil_img, place_to_show)
 
 
 def smoothing(path: str, type_smoothing: str, factor: float, place: int = 1) -> None:
@@ -415,4 +434,48 @@ def smoothing(path: str, type_smoothing: str, factor: float, place: int = 1) -> 
         p = pil_img.resize((new_width, new_height), Image.BILINEAR)
         pil_img = p
 
-    save(pil_img, place)
+    save_img(pil_img, place)
+
+
+def arithmetic_filter_img(path: str, place_to_save: int, n_of_maska: int) -> None:
+    pillow_img = Image.open(path)
+    pil_draw = ImageDraw.Draw(pillow_img)
+    width: int = pillow_img.size[0]
+    height: int = pillow_img.size[1]
+    pix = pillow_img.load()
+    for j in range(height):
+        for i in range(width):
+            all_value_pixel: int = 0
+            pixel_quantity: int = 0
+            loop: int = 0
+            average: int = 0
+            while loop < 2:
+
+                for k in range(j, j+n_of_maska):
+                    if k == height:
+                        break
+                    for s in range(i, i+n_of_maska):
+                        if s == width:
+                            break
+
+                        if loop == 0:
+                            pixel = pix[s, k]
+                            all_value_pixel += pixel
+                            pixel_quantity += 1
+
+                        else:
+                            pil_draw.point((s, k), average)
+
+                if pixel_quantity == 0:
+                    break
+
+                average = int(all_value_pixel / pixel_quantity)
+                loop += 1
+
+    save_img(pillow_img, place_to_save)
+
+
+def median_img(path: str, place_to_save: int, n_of_maska: int) -> None:
+    pillow_img = Image.open(path)
+    image_after_filter = pillow_img.filter(ImageFilter.MedianFilter(n_of_maska))
+    save_img(image_after_filter, place_to_save)

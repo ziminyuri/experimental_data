@@ -68,12 +68,10 @@ def convolution_img(img: np.ndarray, my_filter: np.ndarray) -> np.ndarray:
 
 
 class Model:
-    def __init__(self, option):
+    def __init__(self, option, m=32, fc_1=60, fc_2=80, delta_t=0.001):
         self.n = 1000  # Количество точек по оси Х
         self.display_n = self.n
-        self.flag_checking_display_n = (
-            0  # Флаг использования dislpay_n при отрисовки графика
-        )
+        self.flag_checking_display_n = 0  # Флаг использования dislpay_n при отрисовки графика
 
         self.x = np.arange(0, self.n)
         self.y = np.zeros(self.n)  # Сгенерировали матрицу из нулей
@@ -96,6 +94,12 @@ class Model:
 
         # Гармоничекое процесс
         self.c = 0  # Константа
+
+        # Фильтр
+        self.m = m
+        self.fc_1 = fc_1
+        self.fc_2 = fc_2
+        self.dt = delta_t
 
     # Нормализация осей
     def normalisation_axis(self):
@@ -387,7 +391,7 @@ class Model:
         # Реализация фильтров
         if self.option == 'Низких частот':
             trend = Trend()
-            trend.generation_trend_filter_potter()
+            trend.generation_trend_filter_potter(self.m, self.dt, self.fc_1)
 
             self.y = trend.y
             self.x = trend.x
@@ -397,7 +401,7 @@ class Model:
 
         if self.option == 'Высоких частот':
             trend = Trend()
-            trend.generating_trend_high_potter()
+            trend.generating_trend_high_potter(self.m, self.dt, self.fc_1)
 
             self.y = trend.y
             self.x = trend.x
@@ -407,7 +411,7 @@ class Model:
 
         if self.option == 'Полосовой':
             trend = Trend()
-            trend.generating_trend_bandpass_filter()
+            trend.generating_trend_bandpass_filter(self.m, self.dt, self.fc_1, self.fc_2)
 
             self.y = trend.y
             self.x = trend.x
@@ -417,7 +421,7 @@ class Model:
 
         if self.option == 'Режекторный':
             trend = Trend()
-            trend.generating_trend_notch_filter()
+            trend.generating_trend_notch_filter(self.m, self.dt, self.fc_1, self.fc_2)
 
             self.y = trend.y
             self.x = trend.x

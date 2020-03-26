@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
-from Image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
+from image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
 
 class image_processing_window(object):
     def __init__(self, main_window: object):
@@ -195,7 +195,7 @@ class image_processing_window(object):
 
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_2.setObjectName("lineEdit_2")
-        self.lineEdit_2.setStyleSheet("background-color: #546E7A")
+        self.lineEdit_2.setStyleSheet("background-color: #546E7A; color: #EEEEEE")
         self.gridLayout.addWidget(self.lineEdit_2, 6, 4, 1, 1)
 
         self.checkBox_5 = QtWidgets.QCheckBox(self.centralwidget)
