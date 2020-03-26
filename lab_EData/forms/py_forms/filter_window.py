@@ -3,13 +3,14 @@ from PyQt5 import QtCore, QtWidgets
 from model import Model
 from trend import Trend
 from setting import *
+from Image import filtration
 
 
 class Ui_filter_window(object):
-    def __init__(self,  main_window):
+    def __init__(self, main_window):
         self.main_window = main_window
         self.filter_window = main_window.filter_window
-        self.image = main_window.image
+        # self.image = main_window.image
         self.filter_window.setObjectName("MainWindow")
         self.filter_window.resize(523, 461)
         self.centralwidget = QtWidgets.QWidget(self.filter_window)
@@ -159,10 +160,75 @@ class Ui_filter_window(object):
 
     def filtration(self):
         if self.radioButton_image.isChecked():
+
             filter_trend = Trend()
-            filter_trend.generating_trend_notch_filter()
+            type_of_filter = self.comboBox_3.currentText()
+
+            m = self.lineEdit_2.text()
+            delta_t = self.lineEdit.text()
+            fc_1 = self.lineEdit_3.text()
+            fc_2 = self.lineEdit_4.text()
+            error_dialog = QtWidgets.QErrorMessage()
+
+            if m != '':
+                try:
+                    m = int(m)
+                    filter_trend.m = m
+
+                except:
+                    error_dialog.showMessage('Значение m должны быть целочисленными. Использовано значение m по '
+                                             'умолчанию')
+
+            if delta_t != '':
+                try:
+                    delta_t = float(delta_t)
+                    filter_trend.delta_t = delta_t
+
+                except:
+                    error_dialog.showMessage('Значение delta t должны быть вещественными. Использовано значение delta t по '
+                                             'умолчанию')
+
+            if fc_1 != '':
+                try:
+                    fc_1 = int(fc_1)
+                    filter_trend.fc_1 = fc_1
+
+                except:
+                    error_dialog.showMessage('Значение fc_1 должны быть целочисленными. Использовано значение fc_1 по '
+                                             'умолчанию')
+
+            if fc_2 != '':
+                try:
+                    fc_2 = int(fc_2)
+                    filter_trend.fc_2 = fc_2
+
+                except:
+                    error_dialog.showMessage('Значение fc_2 должны быть целочисленными. Использовано значение fc_2 по '
+                                             'умолчанию')
+
+            if type_of_filter == 'Низких частот':
+                filter_trend.generation_trend_filter_potter()
+
+            elif type_of_filter == 'Высоких частот':
+                filter_trend.generating_trend_high_potter()
+
+            elif type_of_filter == 'Полосовой':
+                filter_trend.generating_trend_bandpass_filter()
+
+            elif type_of_filter == 'Режекторный':
+                filter_trend.generating_trend_notch_filter()
+
             place_to_show_image: int = int(self.comboBox_2.currentText())
-            self.image.filtration(filter_trend, place_to_show_image)
+
+            try:
+                position_img: int = int(self.comboBox.currentText())
+                img_path = POSITION_FOR_ANALYSIS.get(position_img)
+            except:
+                error_dialog.showMessage('Не найдено изображение для фильтрации')
+                return
+
+            filtration(img_path, filter_trend, place_to_show_image)
+            self.main_window.show_img(place_to_show_image)
 
         self.close_window()
 
@@ -179,5 +245,3 @@ class Ui_filter_window(object):
 
     def close_window(self):
         self.filter_window.close()
-
-

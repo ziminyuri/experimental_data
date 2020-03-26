@@ -180,25 +180,18 @@ class Trend:
 
     # Генерируем тренд фильтра низких частот
     def generation_trend_filter_potter(self):
-        m = 32
-        self.dt = 0.001
-        fc = 70
-        lpw = filter_potter(m, self.dt, fc)
+        lpw = filter_potter(self.m, self.dt, self.fc_1)
 
-        self.n = m
+        self.n = self.m
         self.x = np.arange(0, self.n * 2 + 1)
         self.y = lpw
         self.display_n = self.n * 2 + 1
 
     # Генерируем тренд фильтра высоких частот
     def generating_trend_high_potter(self):
-        m = 32
-        self.dt = 0.001
-        fc = 60
+        hpf = high_potter_filter(self.m, self.dt, self.fc_1)
 
-        hpf = high_potter_filter(m, self.dt, fc)
-
-        self.n = m
+        self.n = self.m
         self.x = np.arange(0, self.n * 2 + 1)
         self.y = hpf
         self.display_n = self.n * 2 + 1
@@ -214,14 +207,9 @@ class Trend:
 
     # Генерируем тренд фильтра режекторного
     def generating_trend_notch_filter(self):
-        m = 32
-        self.dt = 0.001
-        fc_1 = 250
-        fc_2 = 350
+        bsf = notch_filter(self.m, self.dt, self.fc_1, self.fc_2)
 
-        bsf = notch_filter(m, self.dt, fc_1, fc_2)
-
-        self.n = m
+        self.n = self.m
         self.x = np.arange(0, self.n * 2 + 1)
         self.y = bsf
         self.display_n = self.n * 2 + 1
