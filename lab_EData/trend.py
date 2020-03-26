@@ -178,8 +178,22 @@ class Trend:
 
         self.y = np.array(y_list)
 
+    def update_filter_start_value(self,m=None, dt=None, fc_1=None, fc_2=None):
+        if m is not None:
+            self.m = m
+
+        if dt is not None:
+            self.dt = dt
+
+        if fc_1 is not None:
+            self.fc_1 = fc_1
+
+        if fc_2 is not None:
+            self.fc_2 = fc_2
+
     # Генерируем тренд фильтра низких частот
-    def generation_trend_filter_potter(self):
+    def generation_trend_filter_potter(self, m=None, dt=None, fc_1=None):
+        self.update_filter_start_value(m, dt, fc_1)
         lpw = filter_potter(self.m, self.dt, self.fc_1)
 
         self.n = self.m
@@ -188,7 +202,8 @@ class Trend:
         self.display_n = self.n * 2 + 1
 
     # Генерируем тренд фильтра высоких частот
-    def generating_trend_high_potter(self):
+    def generating_trend_high_potter(self, m=None, dt=None, fc_1=None):
+        self.update_filter_start_value(m, dt, fc_1)
         hpf = high_potter_filter(self.m, self.dt, self.fc_1)
 
         self.n = self.m
@@ -197,7 +212,8 @@ class Trend:
         self.display_n = self.n * 2 + 1
 
     # Генерируем тренд фильтра полосового
-    def generating_trend_bandpass_filter(self):
+    def generating_trend_bandpass_filter(self, m=None, dt=None, fc_1=None, fc_2=None):
+        self.update_filter_start_value(m, dt, fc_1, fc_2)
         bpf = bandpass_filter(self.m, self.dt, self.fc_1, self.fc_2)
 
         self.n = self.m
@@ -206,7 +222,8 @@ class Trend:
         self.display_n = self.n * 2 + 1
 
     # Генерируем тренд фильтра режекторного
-    def generating_trend_notch_filter(self):
+    def generating_trend_notch_filter(self, m=None, dt=None, fc_1=None, fc_2=None):
+        self.update_filter_start_value(m, dt, fc_1, fc_2)
         bsf = notch_filter(self.m, self.dt, self.fc_1, self.fc_2)
 
         self.n = self.m

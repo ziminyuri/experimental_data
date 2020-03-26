@@ -235,7 +235,33 @@ class Ui_filter_window(object):
     def add_filter_graph(self):
         place_to_show: int = int(self.comboBox_2.currentText())
         name_of_graph: str = self.comboBox_3.currentText()
-        model = Model(name_of_graph)
+
+        m = self.lineEdit_2.text()
+        delta_t = self.lineEdit.text()
+        fc_1 = self.lineEdit_3.text()
+        fc_2 = self.lineEdit_4.text()
+
+        try:
+            m = int(m)
+        except:
+            m = None
+
+        try:
+            delta_t = float(delta_t)
+        except:
+            delta_t = None
+
+        try:
+            fc_1 = int(fc_1)
+        except:
+            fc_1 = None
+
+        try:
+            fc_2 = int(fc_2)
+        except:
+            fc_2 = None
+
+        model = Model(name_of_graph, m, fc_1, fc_2, delta_t)
         model.calculation()
 
         POSITION_FOR_ANALYSIS[place_to_show] = model

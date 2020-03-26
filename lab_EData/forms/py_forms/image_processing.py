@@ -195,7 +195,7 @@ class image_processing_window(object):
 
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_2.setObjectName("lineEdit_2")
-        self.lineEdit_2.setStyleSheet("background-color: #546E7A")
+        self.lineEdit_2.setStyleSheet("background-color: #546E7A; color: #EEEEEE")
         self.gridLayout.addWidget(self.lineEdit_2, 6, 4, 1, 1)
 
         self.checkBox_5 = QtWidgets.QCheckBox(self.centralwidget)

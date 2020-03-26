@@ -144,8 +144,9 @@ def noise(type_of_noise, place_to_show_image, path_img: str, factor=0.3) -> None
 
     elif type_of_noise == "gaussian":
         mean = 0
-        var = factor * 255
-        sigma = var ** 0.5
+        # var = factor * 255
+        # sigma = var ** 0.5
+        sigma = factor * 255
         gauss = np.random.normal(mean, sigma, (width, height))
         pix = pil_img.load()
         for i in range(width):
@@ -375,7 +376,12 @@ def filtration(path: str, my_filter: object, place_to_show: int = 1):
 
     for i in range(width):
         for j in range(height):
-            red = pix[i, j][0]
+
+            try:
+                red = pix[i, j][0]
+            except:
+                red = pix[i, j]
+
             matrix[i][j] = red
 
     transpose_matrix = np.transpose(matrix)
@@ -396,11 +402,17 @@ def filtration(path: str, my_filter: object, place_to_show: int = 1):
 
     for i in range(width):
         for j in range(height):
-            red = int(matrix[i][j])
-            green = int(matrix[i][j])
-            blue = int(matrix[i][j])
 
-            pil_draw.point((i, j), (red, green, blue))
+            try:
+                red = int(matrix[i][j])
+                green = int(matrix[i][j])
+                blue = int(matrix[i][j])
+
+                pil_draw.point((i, j), (red, green, blue))
+
+            except:
+                pixel = int(matrix[i][j])
+                pil_draw.point((i, j), pixel)
 
     save(pil_img, place_to_show)
 
