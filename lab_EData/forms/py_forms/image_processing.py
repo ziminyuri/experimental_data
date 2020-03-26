@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
-from Image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
+from image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
 
 class image_processing_window(object):
     def __init__(self, main_window: object):

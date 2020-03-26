@@ -3,14 +3,13 @@ from PyQt5 import QtCore, QtWidgets
 from model import Model
 from trend import Trend
 from setting import *
-from Image import filtration
+from image import filtration, arithmetic_filter_img, median_img
 
 
 class Ui_filter_window(object):
     def __init__(self, main_window):
         self.main_window = main_window
         self.filter_window = main_window.filter_window
-        # self.image = main_window.image
         self.filter_window.setObjectName("MainWindow")
         self.filter_window.resize(523, 461)
         self.centralwidget = QtWidgets.QWidget(self.filter_window)
@@ -127,6 +126,24 @@ class Ui_filter_window(object):
         self.line_2.setObjectName("line_2")
         self.gridLayout.addWidget(self.line_2, 0, 1, 13, 1)
 
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setObjectName("label_9")
+        self.gridLayout.addWidget(self.label_9, 8, 2, 1, 1)
+
+        self.comboBox_4 = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_4.setObjectName("comboBox_4")
+        ls_4 = ['Арифметический', 'Медианный']
+        self.comboBox_4.addItems(ls_4)
+        self.gridLayout.addWidget(self.comboBox_4, 9, 2, 1, 1)
+
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setObjectName("label_10")
+        self.gridLayout.addWidget(self.label_10, 10, 2, 1, 1)
+
+        self.lineEdit_5 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_5.setObjectName("lineEdit_5")
+        self.gridLayout.addWidget(self.lineEdit_5, 11, 2, 1, 1)
+
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 4)
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName("pushButton_2")
@@ -157,6 +174,8 @@ class Ui_filter_window(object):
         self.radioButton_image.setText(_translate("MainWindow", "Изображение"))
         self.label_8.setText(_translate("MainWindow", "Объект фильтрации"))
         self.pushButton_2.setText(_translate("MainWindow", "Выполнить фильтрацию"))
+        self.label_9.setText(_translate("MainWindow", "Тип фильтра с маской"))
+        self.label_10.setText(_translate("MainWindow", "Размер маски"))
 
     def filtration(self):
         if self.radioButton_image.isChecked():
@@ -222,13 +241,41 @@ class Ui_filter_window(object):
 
             try:
                 position_img: int = int(self.comboBox.currentText())
-                img_path = POSITION_FOR_ANALYSIS.get(position_img)
+                img_path: str = POSITION_FOR_ANALYSIS.get(position_img)
             except:
                 error_dialog.showMessage('Не найдено изображение для фильтрации')
                 return
 
             filtration(img_path, filter_trend, place_to_show_image)
-            self.main_window.show_img(place_to_show_image)
+
+
+        else:
+            type_of_filter_with_mask: str = self.comboBox_4.currentText()
+            place_to_show_image: int = int(self.comboBox_2.currentText())
+            error_dialog: object = QtWidgets.QErrorMessage()
+
+            try:
+                n_of_maska: int = int(self.lineEdit_5.text())
+                if n_of_maska % 2 == 0:
+                    n_of_maska = n_of_maska + 1
+
+            except:
+                n_of_maska: int = 3
+
+            try:
+                position_img: int = int(self.comboBox.currentText())
+                img_path: str = POSITION_FOR_ANALYSIS.get(position_img)
+            except:
+                error_dialog.showMessage('Не найдено изображение для фильтрации')
+                return
+
+            if type_of_filter_with_mask == 'Арифметический':
+                arithmetic_filter_img(img_path, place_to_show_image, n_of_maska)
+
+            elif type_of_filter_with_mask == 'Медианный':
+                median_img(img_path, place_to_show_image, n_of_maska)
+
+        self.main_window.show_img(place_to_show_image)
 
         self.close_window()
 

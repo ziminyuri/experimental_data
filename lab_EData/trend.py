@@ -1,8 +1,10 @@
 import random
 import struct
 import time
+import numpy as np
+import math
 
-from filter import *
+from filter import filter_potter, high_potter_filter, bandpass_filter, notch_filter
 
 
 class Trend:
