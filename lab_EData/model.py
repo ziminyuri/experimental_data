@@ -50,18 +50,39 @@ def convolution_img(img: np.ndarray, my_filter: np.ndarray) -> np.ndarray:
     n: int = len(img)
     m: int = len(my_filter)
 
-    y: list = []
-    for i in range(n):
-        y_k: int = 0
-        for j in range(m):
-            coefficient_x: int = i - j
-            if coefficient_x >= 0:
-                y_m = img[coefficient_x] * my_filter[j]
-            else:
-                y_m = 0
-            y_k += y_m
+    y_black_line_right: list = []
+    y_black_line_left: list = []
 
-        y.append(y_k)
+    for i in range(n):
+        y_k_right: int = 0
+        y_k_left: int = 0
+        for j in range(m):
+            coefficient_x_right: int = i + j
+            if coefficient_x_right < n:
+                if coefficient_x_right >= 0:
+                    y_m_right = img[coefficient_x_right] * my_filter[j]
+                else:
+                    y_m_right = 0
+                y_k_right += y_m_right
+
+            coefficient_x_left: int = i - j
+            if coefficient_x_left >= 0:
+                y_m_left = img[coefficient_x_left] * my_filter[j]
+            else:
+                y_m_left = 0
+            y_k_left += y_m_left
+
+        y_black_line_right.append(y_k_right)
+        y_black_line_left.append(y_k_left)
+
+    knife = int(m/2)
+    y = y_black_line_left[knife:]
+    knife_2 = len(y_black_line_right) - knife
+    y_black_line_right = y_black_line_right[:knife_2]
+    knife_2 = len(y_black_line_right) - knife
+    y_black_line_right = y_black_line_right[knife_2:]
+    for i in range(len(y_black_line_right)):
+        y.append(y_black_line_right[i])
 
     img_after_filtration = np.array(y)
     return img_after_filtration
