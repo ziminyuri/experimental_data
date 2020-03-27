@@ -2,7 +2,6 @@ import math
 import array
 import os
 import random
-import cv2
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
@@ -358,7 +357,7 @@ def cdf_function(path: str, normalisation: bool = False) -> object:
     if normalisation is True:
         cdf_max: int = np.amax(cdf_y)
         for i in range(0, cdf_x.size):
-            cdf_y[i] = int(cdf_y[i] / cdf_max * 255)
+            cdf_y[i] = int(cdf_y[i] / cdf_max * 256)
 
     model = Model("Кумулятивная функция распределения")
     model.y = cdf_y
