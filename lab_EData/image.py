@@ -14,14 +14,15 @@ from setting import *
 
 def open_img(main_window) -> None:
     path, _ = QtWidgets.QFileDialog.getOpenFileName(main_window.main_window, "Open Image", ".",
-                                                    "Image Files (*.png *.jpg *.bmp *.xcr)")
+                                                    "Image Files (*.png *.jpg *.bmp *.xcr *.dat)")
     flag_xcr: int = path.find('xcr')
+    flag_dat: int = path.find('dat')
 
-    if path and flag_xcr == -1:
+    if path and flag_xcr == -1 and flag_dat == -1:
         pil_img = Image.open(path)
         save_img(pil_img)
 
-    elif path and flag_xcr != -1:
+    elif path and flag_xcr != -1 and flag_dat == -1:
         count: int = int(os.stat(path).st_size / 2)
         with open(path, 'rb') as fp:
             binary16 = array.array("h")
@@ -44,6 +45,34 @@ def open_img(main_window) -> None:
 
         img.save(PATH_IMG_TEMP_1)
         POSITION_FOR_ANALYSIS[1] = PATH_IMG_TEMP_1
+
+    elif path and flag_xcr == -1 and flag_dat != -1:
+        count: int = int(os.stat(path).st_size / 4)
+
+        with open(path, 'rb') as fp:
+            binary4 = array.array('f')
+            binary4.fromfile(fp, count)
+
+        binary_array: np.ndarray = np.array(binary4.tolist())
+        binary_array_min = np.amin(binary_array)
+        binary_array_max = np.amax(binary_array)
+
+        width: int = 259
+        height: int = 185
+
+        img = Image.new('RGB', (width, height), color='red')
+        pil_draw = ImageDraw.Draw(img)
+
+        pixel: int = 0
+        for i in range(height):
+            for j in range(width):
+                pixel_value = int(binary_array[pixel])
+                pil_draw.point((j, i), (pixel_value, pixel_value, pixel_value))
+                pixel += 1
+
+        img.save(PATH_IMG_TEMP_1)
+        POSITION_FOR_ANALYSIS[1] = PATH_IMG_TEMP_1
+
 
 
 def save_img(pillow_img, place_to_show: int = 1) -> None:

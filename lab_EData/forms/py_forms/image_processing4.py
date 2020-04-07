@@ -191,7 +191,7 @@ class Ui_MainWindow(object):
         self.checkBox_4.setText(_translate("MainWindow", "Гаусса"))
         self.checkBox_5.setText(_translate("MainWindow", "Соль и перец"))
         self.radioButton_9.setText(_translate("MainWindow", "Производная нулевой строки"))
-        self.radioButton_10.setText(_translate("MainWindow", "Автокорреляция строки"))
+        self.radioButton_10.setText(_translate("MainWindow", "Деконволюция изображения"))
         self.radioButton_11.setText(_translate("MainWindow", "Спектр автокореляции"))
 
 

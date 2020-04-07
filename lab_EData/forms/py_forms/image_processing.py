@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QMessageBox
 from setting import *
 from image import zero_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
 
+
 class image_processing_window(object):
     def __init__(self, main_window: object):
         self.main_window = main_window
