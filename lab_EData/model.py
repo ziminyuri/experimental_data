@@ -2,6 +2,7 @@ import numpy as np
 
 from sound import Sound
 from trend import Trend
+from analysis.fourier_transform import direct_fourier_transform, inverse_fourier_transform, division
 
 
 def sum_trend(trend_1, trend_2):
@@ -44,6 +45,34 @@ def convolution(trend_1, trend_2):
     trend.x = trend_1.x
 
     return trend
+
+
+def deconvolution(model, func_model):
+    model_n: int = len(model.y)
+    func_model_n: int = len(func_model.y)
+    y: list = func_model.y.tolist()
+
+    n: int = model_n - func_model_n
+
+    for i in range(n):
+        y.append(0)
+
+    func_model.y = np.array(y)
+
+    model_real_part, model_im_part = direct_fourier_transform(model.y)
+    func_model_real_part, func_model_im_part = direct_fourier_transform(func_model.y)
+
+    decon_model_real_part, decon_model_im_part = division(model_real_part, model_im_part, func_model_real_part,
+                                                          func_model_im_part)
+
+    y: np.ndarray = inverse_fourier_transform(decon_model_real_part, decon_model_im_part)
+
+    result_model = Model(option="Деконфолюция")
+    result_model.n = len(y)
+    result_model.y = y
+    result_model.x = np.arange(result_model.n)
+
+    return result_model
 
 
 def convolution_img(img: np.ndarray, my_filter: np.ndarray) -> np.ndarray:
@@ -206,6 +235,7 @@ class Model:
         if self.option == 'Значения за областью':
             trend1 = Trend()
             trend1.generating_random_spikes(self.s_min, self.s_max)
+            # trend1.generating_spikes(100)
 
             self.y = trend1.y
 
@@ -373,12 +403,9 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
-        # кардиограма
-        if self.option == 'ГП + exp':
+        if self.option == 'Тренд сердцебиения':
             self.n = 200
             self.x = np.arange(0, self.n)
-            # self.delta_t = 0.005
-            # self.display_n = self.n
             self.s_max = 1
 
             trend_1 = Trend()
@@ -394,9 +421,35 @@ class Model:
 
             # Получили тренд сердцебиения
             trend = multi(trend_1, trend_2)
-            # self.y = trend.y
-            # self.normalization()
-            # trend.y = self.y
+
+            self.y = trend.y
+            self.x = trend.x
+
+        if self.option == 'Тренд cпаек':
+            self.n = 1000
+            trend_3 = Trend()
+            trend_3.generating_spikes(100)
+            self.y = trend_3.y
+            self.x = trend_3.x
+
+        if self.option == 'Кардиограма':
+            self.n = 200
+            self.x = np.arange(0, self.n)
+            self.s_max = 1
+
+            trend_1 = Trend()
+            trend_1.n = self.n
+            trend_1.x = self.x
+            trend_1.delta_t = 0.005
+            trend_1.generating_harmonic_process()
+
+            trend_2 = Trend()
+            trend_2.n = self.n
+            trend_2.x = self.x
+            trend_2.generating_exhibitor()
+
+            # Получили тренд сердцебиения
+            trend = multi(trend_1, trend_2)
 
             self.n = 1000
             trend_3 = Trend()
@@ -481,28 +534,6 @@ class Model:
             self.flag_normalisation = 0
             self.normalisation_axis()
 
-        # Модель Input: кардиограма, заполненная нулями с 200 до 1000
-        if self.option == 'кардиограма':
-            self.n = 200
-            self.x = np.arange(0, self.n)
-            self.s_max = 1
-
-            trend_1 = Trend()
-            trend_1.n = self.n
-            trend_1.x = self.x
-            trend_1.delta_t = 0.005
-            trend_1.generating_harmonic_process()
-
-            trend_2_n = 800
-            trend_2_y = np.zeros(trend_2_n)
-
-            self.n = 1000
-            self.x = np.arange(0, self.n)
-            self.y = np.concatenate([trend_1.y, trend_2_y])
-
-            print(self.y)
-            self.s_max = 100
-            self.s_min = -self.s_max
 
     # Метод получения модели после фильтрации
     def filtration(self, model_for_filtration, choice_filter):

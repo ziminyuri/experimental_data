@@ -200,7 +200,6 @@ class Ui_mainwindow(object):
         self.filter_window = QtWidgets.QMainWindow()
 
         self.deconvolution_window = QtWidgets.QMainWindow()
-        self.deconvolution_ui = Ui_deconvolution_window()
 
         self.processing_image_window = QtWidgets.QMainWindow()
 
@@ -235,6 +234,11 @@ class Ui_mainwindow(object):
 
         self.action_deconvolution = QtWidgets.QAction(self.main_window)
         self.action_deconvolution.setObjectName("action_deconvolution")
+        self.action_deconvolution.setShortcut('Ctrl+D')
+        self.action_deconvolution.triggered.connect(
+            self.open_deconvolution_window
+
+        )
 
         self.action_processing_image = QtWidgets.QAction(self.main_window)
         self.action_processing_image.setObjectName("action_processing_image")
@@ -281,7 +285,7 @@ class Ui_mainwindow(object):
         self.filter_window.show()
 
     def open_deconvolution_window(self) -> None:
-        self.deconvolution_ui.setupUi(self.deconvolution_window)
+        self.deconvolution_ui = Ui_deconvolution_window(self)
         self.deconvolution_window.show()
 
     def open_processing_image_window(self) -> None:
