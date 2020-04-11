@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from setting import GET_LIST_ANALYSIS, POSITION_FOR_ANALYSIS
 from model import deconvolution as model_deconvolution
 from model import Model
+from image import deconvolution_img
 
 
 class Ui_deconvolution_window(object):
@@ -66,16 +67,24 @@ class Ui_deconvolution_window(object):
         self.pushButton.setText(_translate("MainWindow", "Деконволюция"))
 
     def deconvlution(self):
-        position_to_analysis = int(self.comboBox_3.currentText())
-        model= POSITION_FOR_ANALYSIS.get(position_to_analysis)
+        position_to_analysis: int = int(self.comboBox_3.currentText())
         place_to_show: int = int(self.comboBox_5.currentText())
-
         deconvoltion_func = self.comboBox_4.currentText()
-        model_func = Model(deconvoltion_func)
-        model_func.calculation()
 
-        result_model = model_deconvolution(model, model_func)
+        if self.checkBox.isChecked():
+            img_path = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+            deconvolution_img(img_path, place_to_show, deconvoltion_func)
+            self.main_window.show_img(place_to_show)
 
-        POSITION_FOR_ANALYSIS[place_to_show] = result_model
-        self.main_window.show_graph(result_model, place_to_show)
-        self.deconvolution_window.close()
+
+        else:
+            model = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+
+            model_func = Model(deconvoltion_func)
+            model_func.calculation()
+
+            result_model = model_deconvolution(model, model_func)
+
+            POSITION_FOR_ANALYSIS[place_to_show] = result_model
+            self.main_window.show_graph(result_model, place_to_show)
+            self.deconvolution_window.close()
