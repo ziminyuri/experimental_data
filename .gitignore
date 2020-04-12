@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+#MyIgnore
+./lab_EData/.idea
+./lab_EData/.DS_Store
+./lab_EData/venv
+./lab_EData/temporary
+
