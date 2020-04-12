@@ -11,10 +11,10 @@ from model import convolution_img
 
 from setting import *
 from analysis.fourier_transform import direct_fourier_transform, inverse_fourier_transform, division
+from normalisation.img import normalisation_arr_to_pixel
 
 
-def binary_to_jpg(path, size_binary, width, height, place_to_save=1):
-
+def binary_to_array(path, size_binary):
     if size_binary == 2:
         count: int = int(os.stat(path).st_size / 2)
     elif size_binary == 4:
@@ -29,6 +29,13 @@ def binary_to_jpg(path, size_binary, width, height, place_to_save=1):
         binary16.fromfile(fp, count)
 
     binary_array: np.ndarray = np.array(binary16.tolist())
+
+    return binary_array
+
+
+def binary_to_jpg(path, size_binary, width, height, place_to_save=1, save_path=False):
+
+    binary_array: np.ndarray = binary_to_array(path, size_binary)
     binary_array_min = np.amin(binary_array)
     img = Image.new('RGB', (width, height), color='red')
     pil_draw = ImageDraw.Draw(img)
@@ -40,66 +47,77 @@ def binary_to_jpg(path, size_binary, width, height, place_to_save=1):
             pil_draw.point((j, i), (pixel_value, pixel_value, pixel_value))
             pixel += 1
 
-    save_img(img, place_to_save)
+    if save_path is False:
+        save_img(img, place_to_save)
+    else:
+        save_img(img, place_to_save, path=path)
 
 
 def open_img(main_window) -> None:
     path, _ = QtWidgets.QFileDialog.getOpenFileName(main_window.main_window, "Open Image", ".",
                                                     "Image Files (*.png *.jpg *.bmp *.xcr *.dat)")
-    flag_xcr: int = path.find('xcr')
-    flag_dat: int = path.find('dat')
+    flag_xcr: int = path.find('.xcr')
+    flag_dat: int = path.find('.dat')
 
     if path and flag_xcr == -1 and flag_dat == -1:
         pil_img = Image.open(path)
         save_img(pil_img)
 
-    elif path and flag_xcr != -1 and flag_dat == -1:
+    elif path and flag_xcr != -1:
         binary_to_jpg(path, 2, 400, 300)
 
-    elif path and flag_xcr == -1 and flag_dat != -1:
-        binary_to_jpg(path, 4, 259, 185)
+    elif path and flag_dat != -1:
+        binary_to_jpg(path, 4, 259, 185, save_path=True)
 
 
-def save_img(pillow_img, place_to_show: int = 1) -> None:
+def save_img(pillow_img=None, place_to_show: int = 1, path=None) -> None:
     if place_to_show == 1:
-        pillow_img.save(PATH_IMG_TEMP_1)
-        POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_1
+        path_save = PATH_IMG_TEMP_1
 
     elif place_to_show == 2:
-        pillow_img.save(PATH_IMG_TEMP_2)
-        POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_2
+        path_save = PATH_IMG_TEMP_2
 
     elif place_to_show == 3:
-        pillow_img.save(PATH_IMG_TEMP_3)
-        POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_3
+        path_save = PATH_IMG_TEMP_3
 
     elif place_to_show == 4:
-        pillow_img.save(PATH_IMG_TEMP_4)
-        POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_4
+        path_save = PATH_IMG_TEMP_4
 
     elif place_to_show == 5:
-        pillow_img.save(PATH_IMG_TEMP_5)
-        POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_5
+        path_save = PATH_IMG_TEMP_5
 
     elif place_to_show == 6:
-        pillow_img.save(PATH_IMG_TEMP_6)
-        POSITION_FOR_ANALYSIS[place_to_show] = PATH_IMG_TEMP_6
+        path_save = PATH_IMG_TEMP_6
+
+    pillow_img.save(path_save)
+
+    if path is not None:
+        POSITION_FOR_ANALYSIS[place_to_show] = path
+    else:
+        POSITION_FOR_ANALYSIS[place_to_show] = path_save
 
 
-def zero_row(path: str) -> object:
-    pil_img = Image.open(path)
-    width = pil_img.size[0]
-    pix = pil_img.load()
-    matrix = []
+def img_row(path: str, number_row: int = 0, binary: bool = False) -> object:
 
-    for i in range(width):
-        try:
-            pixel = pix[i, 0][0]
-        except:
-            pixel = pix[i, 0]
-        matrix.append(pixel)
+    if not binary:
+        pil_img = Image.open(path)
+        width = pil_img.size[0]
+        pix = pil_img.load()
+        matrix = []
 
-    model = Model("Нулевая строка")
+        for i in range(width):
+            try:
+                pixel = pix[i, number_row][0]
+            except:
+                pixel = pix[i, number_row]
+            matrix.append(pixel)
+
+    else:
+        arr = binary_to_array(path, 4)
+        arr = arr.reshape((185, 259))
+        matrix = arr[number_row]
+
+    model = Model("Cтрока №" + str(number_row))
     model.n = len(matrix)
     model.x = np.arange(model.n)
     model.y = np.array(matrix)
@@ -107,24 +125,13 @@ def zero_row(path: str) -> object:
     return model
 
 
-def derivative(path: str) -> object:
-    pil_img = Image.open(path)
-    width = pil_img.size[0]
-    pix = pil_img.load()
-    matrix = []
-
-    for i in range(width):
-        try:
-            pixel = pix[i, 0][0]
-        except:
-            pixel = pix[i, 0]
-        matrix.append(pixel)
-
-    y = np.gradient(matrix)
-    n = len(matrix)
+def derivative(path: str, number_row: int = 0, binary: bool = False) -> object:
+    row_model = img_row(path, number_row, binary)
+    y = np.gradient(row_model.y)
+    n = len(row_model.y)
     x = np.arange(n)
 
-    model = Model("Производная первой строки")
+    model = Model("Производная строки №" + str(number_row))
     model.y = y
     model.x = x
     model.n = n
@@ -494,63 +501,49 @@ def median_img(path: str, place_to_save: int, n_of_maska: int) -> None:
     save_img(image_after_filter, place_to_save)
 
 
-def deconvolution_img(path: str, place_to_save: int, func: str) -> None:
-    path_func = 'input files/deconvoltion_img/kernL64_f4.dat'
-    binary_to_jpg(path_func, 4, 64, 1, place_to_save)
+def deconvolution_img(path: str, place_to_save: int, func: str, noise=False) -> None:
+    path_func: str = 'input files/deconvoltion_img/kernL64_f4.dat'
+    path_func_array: np.ndarray = binary_to_array(path_func, 4)
 
-    pillow_img = Image.open(path)
-    pillow_img_width: int = pillow_img.size[0]
-    pillow_img_height: int = pillow_img.size[1]
+    path_array: np.ndarray = binary_to_array(path, 4)
 
-    path_func_jpg = POSITION_FOR_ANALYSIS.get(place_to_save)
-    pillow_func_img = Image.open(path_func_jpg)
-    pillow_func_img_width: int = pillow_func_img.size[0]
+    width: int = 259
+    height: int = 185
 
-    deconvolution_func = np.zeros(pillow_img_width)
-    pix = pillow_func_img.load()
-    for i in range(pillow_func_img_width):
-        deconvolution_func[i] = pix[i, 0][0]
+    width_func: int = 64
+    kernel_list: list = path_func_array.tolist()
 
-    pillow_img_arr = np.zeros((pillow_img_width, pillow_img_height))
-    pillow_img_pix = pillow_img.load()
-    for i in range(pillow_img_width):
-        for j in range(pillow_img_height):
-            pillow_img_arr[i][j] = pillow_img_pix[i, j][0]
+    for i in range(width - width_func):
+        kernel_list.append(0)
 
-    func_model_real_part, func_model_im_part = direct_fourier_transform(deconvolution_func)
+    kernel_np_array: np.ndarray = np.array(kernel_list)
+    func_model_real_part, func_model_im_part = direct_fourier_transform(kernel_np_array)
 
-    transpose_matrix = np.transpose(pillow_img_arr)
-    for j in range(pillow_img_height):
-        model_real_part, model_im_part = direct_fourier_transform(transpose_matrix[j])
+    path_array: np.ndarray = path_array.reshape(height, width)
+
+    result_arr: np.ndarray = np.zeros((height, width))
+
+    rows, cols = path_array.shape
+
+    for i in range(rows):
+        y: np.ndarray = path_array[i]
+        model_real_part, model_im_part = direct_fourier_transform(y)
         decon_model_real_part, decon_model_im_part = division(model_real_part, model_im_part, func_model_real_part,
-                                                              func_model_im_part)
+                                                              func_model_im_part, noise=noise)
 
-        transpose_matrix[j] = inverse_fourier_transform(decon_model_real_part, decon_model_im_part)
+        result_arr[i] = inverse_fourier_transform(decon_model_real_part, decon_model_im_part)
 
-    pillow_img_arr = np.transpose(transpose_matrix)
-    pillow_img_draw = ImageDraw.Draw(pillow_img)
+    result_arr: np.ndarray = normalisation_arr_to_pixel(result_arr)
+    img: Image = Image.new('RGB', (width, height), color='red')
+    pil_draw: ImageDraw = ImageDraw.Draw(img)
 
-    for i in range(pillow_img_width):
-        for j in range(pillow_img_height):
-            pixel_v = int(pillow_img_arr[i][j])
+    for j in range(height):
+        for i in range(width):
 
-            if pixel_v > 255:
-                pixel_v = 255
-                print('Over 255')
+            pixel_v: int = int(result_arr[j][i])
+            pil_draw.point((i, j), (pixel_v, pixel_v, pixel_v))
 
-            elif pixel_v <0:
-                pixel_v = 0
-                print('Low 0')
-
-            try:
-                pillow_img_draw.point((i, j), (pixel_v, pixel_v, pixel_v))
-            except:
-                pillow_img_draw.point((i, j), pixel_v)
-
-    save_img(pillow_img, place_to_save)
-
-
-
+    save_img(img, place_to_save)
 
 
 

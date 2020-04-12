@@ -22,13 +22,20 @@ def direct_fourier_transform(y):
     return real_part_y, im_part_y
 
 
-def division(real_part_1, im_part_1, real_part_2, im_part_2):
+def division(real_part_1, im_part_1, real_part_2, im_part_2, noise=False):
+    if noise:
+        # k: float = 0.00001
+        # k: float = 0.0001
+        k: float = 0.0005
 
-    # real_part: np.ndarray = np.zeros(len(real_part_1))
-    # im_part: np.ndarray = np.zeros(len(im_part_1))
+        divider: np.ndarray = real_part_2 ** 2 + im_part_2 ** 2 + k
+        real_part_3, im_part_3 = real_part_2 / divider, -im_part_2 / divider
+        real_part: np.ndarray = real_part_1 * real_part_3 - im_part_1 * im_part_3
+        im_part: np.ndarray = real_part_1 * im_part_3 + real_part_3 * im_part_1
 
-    real_part: np.ndarray = (real_part_1 * real_part_2 + im_part_1 * im_part_2) / (real_part_2 ** 2 + im_part_2 ** 2)
-    im_part: np.ndarray = (im_part_1 * real_part_2 - real_part_1 * im_part_2) / (real_part_2 ** 2 + im_part_2 ** 2)
+    else:
+        real_part: np.ndarray = (real_part_1 * real_part_2 + im_part_1 * im_part_2) / (real_part_2 ** 2 + im_part_2 ** 2)
+        im_part: np.ndarray = (im_part_1 * real_part_2 - real_part_1 * im_part_2) / (real_part_2 ** 2 + im_part_2 ** 2)
 
     return real_part, im_part
 

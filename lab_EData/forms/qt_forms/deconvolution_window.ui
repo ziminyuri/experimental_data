@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>379</width>
-    <height>269</height>
+    <width>378</width>
+    <height>322</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,30 +20,10 @@
       <x>10</x>
       <y>0</y>
       <width>361</width>
-      <height>242</height>
+      <height>291</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="QComboBox" name="comboBox_3"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Тренд </string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QComboBox" name="comboBox_5"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>Место для вывода результата</string>
-       </property>
-      </widget>
-     </item>
      <item row="9" column="0">
       <widget class="QCheckBox" name="checkBox">
        <property name="text">
@@ -62,9 +42,43 @@
       <widget class="QComboBox" name="comboBox_4"/>
      </item>
      <item row="10" column="0">
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="text">
+        <string>Подавить шумы</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QComboBox" name="comboBox_3"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QComboBox" name="comboBox_5"/>
+     </item>
+     <item row="11" column="0">
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>Деконволюция</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Тренд </string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Место для вывода результата</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Вывести тренд</string>
        </property>
       </widget>
      </item>
