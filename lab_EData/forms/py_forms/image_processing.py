@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
-from image import img_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function
+from image import img_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function, sobeling
 
 
 class ImageProcessingWindow(object):
@@ -229,6 +229,12 @@ class ImageProcessingWindow(object):
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.lineEdit_3.setStyleSheet("background-color: #546E7A; color: #EEEEEE;")
         self.gridLayout.addWidget(self.lineEdit_3, 7, 2, 1, 1)
+
+        self.radioButton_10 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_10.setObjectName("radioButton_10")
+        self.radioButton_9.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.radioButton_10, 8, 4, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(self.processing_image_window)
@@ -265,6 +271,7 @@ class ImageProcessingWindow(object):
         self.radioButton_9.setText(_translate("MainWindow", "Производная cтроки"))
         self.label_7.setText(_translate("MainWindow", "Номер строки"))
         self.checkBox_6.setText(_translate("MainWindow", "Бинарное изображение"))
+        self.radioButton_10.setText(_translate("MainWindow", "Окунтуривание методом Собеля"))
 
     def processing(self) -> None:
 
@@ -335,6 +342,10 @@ class ImageProcessingWindow(object):
             else:
                 number_row: int = int(self.lineEdit_3.text())
                 model = derivative(img_path, number_row)
+
+        # Окунтуривание методом Собеля
+        elif self.radioButton_10.isChecked():
+            sobeling(img_path, place_to_show_image)
 
         # Шум: Соль и Перец
         if self.checkBox_5.isChecked():

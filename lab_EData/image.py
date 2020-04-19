@@ -1,17 +1,19 @@
-import math
 import array
+import math
 import os
 import random
 
+import imageio
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 from PyQt5 import QtWidgets
-from model import Model
-from model import convolution_img
+from scipy import ndimage
 
-from setting import *
-from analysis.fourier_transform import direct_fourier_transform, inverse_fourier_transform, division
+from analysis.fourier_transform import (direct_fourier_transform, division,
+                                        inverse_fourier_transform)
+from model import Model, convolution_img
 from normalisation.img import normalisation_arr_to_pixel
+from setting import *
 
 
 def binary_to_array(path, size_binary):
@@ -34,7 +36,6 @@ def binary_to_array(path, size_binary):
 
 
 def binary_to_jpg(path, size_binary, width, height, place_to_save=1, save_path=False):
-
     binary_array: np.ndarray = binary_to_array(path, size_binary)
     binary_array_min = np.amin(binary_array)
     img = Image.new('RGB', (width, height), color='red')
@@ -98,7 +99,6 @@ def save_img(pillow_img=None, place_to_show: int = 1, path=None) -> None:
 
 
 def img_row(path: str, number_row: int = 0, binary: bool = False) -> object:
-
     if not binary:
         pil_img = Image.open(path)
         width = pil_img.size[0]
@@ -471,10 +471,10 @@ def arithmetic_filter_img(path: str, place_to_save: int, n_of_maska: int) -> Non
             average: int = 0
             while loop < 2:
 
-                for k in range(j, j+n_of_maska):
+                for k in range(j, j + n_of_maska):
                     if k == height:
                         break
-                    for s in range(i, i+n_of_maska):
+                    for s in range(i, i + n_of_maska):
                         if s == width:
                             break
 
@@ -539,14 +539,23 @@ def deconvolution_img(path: str, place_to_save: int, func: str, noise=False) -> 
 
     for j in range(height):
         for i in range(width):
-
             pixel_v: int = int(result_arr[j][i])
             pil_draw.point((i, j), (pixel_v, pixel_v, pixel_v))
 
     save_img(img, place_to_save)
 
 
+# Окунтуривание методом Собеля
+def sobeling(path: str, place_to_save: int) -> None:
+    im = imageio.imread(path)
+    im = im.astype('int32')
+    dx = ndimage.sobel(im, 0)  # horizontal derivative
+    dy = ndimage.sobel(im, 1)  # vertical derivative
+    mag = np.hypot(dx, dy)  # magnitude
+    mag *= 255.0 / np.max(mag)  # normalize (Q&D)
 
+    temporary_path = 'input files/img/temp/sobel.jpg'
+    imageio.imsave(temporary_path, mag)
 
-
-
+    pillow_img = Image.open(temporary_path)
+    save_img(pillow_img, place_to_save)
