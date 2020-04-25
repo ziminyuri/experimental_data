@@ -7,7 +7,7 @@ import imageio
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 from PyQt5 import QtWidgets
-from scipy import ndimage
+from scipy import ndimage, misc
 
 from analysis.fourier_transform import (direct_fourier_transform, division,
                                         inverse_fourier_transform)
@@ -15,6 +15,7 @@ from model import Model, convolution_img
 from normalisation.img import normalisation_arr_to_pixel
 from setting import *
 
+import cv2 as opencv
 
 def binary_to_array(path, size_binary):
     if size_binary == 2:
@@ -559,3 +560,18 @@ def sobeling(path: str, place_to_save: int) -> None:
 
     pillow_img = Image.open(temporary_path)
     save_img(pillow_img, place_to_save)
+
+
+# Окунтуривание оператором Лапласа
+def laplacian(path: str, place_to_save: int) -> None:
+    im = imageio.imread(path)
+    ddepth = opencv.CV_16S
+    kernel_size = 3
+    # src_gray = opencv.cvtColor(im, opencv.COLOR_BGR2GRAY)
+    dst = opencv.Laplacian(im, ddepth, ksize=kernel_size)
+    temporary_path = 'input files/img/temp/laplacian.jpg'
+    imageio.imsave(temporary_path, dst)
+
+    pillow_img = Image.open(temporary_path)
+    save_img(pillow_img, place_to_save)
+

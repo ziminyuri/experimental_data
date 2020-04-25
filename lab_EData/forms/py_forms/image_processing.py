@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 from setting import *
-from image import img_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function, sobeling
+from image import img_row, derivative, noise, image_processing, smoothing, bar_chart, cdf_function, sobeling, laplacian
 
 
 class ImageProcessingWindow(object):
@@ -232,8 +232,13 @@ class ImageProcessingWindow(object):
 
         self.radioButton_10 = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton_10.setObjectName("radioButton_10")
-        self.radioButton_9.setStyleSheet("color: #EEEEEE")
+        self.radioButton_10.setStyleSheet("color: #EEEEEE")
         self.gridLayout.addWidget(self.radioButton_10, 8, 4, 1, 1)
+
+        self.radioButton_11 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_11.setObjectName("radioButton_11")
+        self.radioButton_11.setStyleSheet("color: #EEEEEE")
+        self.gridLayout.addWidget(self.radioButton_11, 9, 4, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
         self.processing_image_window.setCentralWidget(self.centralwidget)
@@ -271,7 +276,8 @@ class ImageProcessingWindow(object):
         self.radioButton_9.setText(_translate("MainWindow", "Производная cтроки"))
         self.label_7.setText(_translate("MainWindow", "Номер строки"))
         self.checkBox_6.setText(_translate("MainWindow", "Бинарное изображение"))
-        self.radioButton_10.setText(_translate("MainWindow", "Окунтуривание методом Собеля"))
+        self.radioButton_10.setText(_translate("MainWindow", "Окунтуривание оператором Собеля"))
+        self.radioButton_11.setText(_translate("MainWindow", "Окунтуривание оператором Лапласа"))
 
     def processing(self) -> None:
 
@@ -343,9 +349,13 @@ class ImageProcessingWindow(object):
                 number_row: int = int(self.lineEdit_3.text())
                 model = derivative(img_path, number_row)
 
-        # Окунтуривание методом Собеля
+        # Окунтуривание оператором Собеля
         elif self.radioButton_10.isChecked():
             sobeling(img_path, place_to_show_image)
+
+        # Окунтуривание оператором Лапласа
+        elif self.radioButton_11.isChecked():
+            laplacian(img_path, place_to_show_image)
 
         # Шум: Соль и Перец
         if self.checkBox_5.isChecked():
