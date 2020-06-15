@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 
-from analysis import Analysis
+from analysis.analysis import Analysis
 from setting import *
 
 

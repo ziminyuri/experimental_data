@@ -4,10 +4,11 @@ from PyQt5.QtGui import QPixmap
 
 from forms.py_forms.add_graph import Ui_add_graph
 from forms.py_forms.add_sound_window import Ui_add_sound
-from forms.py_forms.deconvolution_window import Ui_deconvolution_window
+from forms.py_forms.deconvolution_window import UiDeconvolutionWindow
 from forms.py_forms.filter_window import Ui_filter_window
-from forms.py_forms.image_processing import image_processing_window
+from forms.py_forms.image_processing import ImageProcessingWindow
 from forms.py_forms.statistics_window import Ui_statistics
+from forms.py_forms.histogram_equalization import HistogramEqualizationWindow
 from image import open_img
 
 from setting import *
@@ -187,7 +188,6 @@ class Ui_mainwindow(object):
         self.statusbar.setObjectName("statusbar")
         self.main_window.setStatusBar(self.statusbar)
 
-
         # Инициализируем окна
         self.add_graph_window = QtWidgets.QMainWindow()
         self.add_graph_ui = Ui_add_graph(self)
@@ -200,9 +200,10 @@ class Ui_mainwindow(object):
         self.filter_window = QtWidgets.QMainWindow()
 
         self.deconvolution_window = QtWidgets.QMainWindow()
-        self.deconvolution_ui = Ui_deconvolution_window()
 
         self.processing_image_window = QtWidgets.QMainWindow()
+
+        self.histogram_equalization_window = QtWidgets.QMainWindow()
 
         self.action_add_graph = QtWidgets.QAction(self.main_window)
         self.action_add_graph.setObjectName("action_add_graph")
@@ -233,8 +234,17 @@ class Ui_mainwindow(object):
         self.action_filter.setShortcut('Ctrl+F')
         self.action_filter.triggered.connect(self.open_filter_window)
 
+        self.action_histogram_equalization = QtWidgets.QAction(self.main_window)
+        self.action_histogram_equalization.setObjectName("action_histogram_equalization")
+        self.action_histogram_equalization.triggered.connect(self.open_histogram_equalization)
+
         self.action_deconvolution = QtWidgets.QAction(self.main_window)
         self.action_deconvolution.setObjectName("action_deconvolution")
+        self.action_deconvolution.setShortcut('Ctrl+D')
+        self.action_deconvolution.triggered.connect(
+            self.open_deconvolution_window
+
+        )
 
         self.action_processing_image = QtWidgets.QAction(self.main_window)
         self.action_processing_image.setObjectName("action_processing_image")
@@ -253,6 +263,7 @@ class Ui_mainwindow(object):
         self.menu_2.addAction(self.action_deconvolution)
         self.menu_2.addSeparator()
         self.menu_2.addAction(self.action_processing_image)
+        self.menu_2.addAction(self.action_histogram_equalization)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
 
@@ -281,12 +292,16 @@ class Ui_mainwindow(object):
         self.filter_window.show()
 
     def open_deconvolution_window(self) -> None:
-        self.deconvolution_ui.setupUi(self.deconvolution_window)
+        self.deconvolution_ui = UiDeconvolutionWindow(self)
         self.deconvolution_window.show()
 
     def open_processing_image_window(self) -> None:
-        self.image_processing_ui = image_processing_window(self)
+        self.image_processing_ui = ImageProcessingWindow(self)
         self.processing_image_window.show()
+
+    def open_histogram_equalization(self) -> None:
+        self.histogram_equalization_ui = HistogramEqualizationWindow(self)
+        self.histogram_equalization_window.show()
 
     def show_graph(self, graph, place: int, normalisation: bool = False) -> None:
         pen = pg.mkPen(color="#AB47BC", width=1)
@@ -441,3 +456,4 @@ class Ui_mainwindow(object):
         self.action_filter.setText(_translate("mainwindow", "Фильтр"))
         self.action_deconvolution.setText(_translate("mainwindow", "Деконволюция"))
         self.action_processing_image.setText(_translate("mainwindow", "Изображения..."))
+        self.action_histogram_equalization.setText(_translate("mainwindow", "Эквализация гистограммы"))

@@ -371,9 +371,11 @@ class Analysis:
 
         new_model.x = np.array(x)
         new_model.y = np.array(y)
-        new_model.n = new_model.x[end - 1]
+        new_model.n = len(new_model.x)
+        new_model.display_n = new_model.n
 
-        new_model.display_n = new_model.n / 2
+        # new_model.n = new_model.x[end - 1]
+        # new_model.display_n = new_model.n / 2
 
         new_model.axis_max = np.amax(new_model.y) * 2
         new_model.axis_min = np.amin(new_model.y) * 2

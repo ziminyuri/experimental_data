@@ -1,108 +1,104 @@
-# -*- coding: utf-8 -*-
+from PyQt5 import QtCore, QtWidgets
 
-# Form implementation generated from reading ui file 'forms/qt_forms/deconvolution_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.14.1
-#
-# WARNING! All changes made in this file will be lost!
-
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+from image import deconvolution_img
+from model import Model
+from model import deconvolution as model_deconvolution
+from setting import POSITION_FOR_ANALYSIS, GET_LIST_ANALYSIS
 
 
-class Ui_deconvolution_window(object):
-    # Закрыть окно
-    def close_window(self):
-        self.deconvolution_window.close()
-
-    def setupUi(self, MainWindow):
-        self.deconvolution_window = MainWindow
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 320)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class UiDeconvolutionWindow(object):
+    def __init__(self, main_window):
+        self.main_window = main_window
+        self.deconvolution_window = main_window.deconvolution_window
+        self.deconvolution_window.setObjectName("MainWindow")
+        self.deconvolution_window.resize(378, 322)
+        self.centralwidget = QtWidgets.QWidget(self.deconvolution_window)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(19, 19, 771, 261))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 0, 361, 291))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        self.label_5 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_5.setObjectName("label_5")
-        self.gridLayout.addWidget(self.label_5, 0, 2, 1, 1)
-        self.label_8 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_8.setObjectName("label_8")
-        self.gridLayout.addWidget(self.label_8, 0, 3, 1, 1)
-        self.comboBox = QtWidgets.QComboBox(self.gridLayoutWidget)
-        self.comboBox.setObjectName("comboBox")
-        self.gridLayout.addWidget(self.comboBox, 2, 0, 1, 1)
+        self.checkBox = QtWidgets.QCheckBox(self.gridLayoutWidget)
+        self.checkBox.setObjectName("checkBox")
+        self.gridLayout.addWidget(self.checkBox, 9, 0, 1, 1)
         self.label_6 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_6.setObjectName("label_6")
-        self.gridLayout.addWidget(self.label_6, 1, 2, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_3.setObjectName("label_3")
-        self.gridLayout.addWidget(self.label_3, 0, 1, 1, 1)
-        self.comboBox_5 = QtWidgets.QComboBox(self.gridLayoutWidget)
-        self.comboBox_5.setObjectName("comboBox_5")
-        self.gridLayout.addWidget(self.comboBox_5, 2, 3, 1, 1)
-        self.label_2 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_2.setObjectName("label_2")
-        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
-        self.label_7 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_7.setObjectName("label_7")
-        self.gridLayout.addWidget(self.label_7, 3, 2, 1, 1)
-        self.label = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_6, 0, 0, 1, 1)
         self.comboBox_4 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_4.setObjectName("comboBox_4")
-        self.gridLayout.addWidget(self.comboBox_4, 4, 2, 1, 1)
-        self.label_9 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_9.setObjectName("label_9")
-        self.gridLayout.addWidget(self.label_9, 1, 3, 1, 1)
+        ls = ['Тренд сердцебиения', 'Тренд функции для IMG']
+        self.comboBox_4.addItems(ls)
+        self.gridLayout.addWidget(self.comboBox_4, 3, 0, 1, 1)
+        self.checkBox_2 = QtWidgets.QCheckBox(self.gridLayoutWidget)
+        self.checkBox_2.setObjectName("checkBox_2")
+        self.gridLayout.addWidget(self.checkBox_2, 10, 0, 1, 1)
         self.comboBox_3 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_3.setObjectName("comboBox_3")
-        self.gridLayout.addWidget(self.comboBox_3, 2, 2, 1, 1)
-        self.comboBox_2 = QtWidgets.QComboBox(self.gridLayoutWidget)
-        self.comboBox_2.setObjectName("comboBox_2")
-        self.gridLayout.addWidget(self.comboBox_2, 2, 1, 1, 1)
-        self.label_4 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_4.setObjectName("label_4")
-        self.gridLayout.addWidget(self.label_4, 1, 1, 1, 1)
+        comboBox_list: list = GET_LIST_ANALYSIS()
+        self.comboBox_3.addItems(comboBox_list)
+        self.gridLayout.addWidget(self.comboBox_3, 1, 0, 1, 1)
+        self.comboBox_5 = QtWidgets.QComboBox(self.gridLayoutWidget)
+        self.comboBox_5.setObjectName("comboBox_5")
+        self.comboBox_5.addItems(["1", "2", "3", "4", "5", "6"])
+        self.gridLayout.addWidget(self.comboBox_5, 5, 0, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 5, 2, 1, 1)
+        self.pushButton.clicked.connect(self.deconvlution)
+        self.gridLayout.addWidget(self.pushButton, 11, 0, 1, 1)
+        self.label_7 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_7.setObjectName("label_7")
+        self.gridLayout.addWidget(self.label_7, 2, 0, 1, 1)
+        self.label_9 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_9.setObjectName("label_9")
+        self.gridLayout.addWidget(self.label_9, 4, 0, 1, 1)
         self.pushButton_2 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.pushButton_2.setObjectName("pushButton_2")
-        self.gridLayout.addWidget(self.pushButton_2, 5, 0, 1, 1)
-        self.pushButton_3 = QtWidgets.QPushButton(self.gridLayoutWidget)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.gridLayout.addWidget(self.pushButton_3, 5, 1, 1, 1)
-        self.pushButton_4 = QtWidgets.QPushButton(self.gridLayoutWidget)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_4.clicked.connect(self.close_window)
-        self.gridLayout.addWidget(self.pushButton_4, 5, 3, 1, 1)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.gridLayout.addWidget(self.pushButton_2, 12, 0, 1, 1)
+        self.deconvolution_window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(self.deconvolution_window)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        self.deconvolution_window.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(self.deconvolution_window)
+        QtCore.QMetaObject.connectSlotsByName(self.deconvolution_window)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, main_window):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Деконволюция"))
-        self.label_5.setText(_translate("MainWindow", "Деконволюция"))
-        self.label_8.setText(_translate("MainWindow", "Запрос результата"))
-        self.label_6.setText(_translate("MainWindow", "Модель №1"))
-        self.label_3.setText(_translate("MainWindow", "Построение спектр"))
-        self.label_2.setText(_translate("MainWindow", "Выберите функцию"))
-        self.label_7.setText(_translate("MainWindow", "Модель №2"))
-        self.label.setText(_translate("MainWindow", "Построение графика"))
-        self.label_9.setText(_translate("MainWindow", "Место для вывода результата"))
-        self.label_4.setText(_translate("MainWindow", "Номер графика для спектра"))
+        main_window.setWindowTitle(_translate("MainWindow", "Деконволюция"))
+        self.checkBox.setText(_translate("MainWindow", "Изображение"))
+        self.label_6.setText(_translate("MainWindow", "Позиция графика"))
+        self.checkBox_2.setText(_translate("MainWindow", "Подавить шумы"))
         self.pushButton.setText(_translate("MainWindow", "Деконволюция"))
-        self.pushButton_2.setText(_translate("MainWindow", "Построить"))
-        self.pushButton_3.setText(_translate("MainWindow", "Спектр"))
-        self.pushButton_4.setText(_translate("MainWindow", "Закрыть"))
+        self.label_7.setText(_translate("MainWindow", "Тренд "))
+        self.label_9.setText(_translate("MainWindow", "Место для вывода результата"))
+        self.pushButton_2.setText(_translate("MainWindow", "Вывести тренд"))
+
+    def deconvlution(self):
+        position_to_analysis: int = int(self.comboBox_3.currentText())
+        place_to_show: int = int(self.comboBox_5.currentText())
+        deconvoltion_func: str = self.comboBox_4.currentText()
+
+        if self.checkBox.isChecked():   # is img
+            img_path: str = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+
+            if self.checkBox_2.isChecked():     # has noise
+                deconvolution_img(img_path, place_to_show, deconvoltion_func, noise=True)
+            else:
+                deconvolution_img(img_path, place_to_show, deconvoltion_func)
+
+            self.main_window.show_img(place_to_show)
+            self.deconvolution_window.close()
+
+        else:
+            model = POSITION_FOR_ANALYSIS.get(position_to_analysis)
+
+            model_func = Model(deconvoltion_func)
+            model_func.calculation()
+
+            result_model = model_deconvolution(model, model_func)
+
+            POSITION_FOR_ANALYSIS[place_to_show] = result_model
+            self.main_window.show_graph(result_model, place_to_show)
+            self.deconvolution_window.close()

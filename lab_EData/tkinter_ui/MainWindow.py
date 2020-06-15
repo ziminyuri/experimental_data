@@ -8,7 +8,7 @@ import pyglet
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
-from analysis import Analysis
+from analysis.analysis import Analysis
 from tkinter_ui.ChildWindow import ChildWindow
 from tkinter_ui.model import Model
 
